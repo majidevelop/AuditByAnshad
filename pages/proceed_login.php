@@ -16,7 +16,6 @@ $where=array(array('eid',$myusername,'STR'),array('password',$mypassword,'STR'))
 $count= rownum($tbl_name,$where);
 
 
-
 if($count==1)
 {
 $row=getrow($tbl_name,$where);
@@ -37,7 +36,6 @@ $ctime=date("Y-m-d H:i:s",$t);
 
 $value=array(array('lastlog',$ctime,'STR'));
 updaterow($tbl_name,$value,$where);
-echo $count;
 
 $loginpage=encrypt_url('home_page'); 
 echo "<script> window.location='".$loginpage."';</script>";
