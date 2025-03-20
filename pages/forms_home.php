@@ -20,6 +20,61 @@
                             </div>
                         </div>
                         <!-- end page title -->
+                         <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                            <input class="form-control form-control-lg" type="text" value="Placeholder Title" id="example-text-input">
+                                            <label for="example-text-input" class="form-label">Enter section title</label>
+
+                                        <div class="card-header">
+                                            <input class="form-control" type="text" value="Placeholder Description" id="example-text-input">
+                                            <label for="example-text-input" class="form-label">Enter section description</label>
+                                        </div>
+                                        <div class="card-body p-4">
+                                            <div class="row">
+                                                <div class="col-7">
+                                                    <input class="form-control mb-3" type="text" value="Placeholder Question" id="example-text-input">
+
+                                                    <input class="form-control" type="text" value="Placeholder Description" id="example-text-input">
+                                                </div>
+                                                <div class="col-5">
+                                                    <select class="form-select">
+                                                            <option>Preconfigured</option>
+                                                            <option>Text</option>
+                                                            <option>Number</option>
+                                                            <option>Single Select</option>
+                                                            <option>Dropdown</option>
+                                                            <option>Multi select</option>
+                                                            <option>date</option>
+
+
+                                                        </select>
+                                                </div>
+
+                                            </div>
+                                           
+                                            <div>
+                                                <button class="btn">Add Question</button>
+                                                <button class="btn">Add Signature</button>
+                                                <button class="btn">Move up</button>
+                                                <button class="btn">Move down</button>
+                                                <button class="btn">Copy</button>
+                                                <button class="btn">Delete</button>
+
+
+
+                                            </div>
+                                        </div>
+
+                                        
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                         </div>
 
                         <div class="row">
                             <div class="col-12">
