@@ -12,9 +12,8 @@ Options -Indexes
 
 
 <Files *.php>
-    Order Deny,Allow
-    Order Deny,Allow
-    Deny from all
+    Order Allow,Deny
+    Allow from all
     </Files>
 
 <Files blade.php>

@@ -91,13 +91,54 @@
 
                                         
                                     </div>
+                                    <button class="btn" id="saveTemplate">Save Template</button>
 
                                 </div>
 
                             </div>
 
                          </div>
+<script>
+    document.getElementById("saveTemplate").addEventListener("click", function () {
+    let templateData = {
+        title: document.querySelector("#example-text-input").value,
+        description: document.querySelector("#example-text-input").value,
+        questions: []
+    };
 
+    document.querySelectorAll(".question-card").forEach((card, index) => {
+        let questionText = card.querySelector("input[type='text']").value;
+        let description = card.querySelectorAll("input[type='text']")[1].value;
+        let answerType = card.querySelector("select").value;
+        let options = [];
+
+        if (answerType === "single_select" || answerType === "multi_select" || answerType === "dropdown") {
+            card.querySelectorAll(".option-input").forEach((option, optIndex) => {
+                options.push({ text: option.value, order: optIndex + 1 });
+            });
+        }
+
+        templateData.questions.push({
+            text: questionText,
+            description: description,
+            order: index + 1,
+            type: answerType,
+            options: options
+        });
+    });
+
+    // Send data to backend
+    fetch("save_template.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(templateData)
+    })
+    .then(response => response.json())
+    .then(data => alert("Template Saved Successfully!"))
+    .catch(error => console.error("Error:", error));
+});
+
+</script>
                          <script>
 // Function to add a new question
 document.addEventListener("click", function(event) {
