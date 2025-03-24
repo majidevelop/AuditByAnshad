@@ -49,7 +49,7 @@
                                                         <input class="form-control mb-3" type="text" value="Placeholder Question" id="example-text-input">
 
                                                         <input class="form-control" type="text" value="Placeholder Description" id="example-text-input">
-                                                        <div id="responseDiv" class="mt-3">
+                                                        <div id="responseDiv" class="mt-3 responseDiv">
                                                             <input type="radio" id="html" name="fav_language" value="true">
                                                             <label for="html">True/False</label><br>
                                                             <input type="radio" id="css" name="fav_language" value="pass">
@@ -59,7 +59,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-5">
-                                                        <select class="form-select" id="fieldType">
+                                                        <select class="form-select field-type" id="fieldType">
                                                             <option value="preconfigured">Preconfigured</option>
                                                             <option value="text">Text</option>
                                                             <option value="number">Number</option>
@@ -99,6 +99,93 @@
 
                          </div>
 <script>
+document.getElementById("questionsContainer").addEventListener("change", function(event) {
+    if (event.target.classList.contains("field-type")) {
+   
+
+
+// document.querySelectorAll(".field-type").forEach(function(selectElement) {
+//     selectElement.addEventListener("change", function() {
+        
+        // let selectedValue = this.value;
+        let selectedValue = event.target.value;
+    // let responseDiv = document.getElementById("responseDiv");
+
+     // Find the closest question card
+     let questionCard = event.target.closest(".question-card");
+
+    // Find the responseDiv inside this question card
+    let responseDiv = questionCard.querySelector(".responseDiv");
+
+    let content = "";
+    console.log(selectedValue);
+    switch (selectedValue) {
+        case "preconfigured":
+            content = `
+                <input type="radio" id="trueFalse" name="option" value="true">
+                <label for="trueFalse">True/False</label><br>
+                <input type="radio" id="passFail" name="option" value="pass">
+                <label for="passFail">Pass/Fail</label><br>
+                <input type="radio" id="yesNo" name="option" value="yes">
+                <label for="yesNo">Yes/No</label>`;
+            break;
+        case "text":
+            content = ``;
+            break;
+        case "number":
+            content = ``;
+            break;
+        case "single_select":
+            content = `
+                    <div id="singleSelectContainer">
+                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Add New</button>
+                        <div id="singleSelectFields">
+                            ${createRadioItem("Option 1")}
+                            ${createRadioItem("Option 2")}
+                            ${createRadioItem("Option 3")}
+                        </div>
+                    </div>
+            `;
+            break;
+        case "dropdown":
+            content = `
+                <div id="dropdownContainer">
+                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Add New</button>
+                    <div  id="dropdownSelect">
+                        ${createDropdownItem("Option 1")}
+                        ${createDropdownItem("Option 2")}
+                        ${createDropdownItem("Option 3")}
+                    </div>
+                </div>
+            `;
+            break;
+        case "multi_select":
+            content = `
+                     <div id="multiSelectContainer">
+                        <button class="btn btn-primary mb-2" onclick="addNewField()">Add New</button>
+                        <div id="multiSelectFields">
+                            ${createMultiSelectItem("Answer 1")}
+                            ${createMultiSelectItem("Answer 2")}
+                            ${createMultiSelectItem("Answer 3")}
+                        </div>
+                    </div>
+            `;
+            break;
+        case "date":
+            content = ``;
+            break;
+        default:
+            content = "";
+    }
+    console.log(selectedValue);
+
+    responseDiv.innerHTML = content;
+
+
+    // });
+}
+});
+
     document.getElementById("saveTemplate").addEventListener("click", function () {
     let templateData = {
         title: document.querySelector("#example-text-input").value,
@@ -148,7 +235,7 @@ document.addEventListener("click", function(event) {
         let newQuestion = questionCard.cloneNode(true);
 
         // Reset input fields
-        newQuestion.querySelectorAll("input[type='text']").forEach(input => input.value = "");
+        newQuestion.querySelectorAll("input[type='text']").forEach(input => input.value = "Placeholder Question");
         newQuestion.querySelectorAll("input[type='radio']").forEach(radio => radio.checked = false);
 
         container.appendChild(newQuestion);
@@ -201,6 +288,7 @@ document.addEventListener("click", function(event) {
 });
 </script>
                          <script>
+                            /*
 document.getElementById("fieldType").addEventListener("change", function() {
     let selectedValue = this.value;
     let responseDiv = document.getElementById("responseDiv");
@@ -266,7 +354,7 @@ document.getElementById("fieldType").addEventListener("change", function() {
     }
 
     responseDiv.innerHTML = content;
-});
+}); */
 </script>
 <script>
    
