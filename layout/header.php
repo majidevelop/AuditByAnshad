@@ -479,7 +479,9 @@
                                     <span data-key="t-forms">Forms</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="forms_home" data-key="t-form-elements">Form Templates</a></li>
+                                    <li><a href="form_template_list" data-key="t-form-elements">Form Templates</a></li>
+
+                                    <li><a href="forms_home" data-key="t-form-elements">Create Form Templates</a></li>
                                     <li><a href="form-validation.html" data-key="t-form-validation">Validation</a></li>
                                     <li><a href="form-advanced.html" data-key="t-form-advanced">Advanced Plugins</a></li>
                                     <li><a href="form-editors.html" data-key="t-form-editors">Editors</a></li>

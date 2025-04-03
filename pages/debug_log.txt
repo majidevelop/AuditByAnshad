@@ -1,0 +1,225 @@
+\Raw JSON Input:
+{"title":"  Title1","description":"  Title1","questions":[{"text":"  Question","description":"  Description","order":1,"type":"single_select","options":[]},{"text":"  Question","description":"  Question","order":2,"type":"preconfigured","options":[]}]}
+
+Decoded Data:
+Array
+(
+    [title] =>   Title1
+    [description] =>   Title1
+    [questions] => Array
+        (
+            [0] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Description
+                    [order] => 1
+                    [type] => single_select
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Question
+                    [order] => 2
+                    [type] => preconfigured
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+        )
+
+)
+
+
+Raw JSON Input:
+{"title":"  Title1","description":"  Title1","questions":[{"text":"  Question","description":"  Description","order":1,"type":"single_select","options":[]},{"text":"  Question","description":"  Question","order":2,"type":"preconfigured","options":[]}]}
+
+Decoded Data:
+Array
+(
+    [title] =>   Title1
+    [description] =>   Title1
+    [questions] => Array
+        (
+            [0] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Description
+                    [order] => 1
+                    [type] => single_select
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Question
+                    [order] => 2
+                    [type] => preconfigured
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+        )
+
+)
+
+
+Raw JSON Input:
+{"title":"  Title","description":"  Title","questions":[{"text":"  Question","description":"  Description","order":1,"type":"preconfigured","options":[]},{"text":"  Question","description":"  Question","order":2,"type":"dropdown","options":[]}]}
+
+Decoded Data:
+Array
+(
+    [title] =>   Title
+    [description] =>   Title
+    [questions] => Array
+        (
+            [0] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Description
+                    [order] => 1
+                    [type] => preconfigured
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Question
+                    [order] => 2
+                    [type] => dropdown
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+        )
+
+)
+
+
+Raw JSON Input:
+{"title":"  Title","description":"  Title","questions":[{"text":"  Question","description":"  Description","order":1,"type":"single_select","options":[]},{"text":"  Question","description":"  Question","order":2,"type":"dropdown","options":[]},{"text":"  Question","description":"  Question","order":3,"type":"multi_select","options":[]}]}
+
+Decoded Data:
+Array
+(
+    [title] =>   Title
+    [description] =>   Title
+    [questions] => Array
+        (
+            [0] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Description
+                    [order] => 1
+                    [type] => single_select
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Question
+                    [order] => 2
+                    [type] => dropdown
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+            [2] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Question
+                    [order] => 3
+                    [type] => multi_select
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+        )
+
+)
+
+
+Raw JSON Input:
+{"title":"  Title","description":"  Title","questions":[{"text":"  Question","description":"  Description","order":1,"type":"preconfigured","options":[]},{"text":"  Question","description":"  Question","order":2,"type":"single_select","options":[{"text":"Option 1","order":1},{"text":"Option 2","order":2},{"text":"Option 3","order":3}]}]}
+
+Decoded Data:
+Array
+(
+    [title] =>   Title
+    [description] =>   Title
+    [questions] => Array
+        (
+            [0] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Description
+                    [order] => 1
+                    [type] => preconfigured
+                    [options] => Array
+                        (
+                        )
+
+                )
+
+            [1] => Array
+                (
+                    [text] =>   Question
+                    [description] =>   Question
+                    [order] => 2
+                    [type] => single_select
+                    [options] => Array
+                        (
+                            [0] => Array
+                                (
+                                    [text] => Option 1
+                                    [order] => 1
+                                )
+
+                            [1] => Array
+                                (
+                                    [text] => Option 2
+                                    [order] => 2
+                                )
+
+                            [2] => Array
+                                (
+                                    [text] => Option 3
+                                    [order] => 3
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+
+

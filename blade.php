@@ -25,8 +25,8 @@ $page="login";
 //$page=encrypt_url("login");
 //$page=decrypt_url($page) ;
 
-$layout0page = array("login","logout","proceed_login","save_template");
-$layout1page = array("home_page","add_product","edit_product","variant","view_product","forms_home");
+$layout0page = array("login","logout","proceed_login");
+$layout1page = array("home_page","add_product","edit_product","variant","view_product","forms_home", "form_template_list", "view_template");
 
 $layout2page = array("pdf_print_html","pdf_print");
 
