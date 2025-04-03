@@ -479,6 +479,10 @@
                                     <span data-key="t-forms">Forms</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="schedule_inspection" data-key="t-form-elements">Schedule Inspection</a></li>
+                                    <li><a href="list_schedule_inspection" data-key="t-form-elements">Inspections</a></li>
+
+
                                     <li><a href="form_template_list" data-key="t-form-elements">Form Templates</a></li>
 
                                     <li><a href="forms_home" data-key="t-form-elements">Create Form Templates</a></li>

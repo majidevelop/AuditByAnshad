@@ -1,6 +1,6 @@
 
 
-                <div class="page-content">
+<div class="page-content">
                     <div class="container-fluid">
 
                         <!-- start page title -->
@@ -65,14 +65,14 @@
            <script>
             function load_func()
                 {
-                    get_form_templates();
+                    get_inspections();
 
                 }
 
-                function get_form_templates() {
+                function get_inspections() {
   
 //                     $.ajax({
-//     url: "./ajax/get_form_templates.php", // Update URL if needed
+//     url: "./ajax/get_inspections.php", // Update URL if needed
 //     type: "GET",
 //     dataType: "json",
 //     success: function(response) {
@@ -94,7 +94,7 @@
 // });
 
 $.ajax({
-    url: "ajax/get_form_templates.php", // Update URL if needed
+    url: "ajax/get_inspections.php", // Update URL if needed
     type: "POST", // Changed from GET to POST
     dataType: "json",
     data: {}, // Add any necessary data here
