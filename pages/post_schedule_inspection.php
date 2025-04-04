@@ -6,10 +6,11 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Database connection
-$host = 'localhost';
-$username = 'root';
-$password = '';
-$database = 'ehse';
+$host = 'sdb-82.hosting.stackcp.net';
+$username = 'db_ehse-35303839647d';
+$password = 'A4Z0&}.Ftndg';
+$database = 'db_ehse-35303839647d';
+$pdo = new PDO("mysql:host=sdb-82.hosting.stackcp.net;dbname=db_ehse-35303839647d", "db_ehse-35303839647d", "A4Z0&}.Ftndg");
 
 $conn = new mysqli($host, $username, $password, $database);
 

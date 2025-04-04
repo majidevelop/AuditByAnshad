@@ -9,6 +9,9 @@
     .w-100{
         width: 100%;
     }
+    .card-body{
+        padding: 1rem 0rem;
+    }
 </style>
 <div class="page-content">
                     <div class="container-fluid">
@@ -34,16 +37,18 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header">
-                                            <input class="form-control form-control-lg" type="text" value="  Title" id="example-text-input">
-                                            <label for="example-text-input" class="form-label">Enter section title</label>
+                                    <label for="example-text-input" class="form-label">Enter template title</label>
+
+                                            <input class="form-control form-control-lg" type="text" value="Enter Template Title" id="example-text-input">
 
                                         <div class="mt-3">
-                                            <input class="form-control" type="text" value="  Description" id="example-text-input">
-                                            <label for="example-text-input" class="form-label">Enter section description</label>
+                                        <label for="example-text-input" class="form-label">Enter template description</label>
+
+                                            <input class="form-control" type="text" value="Enter Template Description" id="example-text-input">
                                         </div>
                                         <div id="questionsContainer">
 
-                                            <div class="card-body  question-card p-4">
+                                            <div class="card-body  question-card">
                                                 <div class="row">
                                                     <div class="col-7">
                                                         <input class="form-control mb-3" type="text" value="  Question" id="example-text-input">
@@ -60,13 +65,15 @@
                                                     </div>
                                                     <div class="col-5">
                                                         <select class="form-select field-type" id="fieldType">
-                                                            <option value="preconfigured">Preconfigured</option>
+                                                        <option value="preconfigured">Preconfigured</option>
+
                                                             <option value="text">Text</option>
                                                             <option value="number">Number</option>
                                                             <option value="single_select">Single Select</option>
                                                             <option value="dropdown">Dropdown</option>
                                                             <option value="multi_select">Multi Select</option>
                                                             <option value="date">Date</option>
+
                                                         </select>
                                                     </div>
 
@@ -75,13 +82,13 @@
                                                 <div>
                                                  
 
-                                                    <button class="btn btn-primary add-question">Add Question</button>
-                                                    <button class="btn">Add Signature</button>
+                                                    <button class="btn btn-primary add-question"><i class="dripicons-plus"></i></button>
+                                                    <!-- <button class="btn">Add Signature</button> -->
 
-                                                    <button class="btn btn-success move-up">Move Up</button>
-                                                    <button class="btn btn-warning move-down">Move Down</button>
-                                                    <button class="btn btn-info copy">Copy</button>
-                                                    <button class="btn btn-danger delete">Delete</button>
+                                                    <button class="btn btn-success move-up"><i class="dripicons-arrow-thin-up"></i></button>
+                                                    <button class="btn btn-warning move-down"><i class="dripicons-arrow-thin-down"></i></button>
+                                                    <button class="btn btn-info copy"><i class="dripicons-copy"></i></button>
+                                                    <button class="btn btn-danger delete"><i class="dripicons-trash"></i></button>
 
 
 
@@ -91,7 +98,10 @@
 
                                         
                                     </div>
-                                    <button class="btn" id="saveTemplate">Save Template</button>
+                                    <center>
+                                    <button class="btn btn-success" id="saveTemplate">Save Template</button>
+
+                                    </center>
 
                                 </div>
 
@@ -99,6 +109,13 @@
 
                          </div>
 <script>
+    let templateId = null;
+    function load_func(){
+        
+        saveTemplate();
+    }
+
+
 document.getElementById("questionsContainer").addEventListener("change", function(event) {
     if (event.target.classList.contains("field-type")) {
    
@@ -138,7 +155,7 @@ document.getElementById("questionsContainer").addEventListener("change", functio
         case "single_select":
             content = `
                     <div id="singleSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Add New</button>
+                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Option <i class="dripicons-plus"></i></button>
                         <div id="singleSelectFields">
                             ${createRadioItem("Option 1")}
                             ${createRadioItem("Option 2")}
@@ -150,7 +167,7 @@ document.getElementById("questionsContainer").addEventListener("change", functio
         case "dropdown":
             content = `
                 <div id="dropdownContainer">
-                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Add New</button>
+                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Option <i class="dripicons-plus"></i></button>
                     <div  id="dropdownSelect">
                         ${createDropdownItem("Option 1")}
                         ${createDropdownItem("Option 2")}
@@ -162,7 +179,7 @@ document.getElementById("questionsContainer").addEventListener("change", functio
         case "multi_select":
             content = `
                      <div id="multiSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewField()">Add New</button>
+                        <button class="btn btn-primary mb-2" onclick="addNewField()">Option <i class="dripicons-plus"></i></button>
                         <div id="multiSelectFields">
                             ${createMultiSelectItem("Answer 1")}
                             ${createMultiSelectItem("Answer 2")}
@@ -187,6 +204,10 @@ document.getElementById("questionsContainer").addEventListener("change", functio
 });
 
     document.getElementById("saveTemplate").addEventListener("click", function () {
+        saveTemplate();
+    });
+
+function saveTemplate(){
     let templateData = {
         title: document.querySelector("#example-text-input").value,
         description: document.querySelector("#example-text-input").value,
@@ -214,30 +235,120 @@ document.getElementById("questionsContainer").addEventListener("change", functio
         });
     });
 
-    // Send data to backend
-    // fetch("save_template.php", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(templateData)
-    // })
-    // .then(response => response.json())
-    // .then(data => alert("Template Saved Successfully!"))
-    // .catch(error => console.error("Error:", error));
 console.log(templateData);
-    fetch("http://localhost/AuditByAnshad/pages/save_template.php", {
+    fetch("pages/save_template.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(templateData)
 })
 .then(response => response.json())
-.then(data => {alert("Template Saved Successfully!");
-console.log(data)}
+.then(data => {
+    // alert("Template Saved Successfully!");
+    console.log(data);
+    templateId = data.template_id;
+    // location.reload();
+}
 )
 .catch(error => console.error("Error:", error));
+}
 
 
 
+// let templateId = null; // Stores template ID once saved
+let saveTimeout;
+
+function autoSaveTemplate() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+        if (templateId) {
+            updateTemplate(); // Update if template already exists
+        } else {
+            saveTemplate(); // Save new template
+        }
+    }, 1000); // 1s debounce
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#example-text-input").addEventListener("input", autoSaveTemplate);
+    
+    document.addEventListener("input", (event) => {
+        if (event.target.matches(".question-card input[type='text'], .option-input")) {
+            autoSaveTemplate();
+        }
+    });
+
+    document.addEventListener("change", (event) => {
+        if (event.target.matches(".question-card select")) {
+            autoSaveTemplate();
+        }
+    });
 });
+
+// Function to Save a New Template
+function saveTemplate1() {
+    let templateData = collectTemplateData();
+
+    fetch("pages/save_template.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(templateData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Template Saved:", data);
+        templateId = data.template_id; // Store template ID for future updates
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+// Function to Update an Existing Template
+function updateTemplate() {
+    let templateData = collectTemplateData();
+    templateData.template_id = templateId; // Add template ID
+
+    fetch("pages/update_template.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(templateData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Template Updated:", data);
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+// Function to Collect Template Data
+function collectTemplateData() {
+    let templateData = {
+        title: document.querySelector("#example-text-input").value,
+        description: document.querySelector("#example-text-input").value,
+        questions: []
+    };
+
+    document.querySelectorAll(".question-card").forEach((card, index) => {
+        let questionText = card.querySelector("input[type='text']").value;
+        let description = card.querySelectorAll("input[type='text']")[1].value;
+        let answerType = card.querySelector("select").value;
+        let options = [];
+
+        if (answerType === "single_select" || answerType === "multi_select" || answerType === "dropdown") {
+            card.querySelectorAll(".option-input").forEach((option, optIndex) => {
+                options.push({ text: option.value, order: optIndex + 1 });
+            });
+        }
+
+        templateData.questions.push({
+            text: questionText,
+            description: description,
+            order: index + 1,
+            type: answerType,
+            options: options
+        });
+    });
+
+    return templateData;
+}
 
 </script>
                          <script>
@@ -264,6 +375,8 @@ document.addEventListener("click", function(event) {
         if (prevQuestion) {
             questionCard.parentNode.insertBefore(questionCard, prevQuestion);
         }
+        updateTemplate();
+
     }
 });
 
@@ -275,6 +388,8 @@ document.addEventListener("click", function(event) {
         if (nextQuestion) {
             questionCard.parentNode.insertBefore(nextQuestion, questionCard);
         }
+        updateTemplate();
+
     }
 });
 
@@ -286,6 +401,8 @@ document.addEventListener("click", function(event) {
 
         // Append below the current question
         questionCard.parentNode.insertBefore(newQuestion, questionCard.nextElementSibling);
+        updateTemplate();
+
     }
 });
 
@@ -298,6 +415,8 @@ document.addEventListener("click", function(event) {
         } else {
             alert("At least one question must remain!");
         }
+        updateTemplate();
+
     }
 });
 </script>
@@ -327,7 +446,7 @@ document.getElementById("fieldType").addEventListener("change", function() {
         case "single_select":
             content = `
                     <div id="singleSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Add New</button>
+                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Option <i class="dripicons-plus"></i></button>
                         <div id="singleSelectFields">
                             ${createRadioItem("Option 1")}
                             ${createRadioItem("Option 2")}
@@ -339,7 +458,7 @@ document.getElementById("fieldType").addEventListener("change", function() {
         case "dropdown":
             content = `
                 <div id="dropdownContainer">
-                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Add New</button>
+                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Option <i class="dripicons-plus"></i></button>
                     <div  id="dropdownSelect">
                         ${createDropdownItem("Option 1")}
                         ${createDropdownItem("Option 2")}
@@ -351,7 +470,7 @@ document.getElementById("fieldType").addEventListener("change", function() {
         case "multi_select":
             content = `
                      <div id="multiSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewField()">Add New</button>
+                        <button class="btn btn-primary mb-2" onclick="addNewField()">Option <i class="dripicons-plus"></i></button>
                         <div id="multiSelectFields">
                             ${createMultiSelectItem("Answer 1")}
                             ${createMultiSelectItem("Answer 2")}
@@ -377,9 +496,9 @@ function createMultiSelectItem(value) {
     return `
         <div class="multi-select-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)">Up</button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)">Dn</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)">Del</button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
         </div>
     `;
 }
@@ -389,9 +508,9 @@ function createRadioItem(value) {
     return `
         <div class="radio-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)">Up</button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)">Dn</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)">Del</button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
         </div>
     `;
 }
@@ -401,9 +520,9 @@ function createDropdownItem(value) {
     return `
     <div class="drop-down-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)">Up</button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)">Dn</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)">Del</button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
         </div>
     `;
 }

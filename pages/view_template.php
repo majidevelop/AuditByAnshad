@@ -10,6 +10,10 @@
     .w-100{
         width: 100%;
     }
+    
+    .card-body{
+        padding: 1rem 0rem;
+    }
 </style>
 <div class="page-content">
                     <div class="container-fluid">
@@ -45,7 +49,7 @@
                                         </div>
                                         <div id="questionsContainer">
 
-                                            <div class="card-body  question-card p-4">
+                                            <div class="card-body  question-card " style="margin-bottom: 1px solid;">
                                                 <div class="row">
                                                     <div class="col-7">
                                                         <input class="form-control mb-3" type="text" value="  Question" id="example-text-input">
@@ -62,13 +66,15 @@
                                                     </div>
                                                     <div class="col-5">
                                                         <select class="form-select field-type" id="fieldType">
-                                                            <option value="preconfigured">Preconfigured</option>
+                                                        <option value="preconfigured">Preconfigured</option>
+
                                                             <option value="text">Text</option>
                                                             <option value="number">Number</option>
                                                             <option value="single_select">Single Select</option>
                                                             <option value="dropdown">Dropdown</option>
                                                             <option value="multi_select">Multi Select</option>
                                                             <option value="date">Date</option>
+
                                                         </select>
                                                     </div>
 
@@ -77,13 +83,13 @@
                                                 <div>
                                                  
 
-                                                    <button class="btn btn-primary add-question">Add Question</button>
-                                                    <button class="btn">Add Signature</button>
+                                                    <button class="btn btn-primary add-question"><i class="dripicons-plus"></i></button>
+                                                    <!-- <button class="btn">Add Signature</button> -->
 
-                                                    <button class="btn btn-success move-up">Move Up</button>
-                                                    <button class="btn btn-warning move-down">Move Down</button>
-                                                    <button class="btn btn-info copy">Copy</button>
-                                                    <button class="btn btn-danger delete">Delete</button>
+                                                    <button class="btn btn-success move-up"> <i class="dripicons-arrow-thin-up"></i> </button>
+                                                    <button class="btn btn-warning move-down"><i class="dripicons-arrow-thin-down"></i></button>
+                                                    <button class="btn btn-info copy"><i class="dripicons-copy"></i></button>
+                                                    <button class="btn btn-danger delete"><i class="dripicons-trash"></i></button>
 
 
 
@@ -93,7 +99,10 @@
 
                                         
                                     </div>
-                                    <button class="btn" id="saveTemplate">Save Template</button>
+                                    <center>
+                                    <button class="btn btn-success" id="saveTemplate">Save Template</button>
+
+                                    </center>
 
                                 </div>
 
@@ -104,6 +113,7 @@
 
                          
 <script>
+    let templateId = null;
     function get_template_details(templateId) {
     $.ajax({
         url: `./pages/view_template_by_id.php?id=${templateId}`,
@@ -161,7 +171,7 @@ questions.forEach(q => {
     }
 
     questionsHtml += `
-        <div class="card-body question-card p-4">
+        <div class="card-body question-card " style="margin-bottom: 1px solid beige;">
             <div class="row">
                 <div class="col-7">
                     <input class="form-control mb-3" type="text" value="${q.question_title}" id="question-title">
@@ -186,24 +196,27 @@ questions.forEach(q => {
                 <div class="col-5">
                     <select class="form-select field-type">
                         <option value="preconfigured" ${q.answer_type === 'preconfigured' ? 'selected' : ''}>Preconfigured</option>
+
                         <option value="text" ${q.answer_type === 'text' ? 'selected' : ''}>Text</option>
                         <option value="number" ${q.answer_type === 'number' ? 'selected' : ''}>Number</option>
                         <option value="single_select" ${q.answer_type === 'single_select' ? 'selected' : ''}>Single Select</option>
                         <option value="dropdown" ${q.answer_type === 'dropdown' ? 'selected' : ''}>Dropdown</option>
                         <option value="multi_select" ${q.answer_type === 'multi_select' ? 'selected' : ''}>Multi Select</option>
                         <option value="date" ${q.answer_type === 'date' ? 'selected' : ''}>Date</option>
+
                     </select>
                 </div>
             </div>
 
             <div>
-                <button class="btn btn-primary add-question">Add Question</button>
-                <button class="btn">Add Signature</button>
-                <button class="btn btn-success move-up">Move Up</button>
-                <button class="btn btn-warning move-down">Move Down</button>
-                <button class="btn btn-info copy">Copy</button>
-                <button class="btn btn-danger delete">Delete</button>
+                <button class="btn btn-primary add-question"><i class="dripicons-plus"></i></button>
+                <!-- <button class="btn">Add Signature</button> -->
+                <button class="btn btn-success move-up"><i class="dripicons-arrow-thin-up"></i></button>
+                <button class="btn btn-warning move-down"><i class="dripicons-arrow-thin-down"></i></button>
+                <button class="btn btn-info copy"><i class="dripicons-copy"></i></button>
+                <button class="btn btn-danger delete"><i class="dripicons-trash"></i></button>
             </div>
+            <hr style="height:2px;">
         </div>
     `;
 });
@@ -215,13 +228,114 @@ $("#questionsContainer").html(questionsHtml);
 
 // Call the function when the page loads (replace '1' with dynamic ID)
 function load_func(){
-    let templateId = new URLSearchParams(window.location.search).get("id");
+    templateId = new URLSearchParams(window.location.search).get("id");
     if (templateId) {
         get_template_details(templateId);
     } else {
         alert("No template ID provided.");
     }
 }
+
+
+let saveTimeout;
+
+function autoSaveTemplate() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => {
+        if (templateId) {
+            updateTemplate(); // Update if template already exists
+        } else {
+            saveTemplate(); // Save new template
+        }
+    }, 500); // 1s debounce
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("#example-text-input").addEventListener("input", autoSaveTemplate);
+    document.querySelector("#example-text-input-title").addEventListener("input", autoSaveTemplate);
+    document.querySelector("#example-text-input-desc").addEventListener("input", autoSaveTemplate);
+
+    
+    document.addEventListener("input", (event) => {
+        if (event.target.matches(".question-card input[type='text'], .option-input")) {
+            autoSaveTemplate();
+        }
+    });
+
+    document.addEventListener("change", (event) => {
+        if (event.target.matches(".question-card select")) {
+            autoSaveTemplate();
+        }
+    });
+});
+
+// Function to Save a New Template
+function saveTemplate1() {
+    let templateData = collectTemplateData();
+
+    fetch("pages/save_template.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(templateData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Template Saved:", data);
+        templateId = data.template_id; // Store template ID for future updates
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+// Function to Update an Existing Template
+function updateTemplate() {
+    let templateData = collectTemplateData();
+    templateData.template_id = templateId; // Add template ID
+
+    fetch("pages/update_template.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(templateData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Template Updated:", data);
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+// Function to Collect Template Data
+function collectTemplateData() {
+    let templateData = {
+        title: document.querySelector("#example-text-input-title").value,
+        description: document.querySelector("#example-text-input-desc").value,
+        questions: []
+    };
+
+    document.querySelectorAll(".question-card").forEach((card, index) => {
+        let questionText = card.querySelector("input[type='text']").value;
+        let description = card.querySelectorAll("input[type='text']")[1].value;
+        let answerType = card.querySelector("select").value;
+        let options = [];
+
+        if (answerType === "single_select" || answerType === "multi_select" || answerType === "dropdown") {
+            card.querySelectorAll(".option-input").forEach((option, optIndex) => {
+                options.push({ text: option.value, order: optIndex + 1 });
+            });
+        }
+
+        templateData.questions.push({
+            text: questionText,
+            description: description,
+            order: index + 1,
+            type: answerType,
+            options: options
+        });
+    });
+
+    return templateData;
+}
+
+
 
 </script>
 
@@ -315,9 +429,14 @@ document.getElementById("questionsContainer").addEventListener("change", functio
 });
 
     document.getElementById("saveTemplate").addEventListener("click", function () {
+        saveTemplate();
+
+});
+
+function saveTemplate(){
     let templateData = {
-        title: document.querySelector("#example-text-input").value,
-        description: document.querySelector("#example-text-input").value,
+        title: document.querySelector("#example-text-input-title").value,
+        description: document.querySelector("#example-text-input-desc").value,
         questions: []
     };
 
@@ -364,8 +483,7 @@ console.log(data)}
 .catch(error => console.error("Error:", error));
 
 
-
-});
+}
 
 </script>
                          <script>
@@ -381,6 +499,7 @@ document.addEventListener("click", function(event) {
         newQuestion.querySelectorAll("input[type='radio']").forEach(radio => radio.checked = false);
 
         container.appendChild(newQuestion);
+        updateTemplate();
     }
 });
 
@@ -392,6 +511,7 @@ document.addEventListener("click", function(event) {
         if (prevQuestion) {
             questionCard.parentNode.insertBefore(questionCard, prevQuestion);
         }
+        updateTemplate();
     }
 });
 
@@ -403,6 +523,8 @@ document.addEventListener("click", function(event) {
         if (nextQuestion) {
             questionCard.parentNode.insertBefore(nextQuestion, questionCard);
         }
+        updateTemplate();
+
     }
 });
 
@@ -414,6 +536,8 @@ document.addEventListener("click", function(event) {
 
         // Append below the current question
         questionCard.parentNode.insertBefore(newQuestion, questionCard.nextElementSibling);
+        updateTemplate();
+
     }
 });
 
@@ -426,6 +550,8 @@ document.addEventListener("click", function(event) {
         } else {
             alert("At least one question must remain!");
         }
+        updateTemplate();
+
     }
 });
 </script>
@@ -505,9 +631,9 @@ function createMultiSelectItem(value) {
     return `
         <div class="multi-select-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)">Up</button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)">Dn</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)">Del</button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
         </div>
     `;
 }
@@ -517,9 +643,9 @@ function createRadioItem(value) {
     return `
         <div class="radio-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)">Up</button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)">Dn</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)">Del</button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
         </div>
     `;
 }
@@ -529,9 +655,9 @@ function createDropdownItem(value) {
     return `
     <div class="drop-down-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)">Up</button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)">Dn</button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)">Del</button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
         </div>
     `;
 }

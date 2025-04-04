@@ -41,16 +41,14 @@ echo json_encode(["status" => "success"]); */
 
 
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
 header("Content-Type: application/json");
 
 // Read raw input
 $jsonInput = file_get_contents("php://input",true);
 
-// Debug: Print raw input
-file_put_contents("debug_log.txt", "Raw JSON Input:\n" . $jsonInput . "\n\n", FILE_APPEND);
 
 // Decode JSON
 $data = json_decode($jsonInput, true);
@@ -60,10 +58,9 @@ if ($data === null) {
     exit;
 }
 
-// Debug: Print decoded data
-file_put_contents("debug_log.txt", "Decoded Data:\n" . print_r($data, true) . "\n\n", FILE_APPEND);
 
-$pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
+$pdo = new PDO("mysql:host=sdb-82.hosting.stackcp.net;dbname=db_ehse-35303839647d", "db_ehse-35303839647d", "A4Z0&}.Ftndg");
+// $pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 
