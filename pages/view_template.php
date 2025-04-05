@@ -21,18 +21,25 @@
 
                         <!-- start page title -->
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-9">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                     <h4 class="mb-sm-0 font-size-18">Create Template</h4>
 
-                                    <div class="page-title-right">
+                                   
+
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Forms</a></li>
                                             <li class="breadcrumb-item active">Create Template</li>
                                         </ol>
-                                    </div>
+                                        <div id="lastUpdated" class="m-0">
 
-                                </div>
+                                        </div>
+                                    </div>
+                                
                             </div>
                         </div>
                         <!-- end page title -->
@@ -56,17 +63,16 @@
 
                                                         <input class="form-control" type="text" value="  Description" id="example-text-input">
                                                         <div id="responseDiv" class="mt-3 responseDiv">
-                                                            <input type="radio" id="html" name="fav_language" value="true">
+                                                            <!-- <input type="radio" id="html" name="fav_language" value="true">
                                                             <label for="html">True/False</label><br>
                                                             <input type="radio" id="css" name="fav_language" value="pass">
                                                             <label for="css">Pass/Fail</label><br>
                                                             <input type="radio" id="javascript" name="fav_language" value="yes">
-                                                            <label for="javascript">Yes/No</label>
+                                                            <label for="javascript">Yes/No</label> -->
                                                         </div>
                                                     </div>
                                                     <div class="col-5">
                                                         <select class="form-select field-type" id="fieldType">
-                                                        <option value="preconfigured">Preconfigured</option>
 
                                                             <option value="text">Text</option>
                                                             <option value="number">Number</option>
@@ -74,36 +80,45 @@
                                                             <option value="dropdown">Dropdown</option>
                                                             <option value="multi_select">Multi Select</option>
                                                             <option value="date">Date</option>
+                                                            <option value="preconfigured">Preconfigured</option>
 
                                                         </select>
+
+                                                       
                                                     </div>
 
                                                 </div>
-                                            
-                                                <div>
-                                                 
-
-                                                    <button class="btn btn-primary add-question"><i class="dripicons-plus"></i></button>
+                                                <div style="float: right;">
+                                                
+                                                    <!-- <button class="btn btn-primary add-question"><i class="dripicons-plus"></i></button> -->
                                                     <!-- <button class="btn">Add Signature</button> -->
-
                                                     <button class="btn btn-success move-up"> <i class="dripicons-arrow-thin-up"></i> </button>
                                                     <button class="btn btn-warning move-down"><i class="dripicons-arrow-thin-down"></i></button>
                                                     <button class="btn btn-info copy"><i class="dripicons-copy"></i></button>
                                                     <button class="btn btn-danger delete"><i class="dripicons-trash"></i></button>
-
-
-
-                                                </div>
+                                            </div>
+                                                
                                             </div>
                                         </div>
 
                                         
                                     </div>
-                                    <center>
-                                    <button class="btn btn-success" id="saveTemplate">Save Template</button>
+                                      
+                                    <div class="card-footer">
+                                        <div class="row">
+                                            <div class="col-11"></div>
+                                            <div class="col-1">
+                                                <button class="btn btn-primary add-question" style="width:-webkit-fill-available"><i class="dripicons-plus"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                                                
+                                    <div class="card-footer">
+                                        <center>
+                                            <button class="btn btn-success" id="saveTemplate">Save Template</button>
 
-                                    </center>
-
+                                        </center>
+                                    </div>
                                 </div>
 
                             </div>
@@ -156,22 +171,37 @@ questions.forEach(q => {
         showDefaultInputs = false; // Hide default inputs
 
         optionsHtml = `<div class="mt-3"><label>Options:</label>`;
-
         relatedOptions.forEach(option => {
+        
             if (q.answer_type === "multi_select") {
                 optionsHtml += createMultiSelectItem(option.option_value);
             } else if (q.answer_type === "single_select") {
                 optionsHtml += createRadioItem(option.option_value);
             } else if (q.answer_type === "dropdown") {
                 optionsHtml += createDropdownItem(option.option_value);
-            }
+            } 
         });
 
         optionsHtml += `</div>`;
     }
+    else if(q.answer_type === "preconfigured"){
+                optionsHtml = ` 
+                <div class="mt-3">
+                 <input type="radio" id="true_false_${q.id}" name="response_${q.id}" value="true" ${q.answer_type === 'true_false' ? 'checked' : ''}>
+                            <label for="true_false_${q.id}">True/False</label><br>
+
+                            <input type="radio" id="pass_fail_${q.id}" name="response_${q.id}" value="pass" ${q.answer_type === 'pass_fail' ? 'checked' : ''}>
+                            <label for="pass_fail_${q.id}">Pass/Fail</label><br>
+
+                            <input type="radio" id="yes_no_${q.id}" name="response_${q.id}" value="yes" ${q.answer_type === 'yes_no' ? 'checked' : ''}>
+                            <label for="yes_no_${q.id}">Yes/No</label> </div>
+                `;
+            }
 
     questionsHtml += `
         <div class="card-body question-card " style="margin-bottom: 1px solid beige;">
+            <hr style="height:2px;">
+
             <div class="row">
                 <div class="col-7">
                     <input class="form-control mb-3" type="text" value="${q.question_title}" id="question-title">
@@ -180,22 +210,12 @@ questions.forEach(q => {
                     <div class="mt-3 responseDiv">
                         ${optionsHtml}
                         
-                        ${showDefaultInputs ? `
-                            <input type="radio" id="true_false_${q.id}" name="response_${q.id}" value="true" ${q.answer_type === 'true_false' ? 'checked' : ''}>
-                            <label for="true_false_${q.id}">True/False</label><br>
-
-                            <input type="radio" id="pass_fail_${q.id}" name="response_${q.id}" value="pass" ${q.answer_type === 'pass_fail' ? 'checked' : ''}>
-                            <label for="pass_fail_${q.id}">Pass/Fail</label><br>
-
-                            <input type="radio" id="yes_no_${q.id}" name="response_${q.id}" value="yes" ${q.answer_type === 'yes_no' ? 'checked' : ''}>
-                            <label for="yes_no_${q.id}">Yes/No</label>
-                        ` : ''}
+                        ${showDefaultInputs ? `` : ''}
                     </div>
                 </div>
 
                 <div class="col-5">
                     <select class="form-select field-type">
-                        <option value="preconfigured" ${q.answer_type === 'preconfigured' ? 'selected' : ''}>Preconfigured</option>
 
                         <option value="text" ${q.answer_type === 'text' ? 'selected' : ''}>Text</option>
                         <option value="number" ${q.answer_type === 'number' ? 'selected' : ''}>Number</option>
@@ -203,20 +223,22 @@ questions.forEach(q => {
                         <option value="dropdown" ${q.answer_type === 'dropdown' ? 'selected' : ''}>Dropdown</option>
                         <option value="multi_select" ${q.answer_type === 'multi_select' ? 'selected' : ''}>Multi Select</option>
                         <option value="date" ${q.answer_type === 'date' ? 'selected' : ''}>Date</option>
+                        <option value="preconfigured" ${q.answer_type === 'preconfigured' ? 'selected' : ''}>Preconfigured</option>
+
 
                     </select>
                 </div>
             </div>
 
-            <div>
-                <button class="btn btn-primary add-question"><i class="dripicons-plus"></i></button>
+            <div style="float: right;">
+
+                <!--  <button class="btn btn-primary add-question"><i class="dripicons-plus"></i></button> -->
                 <!-- <button class="btn">Add Signature</button> -->
                 <button class="btn btn-success move-up"><i class="dripicons-arrow-thin-up"></i></button>
                 <button class="btn btn-warning move-down"><i class="dripicons-arrow-thin-down"></i></button>
                 <button class="btn btn-info copy"><i class="dripicons-copy"></i></button>
                 <button class="btn btn-danger delete"><i class="dripicons-trash"></i></button>
             </div>
-            <hr style="height:2px;">
         </div>
     `;
 });
@@ -231,9 +253,28 @@ function load_func(){
     templateId = new URLSearchParams(window.location.search).get("id");
     if (templateId) {
         get_template_details(templateId);
+        setLastUpdated();
     } else {
         alert("No template ID provided.");
     }
+}
+
+function setLastUpdated(){
+    fetch("ajax/get_last_updated.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            'templateId': templateId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Last Updated:", data.data[0]);
+        console.log(data.data[0].updated_at);
+        lastUpdated = data.data[0].updated_at;
+        $("#lastUpdated").html("<p>Last Updated : "+lastUpdated+"</p>");
+    })
+    .catch(error => console.error("Error:", error));
 }
 
 
@@ -301,6 +342,7 @@ function updateTemplate() {
         console.log("Template Updated:", data);
     })
     .catch(error => console.error("Error:", error));
+    setLastUpdated();
 }
 
 // Function to Collect Template Data
@@ -380,36 +422,39 @@ document.getElementById("questionsContainer").addEventListener("change", functio
         case "single_select":
             content = `
                     <div id="singleSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Add New</button>
                         <div id="singleSelectFields">
                             ${createRadioItem("Option 1")}
                             ${createRadioItem("Option 2")}
                             ${createRadioItem("Option 3")}
                         </div>
+                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Add New</button>
+
                     </div>
             `;
             break;
         case "dropdown":
             content = `
                 <div id="dropdownContainer">
-                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Add New</button>
                     <div  id="dropdownSelect">
                         ${createDropdownItem("Option 1")}
                         ${createDropdownItem("Option 2")}
                         ${createDropdownItem("Option 3")}
                     </div>
+                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Add New</button>
+
                 </div>
             `;
             break;
         case "multi_select":
             content = `
                      <div id="multiSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewField()">Add New</button>
                         <div id="multiSelectFields">
                             ${createMultiSelectItem("Answer 1")}
                             ${createMultiSelectItem("Answer 2")}
                             ${createMultiSelectItem("Answer 3")}
                         </div>
+                        <button class="btn btn-primary mb-2" onclick="addNewField()">Add New</button>
+
                     </div>
             `;
             break;
@@ -487,37 +532,95 @@ console.log(data)}
 
 </script>
                          <script>
+
 // Function to add a new question
+// document.addEventListener("click", function(event) {
+//     if (event.target.classList.contains("add-question" ) ||
+//         event.target.classList.contains("dripicons-plus")) {
+//         let container = document.getElementById("questionsContainer");
+//         let questionCard = event.target.closest(".question-card"); 
+//         let newQuestion = questionCard.cloneNode(true);
+
+//         // Reset input fields
+//         newQuestion.querySelectorAll("input[type='text']").forEach(input => input.value = "  Question");
+//         newQuestion.querySelectorAll("input[type='radio']").forEach(radio => radio.checked = false);
+
+//         container.appendChild(newQuestion);
+//         updateTemplate();
+
+//     }
+// });
+
+
+
 document.addEventListener("click", function(event) {
-    if (event.target.classList.contains("add-question")) {
-        let container = document.getElementById("questionsContainer");
-        let questionCard = event.target.closest(".question-card"); 
-        let newQuestion = questionCard.cloneNode(true);
+    if (
+        event.target.classList.contains("add-question") ||
+        event.target.classList.contains("dripicons-plus")
+    ) {
+        const container = document.getElementById("questionsContainer");
 
-        // Reset input fields
-        newQuestion.querySelectorAll("input[type='text']").forEach(input => input.value = "  Question");
-        newQuestion.querySelectorAll("input[type='radio']").forEach(radio => radio.checked = false);
+        if (!container) return;
 
-        container.appendChild(newQuestion);
-        updateTemplate();
+        container.insertAdjacentHTML("beforeend", `
+
+            <div class="card-body question-card">
+            <hr>
+
+                <div class="row">
+                    <div class="col-7">
+                        <input class="form-control mb-3" type="text" value="" placeholder="Question" id="example-text-input">
+                        <input class="form-control" type="text" value="" placeholder="Description" id="example-text-input">
+                        <div id="responseDiv" class="mt-3 responseDiv">
+                            <!-- Radio options can be dynamically added here -->
+                        </div>
+                    </div>
+                    <div class="col-5">
+                        <select class="form-select field-type" id="fieldType">
+                            <option value="text">Text</option>
+                            <option value="number">Number</option>
+                            <option value="single_select">Single Select</option>
+                            <option value="dropdown">Dropdown</option>
+                            <option value="multi_select">Multi Select</option>
+                            <option value="date">Date</option>
+                            <option value="preconfigured">Preconfigured</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="float:right;">
+                    <button class="btn btn-success move-up"><i class="dripicons-arrow-thin-up"></i></button>
+                    <button class="btn btn-warning move-down"><i class="dripicons-arrow-thin-down"></i></button>
+                    <button class="btn btn-info copy"><i class="dripicons-copy"></i></button>
+                    <button class="btn btn-danger delete"><i class="dripicons-trash"></i></button>
+                </div>
+            </div>
+        `);
     }
 });
 
+
 // Function to move a question up
 document.addEventListener("click", function(event) {
-    if (event.target.classList.contains("move-up")) {
+    if (event.target.classList.contains("move-up")
+    ||
+    event.target.classList.contains("dripicons-arrow-thin-up")
+) {
         let questionCard = event.target.closest(".question-card");
         let prevQuestion = questionCard.previousElementSibling;
         if (prevQuestion) {
             questionCard.parentNode.insertBefore(questionCard, prevQuestion);
         }
         updateTemplate();
+
     }
 });
 
 // Function to move a question down
 document.addEventListener("click", function(event) {
-    if (event.target.classList.contains("move-down")) {
+    if (event.target.classList.contains("move-down")
+    ||
+    event.target.classList.contains("dripicons-arrow-thin-down")
+) {
         let questionCard = event.target.closest(".question-card");
         let nextQuestion = questionCard.nextElementSibling;
         if (nextQuestion) {
@@ -530,7 +633,10 @@ document.addEventListener("click", function(event) {
 
 // Function to copy a question
 document.addEventListener("click", function(event) {
-    if (event.target.classList.contains("copy")) {
+    if (event.target.classList.contains("copy")
+    ||
+    event.target.classList.contains("dripicons-copy")
+) {
         let questionCard = event.target.closest(".question-card");
         let newQuestion = questionCard.cloneNode(true);
 
@@ -543,7 +649,11 @@ document.addEventListener("click", function(event) {
 
 // Function to delete a question
 document.addEventListener("click", function(event) {
-    if (event.target.classList.contains("delete")) {
+    if (event.target.classList.contains("delete")
+    ||
+    event.target.classList.contains("dripicons-trash")
+
+) {
         let questionCard = event.target.closest(".question-card");
         if (document.querySelectorAll(".question-card").length > 1) {
             questionCard.remove();
@@ -554,6 +664,8 @@ document.addEventListener("click", function(event) {
 
     }
 });
+
+
 </script>
                          <script>
                             /*

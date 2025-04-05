@@ -12,14 +12,14 @@ if (!isset($data['template_id'])) {
 $template_id = $data['template_id'];
 
 try {
-// $pdo = new PDO("mysql:host=sdb-82.hosting.stackcp.net;dbname=db_ehse-35303839647d", "db_ehse-35303839647d", "A4Z0&}.Ftndg");
+$pdo = new PDO("mysql:host=sdb-82.hosting.stackcp.net;dbname=db_ehse-35303839647d", "db_ehse-35303839647d", "A4Z0&}.Ftndg");
 
-    $pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
+    // $pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+    $updatedAt = date('Y-m-d H:i:s'); // current timestamp
     // Update Template
-    $stmt = $pdo->prepare("UPDATE form_templates SET title = ?, description = ? WHERE id = ?");
-    $stmt->execute([$data['title'], $data['description'], $template_id]);
+    $stmt = $pdo->prepare("UPDATE form_templates SET title = ?, description = ?, updated_at = ? WHERE id = ?");
+    $stmt->execute([$data['title'], $data['description'], $updatedAt, $template_id]);
 
     // Delete old questions and options (simplest way to update them)
     $stmt = $pdo->prepare("DELETE FROM form_template_questions WHERE template_id = ?");
