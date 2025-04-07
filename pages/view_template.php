@@ -605,6 +605,9 @@ document.addEventListener("click", function(event) {
     ||
     event.target.classList.contains("dripicons-arrow-thin-up")
 ) {
+    if(event.target.classList.contains("skiptrigger")){
+        return;
+    }
         let questionCard = event.target.closest(".question-card");
         let prevQuestion = questionCard.previousElementSibling;
         if (prevQuestion) {
@@ -621,6 +624,9 @@ document.addEventListener("click", function(event) {
     ||
     event.target.classList.contains("dripicons-arrow-thin-down")
 ) {
+    if(event.target.classList.contains("skiptrigger")){
+        return;
+    }
         let questionCard = event.target.closest(".question-card");
         let nextQuestion = questionCard.nextElementSibling;
         if (nextQuestion) {
@@ -637,6 +643,9 @@ document.addEventListener("click", function(event) {
     ||
     event.target.classList.contains("dripicons-copy")
 ) {
+    if(event.target.classList.contains("skiptrigger")){
+        return;
+    }
         let questionCard = event.target.closest(".question-card");
         let newQuestion = questionCard.cloneNode(true);
 
@@ -654,6 +663,9 @@ document.addEventListener("click", function(event) {
     event.target.classList.contains("dripicons-trash")
 
 ) {
+    if(event.target.classList.contains("skiptrigger")){
+        return;
+    }
         let questionCard = event.target.closest(".question-card");
         if (document.querySelectorAll(".question-card").length > 1) {
             questionCard.remove();
@@ -668,73 +680,7 @@ document.addEventListener("click", function(event) {
 
 </script>
                          <script>
-                            /*
-document.getElementById("fieldType").addEventListener("change", function() {
-    let selectedValue = this.value;
-    let responseDiv = document.getElementById("responseDiv");
-
-    let content = "";
-    switch (selectedValue) {
-        case "preconfigured":
-            content = `
-                <input type="radio" id="trueFalse" name="option" value="true">
-                <label for="trueFalse">True/False</label><br>
-                <input type="radio" id="passFail" name="option" value="pass">
-                <label for="passFail">Pass/Fail</label><br>
-                <input type="radio" id="yesNo" name="option" value="yes">
-                <label for="yesNo">Yes/No</label>`;
-            break;
-        case "text":
-            content = ``;
-            break;
-        case "number":
-            content = ``;
-            break;
-        case "single_select":
-            content = `
-                    <div id="singleSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Add New</button>
-                        <div id="singleSelectFields">
-                            ${createRadioItem("Option 1")}
-                            ${createRadioItem("Option 2")}
-                            ${createRadioItem("Option 3")}
-                        </div>
-                    </div>
-            `;
-            break;
-        case "dropdown":
-            content = `
-                <div id="dropdownContainer">
-                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Add New</button>
-                    <div  id="dropdownSelect">
-                        ${createDropdownItem("Option 1")}
-                        ${createDropdownItem("Option 2")}
-                        ${createDropdownItem("Option 3")}
-                    </div>
-                </div>
-            `;
-            break;
-        case "multi_select":
-            content = `
-                     <div id="multiSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewField()">Add New</button>
-                        <div id="multiSelectFields">
-                            ${createMultiSelectItem("Answer 1")}
-                            ${createMultiSelectItem("Answer 2")}
-                            ${createMultiSelectItem("Answer 3")}
-                        </div>
-                    </div>
-            `;
-            break;
-        case "date":
-            content = ``;
-            break;
-        default:
-            content = "";
-    }
-
-    responseDiv.innerHTML = content;
-}); */
+      
 </script>
 <script>
    
@@ -743,9 +689,9 @@ function createMultiSelectItem(value) {
     return `
         <div class="multi-select-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up skiptrigger"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down skiptrigger"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash skiptrigger"></i></button>
         </div>
     `;
 }
@@ -755,9 +701,9 @@ function createRadioItem(value) {
     return `
         <div class="radio-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up skiptrigger"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down skiptrigger"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash skiptrigger"></i></button>
         </div>
     `;
 }
@@ -767,9 +713,9 @@ function createDropdownItem(value) {
     return `
     <div class="drop-down-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up skiptrigger"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down skiptrigger"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash skiptrigger"></i></button>
         </div>
     `;
 }

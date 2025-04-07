@@ -484,6 +484,8 @@
 
 
                                     <li><a href="form_template_list" data-key="t-form-elements">Form Templates</a></li>
+                                    <li><a href="form_template_list_view_cards" data-key="t-form-elements">View Templates</a></li>
+
 
                                     <li><a href="forms_home" data-key="t-form-elements">Create Form Templates</a></li>
                                     <li><a href="form-validation.html" data-key="t-form-validation">Validation</a></li>

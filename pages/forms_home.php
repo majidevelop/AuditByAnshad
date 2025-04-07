@@ -471,6 +471,9 @@ document.addEventListener("click", function(event) {
     ||
     event.target.classList.contains("dripicons-arrow-thin-up")
 ) {
+    if(event.target.classList.contains("skiptrigger")){
+        return;
+    }
         let questionCard = event.target.closest(".question-card");
         let prevQuestion = questionCard.previousElementSibling;
         if (prevQuestion) {
@@ -487,6 +490,10 @@ document.addEventListener("click", function(event) {
     ||
     event.target.classList.contains("dripicons-arrow-thin-down")
 ) {
+    if(event.target.classList.contains("skiptrigger")){
+        return;
+    }
+
         let questionCard = event.target.closest(".question-card");
         let nextQuestion = questionCard.nextElementSibling;
         if (nextQuestion) {
@@ -503,6 +510,9 @@ document.addEventListener("click", function(event) {
     ||
     event.target.classList.contains("dripicons-copy")
 ) {
+    if(event.target.classList.contains("skiptrigger")){
+        return;
+    }
         let questionCard = event.target.closest(".question-card");
         let newQuestion = questionCard.cloneNode(true);
 
@@ -520,6 +530,9 @@ document.addEventListener("click", function(event) {
     event.target.classList.contains("dripicons-trash")
 
 ) {
+    if(event.target.classList.contains("skiptrigger")){
+        return;
+    }
         let questionCard = event.target.closest(".question-card");
         if (document.querySelectorAll(".question-card").length > 1) {
             questionCard.remove();
@@ -607,9 +620,9 @@ function createMultiSelectItem(value) {
     return `
         <div class="multi-select-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up skiptrigger"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down skiptrigger"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash skiptrigger"></i></button>
         </div>
     `;
 }
@@ -619,9 +632,9 @@ function createRadioItem(value) {
     return `
         <div class="radio-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up skiptrigger"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down skiptrigger"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash skiptrigger"></i></button>
         </div>
     `;
 }
@@ -631,9 +644,9 @@ function createDropdownItem(value) {
     return `
     <div class="drop-down-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up"></i></button>
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down"></i></button>
-            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up skiptrigger"></i></button>
+            <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down skiptrigger"></i></button>
+            <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash skiptrigger"></i></button>
         </div>
     `;
 }
