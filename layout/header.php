@@ -32,6 +32,21 @@
         <!-- Responsive datatable examples -->
         <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
 
+        <!-- jQuery (MUST come first) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Choices.js CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
+<!-- Choices.js JS -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
     </head>
 
     <body onload="load_func();">
@@ -479,8 +494,15 @@
                                     <span data-key="t-forms">Forms</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
+                                <li><a href="forms_master_layout" data-key="t-form-elements">Master</a></li>
+                                <li><a href="view_create_master_header" data-key="t-form-elements">Master - Header</a></li>
+
+                                <li><a href="view_create_master_footer" data-key="t-form-elements">Master - Footer</a></li>
+
                                     <li><a href="schedule_inspection" data-key="t-form-elements">Schedule Inspection</a></li>
-                                    <li><a href="list_schedule_inspection" data-key="t-form-elements">Inspections</a></li>
+                                    <li><a href="list_schedule_inspection" data-key="t-form-elements">View Scheduled Inspection</a></li>
+
+                                    <!-- <li><a href="list_schedule_inspection" data-key="t-form-elements">Inspections</a></li> -->
 
 
                                     <li><a href="form_template_list" data-key="t-form-elements">Form Templates</a></li>

@@ -167,24 +167,26 @@ function displayTemplates(templates) {
             <td><a href="view_template?id=${template.id}">${template.created_at} </a></td>
         </tr> 
                   `; */
-                  table +=`<div class="col-3">
+                  table +=`<div class="col-12">
                   <div class="cards">
-                  <h2 class="mb-3">
+                  <h4 class="mb-3">
                   ${template.title}
-                  </h2>
+                  </h4>
                   <p>
                   ${template.description}
                   </p>
                   <div class="row">
-                    <div class="col-8"></div>
+                    <div class="col-8">
+                        <p>Created by : </p>
+                        <p> Created On : ${template.created_at}</p>
+                    </div>
                     <div class="col-4">
 
-                    <a href="view_template?id=${template.id}" class="btn btn-secondary mb-3">Edit</a> <br>
-                    <a href=""  class="btn btn-primary">Schedule</a> <br>
-</div>
+                        <a href="view_template?id=${template.id}" class="btn btn-secondary mb-3">Edit</a> <br>
+                        <a href="view_schedule_inspection?id=${template.id}"  class="btn btn-primary">Schedule</a> <br>
+                    </div>
                   </div>
-                  <p>Created by : </p>
-                  <p> Created On : ${template.created_at}</p>
+                 
 
                   </div></div>`;
 

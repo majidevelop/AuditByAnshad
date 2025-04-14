@@ -10,13 +10,33 @@ include('../functionPDO.php');
 // echo json_encode(["success" => true, "data" => "sad"]);
 
 try {
+
+    
+// Read raw POST input
+$input = json_decode(file_get_contents("php://input"), true);
+
+// Check if templateId is provided
+// if (!isset($input['templateId'])) {
+//     echo json_encode(["error" => "Missing templateId"]);
+//     exit;
+// }
+
+
+
     // $pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
     // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // $stmt = $pdo->query("SELECT id, title, description, created_at FROM form_templates ORDER BY created_at DESC");
+
+    
+// $where = array(
+//     array('id', $templateId, 'INT')
+//               );
+
+              
     // $templates = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $templates = array();
-    $templates=allrows('scheduled_inspections',"1",'created_at DESC');
+    $templates=allrows('uploaded_files',"1",'created_at DESC');
 
 
     echo json_encode(["success" => true, "data" => $templates]);

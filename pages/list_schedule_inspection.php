@@ -40,6 +40,8 @@
                                                             <th data-priority="3">Title</th>
                                                             <th data-priority="1">Description</th>
                                                             <th data-priority="3">Created By</th>
+                                                            <th data-priority="3">Assigned To</th>
+
                                                             <th data-priority="3">CreatedAt</th>
                                                         </tr>
                                                     </thead>
@@ -128,12 +130,12 @@ function displayTemplates(templates) {
         ctr++;
         table += `
         <tr>
-            <td> <a href="view_template?id=${template.id}">${ctr} </a></td>
-            <td><a href="view_template?id=${template.id}"> ${template.id} </a></td>
-            <td><a href="view_template?id=${template.id}">${template.title} </a></td>
-            <td><a href="view_template?id=${template.id}">${template.description ? '' : 'Default Value'} </a></td>
-            <td><a href="view_template?id=${template.id}">${template.created_by ? '' : 'Default Value'} </a></td>
-            <td><a href="view_template?id=${template.id}">${template.created_at} </a></td>
+            <td> <a href="view_schedule?id=${template.id}">${ctr} </a></td>
+            <td><a href="view_schedule?id=${template.id}"> ${template.id} </a></td>
+            <td><a href="view_schedule?id=${template.id}">${template.title} </a></td>
+            <td><a href="view_schedule?id=${template.id}">${template.description ? '' : 'Default Value'} </a></td>
+            <td><a href="view_schedule?id=${template.id}">${template.created_by ? '' : 'Default Value'} </a></td>
+            <td><a href="view_schedule?id=${template.id}">${template.created_at} </a></td>
         </tr> 
                   `;
     });

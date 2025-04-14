@@ -26,7 +26,8 @@ $page="login";
 //$page=decrypt_url($page) ;
 
 $layout0page = array("login","logout","proceed_login", "post_schedule_inspection");
-$layout1page = array("home_page","add_product","edit_product","variant","view_product","forms_home", "form_template_list", "view_template", "schedule_inspection", "list_schedule_inspection", "form_template_list_view_cards");
+$layout1page = array("home_page","add_product","edit_product","variant","view_product","forms_home", "form_template_list", "view_template", "schedule_inspection", "list_schedule_inspection",
+ "form_template_list_view_cards", "view_schedule_inspection", "forms_master_layout","view_create_master_footer" ,"view_create_master_header");
 
 $layout2page = array("pdf_print_html","pdf_print");
 

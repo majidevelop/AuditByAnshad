@@ -78,6 +78,11 @@ return $newId;
 };
 
 
+function save_cover_page($fileName, $file_path) {
+  global $pdo; // assuming you already created the $pdo connection somewhere
+  $stmt = $pdo->prepare("INSERT INTO uploaded_files (file_path,file_name, uploaded_at) VALUES (?,?, NOW())");
+  return $stmt->execute([$fileName, $file_path]);
+}
 
 
 
