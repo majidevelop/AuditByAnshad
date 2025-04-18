@@ -94,75 +94,111 @@
                                 </div>
 
                             </div>
-                            <!-- <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <p>Header</p>
 
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-6">
-                                            <div class="p-3">
-                                            <label for="template_header">Create new header</label>
-<textarea class="form-control" name="template_header" id="template_header" rows="4" placeholder="Enter header text..."></textarea>
-<button class="btn btn-primary mt-3" id="upload_header">Save</button>
-
-
-                                            </div>
-                                          
-
-                                        </div>
-                                        <div class="col-6" id="header_list">
-
-</div>
-                                    </div>
-            
-
-                                </div>
-
-                            </div>
                             <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <p>Footer</p>
-
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-6">
-                                            <div class="p-3">
-                                            <label for="template_footer">Create new footer</label>
-<textarea class="form-control" name="template_footer" id="template_footer" rows="4" placeholder="Enter footer text..."></textarea>
-<button class="btn btn-primary mt-3" id="upload_footer">Save</button>
-
-                                            
-
-                                            </div>
-                                           
-
-                                        </div>
-                                        <div class="col-6" id="footer_list">
-
-</div>
-                                    </div>
-
-                                </div>
+                            <p>
+                                            Add Header text here
+                                        </p>
+                                        <div id="ckeditor-classic"></div>
 
                             </div>
 
-                        </div>
+                            <div class="col-12">
+                                <p>
+                                    Add Footer text here
+                                </p>
+                                <div id="ckeditor-classic1"></div>
+
+                            </div>
+                            <div>
+                                <button id="save_footer">save_footer</button>
+                            </div>
                     </div>
-                 </div> -->
+                    
+
+
+                    <script>
+                        let header_text = null;
+                        let footer_text = null;
+
+//                     document.getElementById("save_footer").addEventListener("click", function (e) {
+//                         e.preventDefault();
+//                         function getHeaderandFooter(){
+//                             const editorElement = document.querySelectorAll('.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred');
+//                         // console.log(editorElement);
+//                         editorElement.forEach((editor, index) => {
+//                         console.log(`Editor ${index + 1}:`);
+//                         console.log(editor.innerHTML);
+//                         if(index == 1){
+//                             if (!editor.innerHTML.trim() || editor.innerHTML.trim() == `<p><br data-cke-filler="true"></p>`) {
+//                             alert("Please enter footer content.");
+//                             return;
+
+//                         }
+//                         header_text = editor.innerHTML.trim();
+//                         }else{
+//                             if (!editor.innerHTML.trim() || editor.innerHTML.trim() == `<p><br data-cke-filler="true"></p>`) {
+//                             alert("Please enter header content.");
+//                             return;
+
+//                         }
+//                         footer_text = editor.innerHTML.trim();
+
+//                         }
+// });
+
+//                         }
+                        
+                        
+
+//                         const editorElement = document.querySelector('#ckeditor-classic .ck-content');
+// const content = editorElement.innerHTML;
+// console.log(content);
+
+// const editorElement1 = document.querySelector('#ckeditor-classic1 .ck-content');
+// const content1 = editorElement1.innerHTML;
+// console.log(content1);
+
+                    // });
+
+                    </script>
+                     
+
+     <!-- /Right-bar -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+        <script src="assets/libs/jquery/jquery.min.js"></script>
+        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/libs/metismenu/metisMenu.min.js"></script>
+        <script src="assets/libs/simplebar/simplebar.min.js"></script>
+        <script src="assets/libs/node-waves/waves.min.js"></script>
+        <script src="assets/libs/feather-icons/feather.min.js"></script>
+        <!-- pace js -->
+        <script src="assets/libs/pace-js/pace.min.js"></script>
+
+        <!-- ckeditor -->
+        <script src="assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+
+        <!-- init js -->
+        <script src="assets/js/pages/form-editor.init.js"></script>
+
+        <script src="assets/js/app.js"></script>
+
+    </body>
+</html>
 
 
 <script>
+/*
     let footers = [];
     let headers = [];
     function load_func(){
-        fetchCoverPages();
-        renderFooters();
-        renderHeaders();
+        // fetchCoverPages();
+        // renderFooters();
+        // renderHeaders();
     }
 
     function renderFooters(){
@@ -289,11 +325,36 @@ console.log(data);
         alert("Something went wrong.");
     });
 });
+*/
 
 
-
-    document.getElementById("upload_cover_page").addEventListener("click", function (e) {
+    document.getElementById("save_footer").addEventListener("click", function (e) {
         e.preventDefault();
+                            const editorElement = document.querySelectorAll('.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred');
+                        // console.log(editorElement);
+                        editorElement.forEach((editor, index) => {
+                        console.log(`Editor ${index + 1}:`);
+                        console.log(editor.innerHTML);
+                        if(index == 1){
+                            if (!editor.innerHTML.trim() || editor.innerHTML.trim() == `<p><br data-cke-filler="true"></p>`) {
+                            alert("Please enter footer content.");
+                            return;
+
+                        }
+                        header_text = editor.innerHTML.trim();
+                        }else{
+                            if (!editor.innerHTML.trim() || editor.innerHTML.trim() == `<p><br data-cke-filler="true"></p>`) {
+                            alert("Please enter header content.");
+                            return;
+
+                        }
+                        footer_text = editor.innerHTML.trim();
+
+                        }
+});
+
+console.log("ffootr" +footer_text);
+console.log("hdrrotr" +header_text);
 
         const fileInput = document.getElementById("cover_page");
         const file = fileInput.files[0];
@@ -305,7 +366,12 @@ console.log(data);
 
         const formData = new FormData();
         formData.append("cover_page", file);
-
+        formData.append("header_text", header_text);
+        formData.append("footer_text", footer_text);
+console.log(formData.footer_text);
+for (var pair of formData.entries()) {
+    console.log(pair[0]+ ': ' + pair[1]);
+}
         fetch("ajax/upload_cover_page.php", {
             method: "POST",
             body: formData
@@ -314,7 +380,7 @@ console.log(data);
         .then(result => {
             console.log("Upload success:", result);
             alert("Cover page uploaded successfully!");
-            fetchCoverPages();
+            // fetchCoverPages();
         })
         .catch(error => {
             console.error("Upload failed:", error);

@@ -15,6 +15,13 @@ if (!isset($_FILES['cover_page']) || $_FILES['cover_page']['error'] !== UPLOAD_E
     echo json_encode($response);
     exit;
 }
+file_put_contents("debug_post.txt", print_r($_POST, true));
+$headerText = $_POST['header_text'] ?? '';
+$footerText = $_POST['footer_text'] ?? '';
+
+
+// $response = ['status' => 'error', 'message' => $headerText];
+// echo json_encode($response);
 
 // Set the destination directory
 $uploadDir = 'uploads/cover_pages/';
@@ -39,12 +46,15 @@ if (move_uploaded_file($fileTmpPath, $destPath)) {
     
  $value = array(
     array('file_name', $fileName, 'STR'),
-    array('file_path', $destPath, 'STR')
+    array('file_path', $destPath, 'STR'),
+    array('header_text', $headerText, 'HTML'),
+    array('footer_text', $footerText, 'HTML'),
+
      
     );
 
 
- $productid = insertrow('uploaded_files', $value);
+ $productid = insertrow('audit_report_layouts', $value);
 
 } else {
     $response = ['status' => 'error', 'message' => 'Failed to move uploaded file.'];

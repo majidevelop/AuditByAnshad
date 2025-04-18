@@ -1,0 +1,5 @@
+Array
+(
+    [header_text] => <p>;ldgd</p>
+    [footer_text] => <p>fdsg</p>
+)
