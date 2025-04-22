@@ -42,24 +42,11 @@ $month = isset($_GET['month']) ? (int)$_GET['month'] : date('n');
 $monthName = date('F', strtotime("$year-$month-01"));
 $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $month, $year);
 $startDay = date('w', strtotime("$year-$month-01"));
-
-// Fetch meetings using your PDO function
-$sql = "SELECT title, audit_date FROM scheduled_inspections WHERE YEAR(date) = ? AND MONTH(date) = ?";
-$meetings = allrows("scheduled_inspections", "1", "id ASC");  // assuming fetch_all() exists in functionPDO.php
-
-$meetingMap = [];
-foreach ($meetings as $meeting) {
-    $meetingMap[$meeting['audit_date']][] = $meeting['title'];
-}
-echo "<pre>";
-print_r($meetingMap);
-echo "</pre>";
-
 ?>
 
 <style>
 .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
-.day { border: 1px solid #ccc; padding: 10px; min-height: 100px; background: #fdfdfd; }
+.day { border: 1px solid #ccc; padding: 10px; min-height: 100px; background: #fdfdfd; position: relative; }
 .header { font-weight: bold; text-align: center; background: #eee; padding: 8px; }
 .date { font-weight: bold; }
 .meeting { background-color: #ffc; padding: 3px 6px; margin-top: 5px; font-size: 0.9em; border-left: 3px solid orange; }
@@ -69,7 +56,7 @@ echo "</pre>";
 <a href="?page=list_schedule_inspection_calendar&month=<?= ($month == 1 ? 12 : $month - 1) ?>&year=<?= ($month == 1 ? $year - 1 : $year) ?>">← Prev</a> |
 <a href="?page=list_schedule_inspection_calendar&month=<?= ($month == 12 ? 1 : $month + 1) ?>&year=<?= ($month == 12 ? $year + 1 : $year) ?>">Next →</a>
 
-<div class="calendar">
+<div class="calendar" id="calendar">
     <?php foreach (['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $d): ?>
         <div class="header"><?= $d ?></div>
     <?php endforeach; ?>
@@ -81,24 +68,44 @@ echo "</pre>";
     <?php for ($day = 1; $day <= $daysInMonth; $day++): 
         $dateStr = sprintf('%04d-%02d-%02d', $year, $month, $day);
     ?>
-        <div class="day">
+        <div class="day" data-date="<?= $dateStr ?>">
             <div class="date"><?= $day ?></div>
-            <?php if (!empty($meetingMap[$dateStr])): ?>
-                <?php foreach ($meetingMap[$dateStr] as $title): ?>
-                    <div class="meeting"><?= htmlspecialchars($title) ?></div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+            <div class="meeting-container"></div>
         </div>
     <?php endfor; ?>
 </div>
 
-                                        <div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const year = <?= $year ?>;
+    const month = <?= $month ?>;
+
+    fetch('ajax/get_inspections.php?year=' + year + '&month=' + month)
+        .then(res => res.json())
+        .then(data => {
+            // console.log(data.data);
+            data.data.forEach(meeting => {
+                const el = document.querySelector(`.day[data-date="${meeting.audit_date}"] .meeting-container`);
+                if (el) {
+                    const div = document.createElement('div');
+                    div.classList.add('meeting');
+                    div.innerText = meeting.title;
+                    el.appendChild(div);
+                }
+            });
+        })
+        .catch(err => console.error('Fetch error:', err));
+});
+</script>
+
+
+                                        <!-- <div>
                                             <center>
                                                 <button class="btn btn-success" id="save_footer">
                                                     Save
                                                 </button>
                                             </center>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
                             </div>

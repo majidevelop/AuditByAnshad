@@ -115,6 +115,9 @@
                             <div class="col-12">
                             <p>             Add Header text here
                                         </p>
+                                        <div id="header">
+
+                                        </div>
                                         <div id="ckeditor-classic"></div>
 
                             </div>
@@ -123,6 +126,9 @@
                                 <p>
                                     Add Footer text here
                                 </p>
+                                <div id="footer">
+
+                                </div>
                                 <div id="ckeditor-classic1"></div>
 
                             </div>
@@ -206,143 +212,39 @@
     </body>
 </html>
 
+<script>
+    let templateId = null;
+    function load_func(){
+        templateId = new URLSearchParams(window.location.search).get("id");
+        if (templateId) {
+            get_master_layout(templateId);
+            setLastUpdated();
+        } else {
+            alert("No template ID provided.");
+        }
+    }
+</script>
 
 <script>
-/*
-    let footers = [];
-    let headers = [];
-    function load_func(){
-        // fetchCoverPages();
-        // renderFooters();
-        // renderHeaders();
-    }
-
-    function renderFooters(){
-        fetch("ajax/get_footers.php")
-        .then(res => res.json())
-        .then(data => {
-            const container = document.getElementById("footer_list");
-            container.innerHTML = "";
-console.log(data);
-            if (data.success === true) {
-                data.data.forEach(file => {
-                  html = `<div>${file.footer_text}</div>`;
-                  container.innerHTML +=html;
-                });
-            } else {
-                container.innerHTML = "<p>No cover pages found.</p>";
+    function get_master_layout(templateId){
+        $.ajax({
+            url: `ajax/get_master_layout_by_id.php?id=${templateId}`,
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.success) {
+                    console.log("Template Details:", response);
+                    renderMasterLayout(response.data);
+                } else {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+                alert("Failed to load template. Check console for details.");
             }
-        })
-        .catch(err => {
-            console.error("Fetch error:", err);
-            alert("Error loading cover pages.");
         });
-
     }
-    function renderHeaders(){
-        fetch("ajax/get_headers.php")
-        .then(res => res.json())
-        .then(data => {
-            const container = document.getElementById("header_list");
-            container.innerHTML = "";
-console.log(data);
-            if (data.success === true) {
-                data.data.forEach(file => {
-                    html = `<div>${file.header_text}</div>`;
-                  container.innerHTML +=html;
-
-                });
-            } else {
-                container.innerHTML = "<p>No cover pages found.</p>";
-            }
-        })
-        .catch(err => {
-            console.error("Fetch error:", err);
-            alert("Error loading cover pages.");
-        });
-
-    }
-    
-    document.getElementById("upload_footer").addEventListener("click", function (e) {
-    e.preventDefault();
-
-    const headerText = document.getElementById("template_footer").value.trim();
-
-    if (!headerText) {
-        alert("Please enter header content.");
-        return;
-    }
-    const payload = {
-        template_footer:headerText
-    };
-
-    fetch("ajax/save_footer.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: JSON.stringify(payload)
-
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success === true) {
-            alert("Footer saved successfully!");
-            document.getElementById("template_footer").value = "";
-            renderFooters();
-        } else {
-            alert("Error: " + data.message);
-        }
-    })
-    .catch(err => {
-        console.error("Error:", err);
-        alert("Something went wrong.");
-    });
-});
-
-
-
-
-    document.getElementById("upload_header").addEventListener("click", function (e) {
-    e.preventDefault();
-
-    const headerText = document.getElementById("template_header").value.trim();
-
-    if (!headerText) {
-        alert("Please enter header content.");
-        return;
-    }
-    const payload = {
-        template_header:headerText
-    };
-
-    fetch("ajax/save_header.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: JSON.stringify(payload)
-
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data);
-        if (data.success === true) {
-            alert("Header saved successfully!");
-            document.getElementById("template_header").value = "";
-            renderFooterandHeaderList("header_list");
-
-        } else {
-            alert("Error: " + data.message);
-        }
-    })
-    .catch(err => {
-        console.error("Error:", err);
-        alert("Something went wrong.");
-    });
-});
-*/
-
 
     document.getElementById("save_footer").addEventListener("click", function (e) {
         e.preventDefault();
@@ -432,5 +334,39 @@ console.log(data);
         });
 }
 
+    function renderMasterLayout(response){
+        let title = response[0].title;
+        console.log(title);
+        document.getElementById('layout_title').value = title; 
+
+        let description = response[0].description;
+        console.log(title);
+        document.getElementById('layout_description').value = description; 
+
+        let cover_page = document.getElementById('cover_page_list');
+        cover_page.innerHTML = `<img src="ajax/${response[0].file_path}" class="w-100">`;
+        const editorInstances = [];
+        const editorElement = document.querySelectorAll('.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred');
+                        // console.log(editorElement);
+                        editorElement.forEach((editor, index) => {
+                           
+                            console.log(`Editor ${index + 1}:`);
+                            console.log(editor.innerHTML);
+                            if(index == 1){
+                                editor.innerHTML = response[0].header_text;
+                                document.getElementById('header').innerHTML = response[0].header_text;
+                            console.log(editor.innerHTML);
+
+                            
+                            }else{
+                                editor.innerHTML = response[0].footer_text;
+                            console.log(editor.innerHTML);
+                            document.getElementById('footer').innerHTML = response[0].footer_text;
+
+
+
+                            }
+                        });
+                    }
 
 </script>

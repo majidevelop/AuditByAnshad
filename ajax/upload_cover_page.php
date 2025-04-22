@@ -18,6 +18,9 @@ if (!isset($_FILES['cover_page']) || $_FILES['cover_page']['error'] !== UPLOAD_E
 file_put_contents("debug_post.txt", print_r($_POST, true));
 $headerText = $_POST['header_text'] ?? '';
 $footerText = $_POST['footer_text'] ?? '';
+$layout_description = $_POST['layout_description'] ?? '';
+$layout_title = $_POST['layout_title'] ?? '';
+
 
 
 // $response = ['status' => 'error', 'message' => $headerText];
@@ -49,6 +52,9 @@ if (move_uploaded_file($fileTmpPath, $destPath)) {
     array('file_path', $destPath, 'STR'),
     array('header_text', $headerText, 'HTML'),
     array('footer_text', $footerText, 'HTML'),
+    array('title', $layout_title, 'STR'),
+    array('description', $layout_description, 'STR'),
+
 
      
     );

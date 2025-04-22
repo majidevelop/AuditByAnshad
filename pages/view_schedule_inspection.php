@@ -51,85 +51,96 @@
                                     <div class="card-header">
                                 
                                        
-                                        </div>
-                                        <div id="questionsContainer">
+                                    </div>
+                                    <div id="questionsContainer">
 
-                                            <div class="card-body question-card">
-                                                <div class="row">
-                                                    <div class="col-5">
-                                                        <label for="example-text-input" class="form-label">Site</label>
+                                        <div class="card-body question-card">
+                                            <div class="row p-3">
+                                                <div class="col-12">
+                                                    <label for="example-text-input" class="form-label">Inspection Title</label>
+                                                    <input type="text" class="form-input form-control" placeholder="Inspection Title" name="inspection_title" id="inspection_title">
 
-                                                        <select class="form-select sites mb-3" id="sites" name="sites">
-                                                            <option value="">Select</option>
-                                                        </select>
+                                                </div>
+                                                <div class="col-12 mt-3">
+                                                    <label for="example-text-input" class="form-label">Inspection Description</label>
+                                                    <input type="text" class="form-input form-control" placeholder="Inspection Title" name="inspection_desc" id="inspection_desc">
 
-                                                    </div>
-                                                    <div class="col-5">
-                                                                                                                
-                                                        <label for="example-text-input" class="form-label">Asset</label>
+                                                </div>
+                                                
+                                                <div class="col-6 p-3">
+                                                    <label for="example-text-input" class="form-label">Site</label>
 
-                                                        <select class="form-select assets mb-3" id="assets" name="assets">
-                                                            <option value="">Select</option>
-                                                            <option value="1">Asset 1</option>
-                                                            <option value="2">Asset 2</option>
-                                                            <option value="3">Asset 3</option>
+                                                    <select class="form-select sites mb-3" id="sites" name="sites">
+                                                        <option value="">Select</option>
+                                                        <option value="1">Site A</option>
+                                                        <option value="2">Site B</option>
+                                                        <option value="3">Site C</option>
+                                                    </select>
 
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-5">
-                                                        <label for="" class="">Auditee</label>
-                                                        <select name="auditee" id="auditee" class="form-select field-type">
-                                                            <option value="">Select </option>
-                                                            <option value="1">Site A</option>
-                                                            <option value="2">Site B</option>
-                                                            <option value="3">Site C</option>
+                                                </div>
+                                                <div class="col-6 p-3">
+                                                                                                            
+                                                    <label for="example-text-input" class="form-label">Asset</label>
 
-                                                        </select>
+                                                    <select class="form-select assets mb-3" id="assets" name="assets">
+                                                        <option value="">Select</option>
+                                                        <option value="1">Asset 1</option>
+                                                        <option value="2">Asset 2</option>
+                                                        <option value="3">Asset 3</option>
 
-                                                    </div>
-                                                    <div class="col-5">
-                                                       <label for="" class="">Assigned To</label>
-                                                       <select name="assigned_to" id="assigned_to" class="form-select field-type" multiple>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6 p-3">
+                                                    <label for="" class="">Auditee</label>
+                                                    <select name="auditee" id="auditee" class="form-select field-type">
                                                         <option value="">Select </option>
-                                                       </select>
-                                                        
-                                                    </div>
-                                               
-                                                    <div class="col-5">
-                                                        <label for="" class="">Audit Lead</label>
-                                                        <select name="audit_lead" id="audit_lead" class="form-select field-type">
-                                                            <option value="">Select </option>
-                                                        </select>
-                                                        
-                                                    </div>
-                                                    <div class="col-5">
-                                                        <label for="" class="">Audit Manager</label>
-                                                            <select name="audit_manager" id="audit_manager" class="form-select field-type">
-                                                                <option value="">Select </option>
-                                                            </select>
-                                                            
-                                                    </div>
-                                                    <div class="col-5">
-                                                    <label for="" class="">Audit Date</label>
-                                                    <input type="date" class="form-control" name="audit_date" id="audit_date">
+                                                        <option value="1">Site A</option>
+                                                        <option value="2">Site B</option>
+                                                        <option value="3">Site C</option>
 
-                                                      
+                                                    </select>
 
-                                                    </div>
-                                                    <div class="col-5">
-                                                            <label for="select_headers">Select header</label>
-                                                            <select name="select_headers" id="select_headers"  class="form-control form-input">
-                                                                <option value=""><p>dfdffddf <b>ewe</b></p></option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-5">
-                                                            <label for="select_footers">Select footer</label>
-                                                            <select name="select_footers" id="select_footers" class="form-control form-input"></select>
-                                                        </div>
+                                                </div>
+                                                <div class="col-6 p-3">
+                                                    <label for="" class="">Assigned To</label>
+                                                    <select name="assigned_to" id="assigned_to" class="form-select field-type" multiple>
+                                                    <option value="">Select </option>
+                                                    </select>
+                                                    
                                                 </div>
                                             
+                                                <div class="col-6 p-3">
+                                                    <label for="" class="">Audit Lead</label>
+                                                    <select name="audit_lead" id="audit_lead" class="form-select field-type">
+                                                        <option value="">Select </option>
+                                                    </select>
+                                                    
+                                                </div>
+                                                <div class="col-6 p-3">
+                                                    <label for="" class="">Audit Manager</label>
+                                                        <select name="audit_manager" id="audit_manager" class="form-select field-type">
+                                                            <option value="">Select </option>
+                                                        </select>
+                                                        
+                                                </div>
+                                                <div class="col-6 p-3">
+                                                <label for="" class="">Audit Date</label>
+                                                <input type="date" class="form-control" name="audit_date" id="audit_date">
+
+                                                    
+
+                                                </div>
+                                                <div class="col-6 p-3">
+                                                        <label for="select_headers">Select Report Template</label>
+                                                        <select name="select_headers" id="select_headers"  class="form-control form-input">
+                                                            <option value=""><p>dfdffddf <b>ewe</b></p></option>
+                                                        </select>
+                                                    </div>
+                                                   
                                             </div>
+                                        
                                         </div>
+                                    </div>
 
                                         
                                     </div>
@@ -159,42 +170,81 @@
 <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
 <script>
-    document.getElementById("saveBtn").addEventListener("click", function () {
-    // Get selected values
-    const assignedTo = Array.from(document.getElementById("assigned_to").selectedOptions).map(option => option.value);
-    const auditLead = document.getElementById("audit_lead").value;
-    const auditDate = document.getElementById("audit_date").value;
 
-    const auditManager = document.getElementById("audit_manager").value;
-    const templateId = new URLSearchParams(window.location.search).get("id");
 
-    // Build payload
-    const payload = {
-        assigned_to: assignedTo,
-        audit_lead: auditLead,
-        audit_manager: auditManager,
-        templateId: templateId,
-        auditDate:auditDate
-    };
-        console.log(payload);
-    // Send AJAX POST request
-    fetch("ajax/post_schedule_inspection.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json" // Tell server it's JSON
+    function get_template_details(templateId) {
+    $.ajax({
+        url: `./pages/view_template_by_id.php?id=${templateId}`,
+        type: "GET",
+        dataType: "json",
+        success: function(response) {
+            if (response.success) {
+                console.log("Template Details:", response);
+                displayTemplate(response.template, response.questions, response.options);
+            } else {
+                alert("Error: " + response.error);
+            }
         },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log("Success:", data);
-        alert("Saved successfully!");
-    })
-    .catch(error => {
-        console.error("Error:", error);
-        alert("Failed to save!");
+        error: function(xhr, status, error) {
+            console.error("AJAX Error:", error);
+            alert("Failed to load template. Check console for details.");
+        }
     });
-});
+}
+    document.getElementById("saveBtn").addEventListener("click", function () {
+        const inspection_title = document.getElementById('inspection_title').value;
+        const inspection_desc = document.getElementById('inspection_desc').value;
+
+        // Get selected values
+        const assignedTo = Array.from(document.getElementById("assigned_to").selectedOptions).map(option => option.value);
+        const auditLead = document.getElementById("audit_lead").value;
+        const auditDate = document.getElementById("audit_date").value;
+
+        const auditManager = document.getElementById("audit_manager").value;
+
+        const site = document.getElementById("sites").value;
+
+        const asset = document.getElementById("assets").value;
+
+        const auditee = document.getElementById("auditee").value;
+
+        const report_template = document.getElementById("select_headers").value;
+
+        const templateId = new URLSearchParams(window.location.search).get("id");
+
+        // Build payload
+        const payload = {
+            inspection_title:inspection_title,
+            inspection_desc:inspection_desc,
+            assigned_to: assignedTo,
+            audit_lead: auditLead,
+            audit_manager: auditManager,
+            templateId: templateId,
+            auditDate:auditDate,
+            site:site,
+            asset:asset,
+            auditee:auditee,
+            report_template: report_template
+        };
+        console.log(payload);
+        // Send AJAX POST request
+        fetch("ajax/post_schedule_inspection.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json" // Tell server it's JSON
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Success:", data);
+            alert(data.message);
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Failed to save!");
+        });
+    });
 </script>
 
 <script>
@@ -207,9 +257,45 @@
         
         // saveTemplate();
         get_application_users();
-        getFooters();
-        getHeaders();
+        get_report_covers();
+
+        // getFooters();
+        // getHeaders();
         // getCovers();
+    }
+    function get_report_covers(){
+        $.ajax({
+            url: "ajax/get_master_layouts.php", // Update URL if needed
+            type: "POST", // Changed from GET to POST
+            dataType: "json",
+            data: {}, // Add any necessary data here
+            success: function(response) {
+                console.log("Form Templates:", response);
+
+                if (response.success) {
+                    //  displayTemplates(response.data); // Call function to handle UI display
+                    const select = document.getElementById("select_headers");
+                    response.data.forEach( footer => {
+            if(footer.title != '' || footer.title != null){
+
+                const defaultOption = document.createElement("option");
+                defaultOption.value =  footer.id;
+                defaultOption.textContent = footer.title;
+                select.appendChild(defaultOption);
+            }
+        });
+                } else {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Request URL:", this.url); // Print the request URL
+                console.log("Status:", status);
+                console.log("Error:", error);
+                console.error("AJAX Error:", error, status);
+                alert("Failed to load templates. Check console for details.");
+            }
+        });
     }
     function getFooters(){
         fetch("ajax/get_footers.php", {
@@ -288,45 +374,6 @@
     })
     .catch(error => console.error("Error:", error));
     }
-
-    // function renderApplicationUsers() {
-    //     const selectIds = ["assigned_to", "audit_lead", "audit_manager"];
-
-    //     selectIds.forEach(selectId => {
-    //         const selectElement = document.getElementById(selectId);
-
-    //         // Clear existing options
-    //         selectElement.innerHTML = "";
-
-    //         // Add a default placeholder option
-    //         const defaultOption = document.createElement("option");
-    //         defaultOption.value = "";
-    //         defaultOption.textContent = "-- Select User --";
-    //         selectElement.appendChild(defaultOption);
-
-    //          // Only show default option for single-selects
-    //     if (!selectElement.hasAttribute("multiple")) {
-    //         const defaultOption = document.createElement("option");
-    //         defaultOption.value = "";
-    //         defaultOption.textContent = "-- Select User --";
-    //         selectElement.appendChild(defaultOption);
-    //     }
-
-    //         // Populate user options
-    //         application_users.forEach(user => {
-    //             const option = document.createElement("option");
-    //             option.value = user.id;
-    //             option.textContent = user.name;
-    //             selectElement.appendChild(option);
-    //         });
-    //           // Initialize Select2
-    //     $(`#${selectId}`).select2({
-    //         placeholder: selectElement.hasAttribute("multiple") ? "Select one or more users" : "Select a user",
-    //         allowClear: !selectElement.hasAttribute("multiple")
-    //     });
-    //     });
-    // }
-
 
     function renderApplicationUsers() {
         const selectConfigs = {
@@ -471,9 +518,7 @@ document.getElementById("questionsContainer").addEventListener("change", functio
 }
 });
 
-    document.getElementById("saveTemplate").addEventListener("click", function () {
-        saveTemplate();
-    });
+  
 
 function saveTemplate(){
     let templateData = {
@@ -645,7 +690,7 @@ document.addEventListener("click", function(event) {
                             <!-- Radio options can be dynamically added here -->
                         </div>
                     </div>
-                    <div class="col-5">
+                    <div class="col-6 p-3">
                         <select class="form-select field-type" id="fieldType">
                             <option value="text">Text</option>
                             <option value="number">Number</option>

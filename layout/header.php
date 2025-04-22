@@ -495,6 +495,9 @@
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
                                 <li><a href="forms_master_layout" data-key="t-form-elements">Master</a></li>
+                                <li><a href="list_master_layouts" data-key="t-form-elements">Master Layouts</a></li>
+
+                                
                                 <li><a href="view_create_master_header" data-key="t-form-elements">Master - Header</a></li>
 
                                 <li><a href="view_create_master_footer" data-key="t-form-elements">Master - Footer</a></li>
