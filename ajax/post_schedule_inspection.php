@@ -47,9 +47,6 @@ if (empty($inspection_title) || empty($inspection_desc)) {
     array('asset', $asset, 'STR'),
     array('auditee', $auditee, 'STR'),
     array('report_template', $report_template, 'STR'),
-
-
-
      
     );
    

@@ -282,7 +282,7 @@ function saveTemplate(){
     });
 
 console.log(templateData);
-    fetch("pages/save_template.php", {
+    fetch("ajax/save_template.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(templateData)

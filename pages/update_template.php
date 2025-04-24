@@ -12,7 +12,9 @@ if (!isset($data['template_id'])) {
 $template_id = $data['template_id'];
 
 try {
-$pdo = new PDO("mysql:host=sdb-82.hosting.stackcp.net;dbname=db_ehse-35303839647d", "db_ehse-35303839647d", "A4Z0&}.Ftndg");
+$pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
+// $pdo = new PDO("mysql:host=sdb-82.hosting.stackcp.net;dbname=db_ehse-35303839647d", "db_ehse-35303839647d", "A4Z0&}.Ftndg");
+
 
     // $pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

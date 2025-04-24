@@ -329,6 +329,7 @@ function saveTemplate1() {
 
 // Function to Update an Existing Template
 function updateTemplate() {
+    alert();
     let templateData = collectTemplateData();
     templateData.template_id = templateId; // Add template ID
 
@@ -601,6 +602,7 @@ document.addEventListener("click", function(event) {
 
 // Function to move a question up
 document.addEventListener("click", function(event) {
+    console.log(event.target.classList);
     if (event.target.classList.contains("move-up")
     ||
     event.target.classList.contains("dripicons-arrow-thin-up")
@@ -701,7 +703,7 @@ function createRadioItem(value) {
     return `
         <div class="radio-item d-flex align-items-center mb-2">
             <input type="text" class="option-input form-control form-control-sm me-2" value="${value}">
-            <button class="btn btn-sm btn-secondary me-1" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up skiptrigger"></i></button>
+            <button class="btn btn-sm btn-secondary me-1 move-up" onclick="moveUp(this)"><i class="dripicons-arrow-thin-up skiptrigger"></i></button>
             <button class="btn btn-sm btn-secondary me-1" onclick="moveDown(this)"><i class="dripicons-arrow-thin-down skiptrigger"></i></button>
             <button class="btn btn-sm btn-danger" onclick="deleteItem(this)"><i class="dripicons-trash skiptrigger"></i></button>
         </div>
