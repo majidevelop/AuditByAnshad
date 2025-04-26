@@ -65,7 +65,7 @@
                                 <div class="card">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div id="questionsContainer">
+                                            <div id="schedulesContainer">
 
                                             </div>
 
@@ -137,9 +137,10 @@
             dataType: "json",
             success: function(response) {
                 if (response.success) {
-                    console.log("Template Details:", response);
+                    console.log("Schedule Details:", response.data);
                     // renderSchedule(response.data);
-                    displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
+                    // displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
+                    renderSchedules(response.data);
                 } else {
                     alert("Error: " + response.error);
                 }
@@ -149,5 +150,19 @@
                 alert("Failed to load template. Check console for details.");
             }
         });
+    }
+    function renderSchedules(schedules){
+        let html;
+        schedules.forEach(schedule => {
+            console.log(schedule.title);
+            html += `<div class="p-3"><div class="p-3 rounded-1 border border-info">
+                <p>${schedule.title}</p>
+                <p>${schedule.description}</p>
+                <p>${schedule.created_at}</p>
+ </div>
+            </div>`
+            
+        });
+        $("#schedulesContainer").html(html);
     }
 </script>
