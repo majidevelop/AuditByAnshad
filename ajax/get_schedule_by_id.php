@@ -27,8 +27,13 @@ $where=array(array('id',$template_id,'STR'));
     $templates = array();
     $templates=allrows('scheduled_inspections',$where,'created_at DESC');
 
+    $where=array(array('schedule_id',$template_id,'STR'));
 
-    echo json_encode(["success" => true, "data" => $templates]);
+    $answers = array();
+    $answers=allrows('form_answers',$where,'created_at DESC');
+
+
+    echo json_encode(["success" => true, "data" => $templates, "answers" => $answers]);
 } catch (Exception $e) {
     echo json_encode(["Fail" => false, "error" => $e->getMessage()]);
 }

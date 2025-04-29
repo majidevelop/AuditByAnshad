@@ -16,6 +16,7 @@ try {
 
     $templateId = (int)$data['template_id'];
     $schedule_id = (int)$data['schedule_id'];
+    $status = $data['status'];
     foreach ($data['responses'] as $response) {
         if (!isset($response['question_id']) || !isset($response['answer'])) {
             http_response_code(400);
@@ -49,6 +50,19 @@ try {
            
         
          $productid = insertrow('form_answers', $value);
+
+         $update_value = array(
+            array('status', $status, 'STR'),
+
+            
+             
+            );
+           
+    $where=array(array('id',$schedule_id,'STR'));
+
+
+                updaterow("scheduled_inspections",$update_value,$where);
+
     }
 
     // Return success response

@@ -121,6 +121,8 @@
 <script>
     let scheduleId = null;
     let templateId = null;
+    let isSubmitted = false;
+    let answers;
 
     function load_func(){
         scheduleId = new URLSearchParams(window.location.search).get("id");
@@ -143,6 +145,7 @@ function get_schedule_by_id(id){
                 if (response.success) {
                     console.log("Schedule Details:", response);
                     templateId = response.data[0].template_id;
+                    answers = response.answers;
                     get_template_details_by_id(templateId);
                     // renderSchedule(response.data);
                 } else {
@@ -176,105 +179,7 @@ function get_template_details_by_id(id){
             }
         });
 }
-   /* 
-     // Function to display the template
-function displayTemplate(template, questions, options) {
-    let html = `<h2>${template.template_name}</h2>`;
-    $("#example-text-input-desc").val(template.description);
-    $("#example-text-input-title").val(template.title);
-
-    html += `<p><strong>Created At:</strong> ${template.created_at}</p>`;
-    html += `<h3>Questions:</h3><ul>`; 
-    let questionsHtml = ``;
-
-    questions.forEach(q => {
-        let optionsHtml = "";
-        let showDefaultInputs = true; // By default, show radio buttons
-
-        // Find options belonging to the current question
-        let relatedOptions = options.filter(o => o.question_id == q.question_id);
-
-        // If answer type is dropdown, multi_select, or single_select, show options only
-        if (["dropdown", "multi_select", "single_select"].includes(q.answer_type) && relatedOptions.length > 0) {
-            showDefaultInputs = false; // Hide default inputs
-            optionsHtml = `<div class="" style="padding-left:1rem;">`;
-
-            if (q.answer_type === "multi_select") {
-                relatedOptions.forEach(option => {
-                    optionsHtml += createMultiSelectItem(option.option_value);
-                });
-                optionsHtml += `</div>`;
-            } else if (q.answer_type === "single_select") {
-                relatedOptions.forEach(option => {
-                    optionsHtml += createRadioItem(option.option_value);
-                });
-                optionsHtml += `</div>`;
-            } else if (q.answer_type === "dropdown") {
-                // Start a <select> tag for dropdown
-                optionsHtml += `<select class="form-select" name="response_${q.question_id}">`;
-                relatedOptions.forEach(option => {
-                    optionsHtml += createDropdownItem(option.option_value);
-                });
-                optionsHtml += `</select></div>`; // Close the <select> and <div>
-            }
-        }
-        else if(q.answer_type === "preconfigured"){
-                    optionsHtml = ` 
-                    <div class="mt-3">
-                    <input type="radio" id="true_false_${q.question_id}" name="response_${q.question_id}" value="true" ${q.answer_type === 'true_false' ? 'checked' : ''}>
-                                <label for="true_false_${q.question_id}">True/False</label><br>
-
-                                <input type="radio" id="pass_fail_${q.question_id}" name="response_${q.question_id}" value="pass" ${q.answer_type === 'pass_fail' ? 'checked' : ''}>
-                                <label for="pass_fail_${q.question_id}">Pass/Fail</label><br>
-
-                                <input type="radio" id="yes_no_${q.question_id}" name="response_${q.question_id}" value="yes" ${q.answer_type === 'yes_no' ? 'checked' : ''}>
-                                <label for="yes_no_${q.question_id}">Yes/No</label> </div>
-                    `;
-                }
-
-        questionsHtml += `
-            <div class="card-body question-card " style="margin-bottom: 1px solid beige;">
-                <hr style="height:2px;">
-
-                <div class="row">
-                    <div class="col-12 p-3">
-                        <!-- <input class="form-control mb-3" type="text" value="${q.question_title}" id="question-title">
-                        <input class="form-control" type="text" value="${q.question_description}" id="question-description"> -->
-                        <p><strong>${q.question_title}</strong></p>
-                        <p>${q.question_description}</p>
-
-                        
-                        <div class=" responseDiv">
-                            ${optionsHtml}
-                            
-                            ${showDefaultInputs ? `` : ''}
-                        </div>
-                    </div>
-
-                   
-                </div>
-
-            </div>
-        `;
-    });
-
-    // Append the generated HTML to the container
-    $("#questionsContainer").html(questionsHtml);
-
-}
-
-// Function to create a multi-select input item
-function createDropdownItem(value) {
-    return `<option value="${value}">${value}</option>`;
-}
-
-function createRadioItem(value) {
-    return `<div><input type="radio" name="option" value="${value}"> <label>${value}</label></div>`;
-}
-
-function createMultiSelectItem(value) {
-    return `<div><input type="checkbox" name="option" value="${value}"> <label>${value}</label></div>`;
-}*/
+   
 function createRadioItem(value, questionId, answerId) {
     return `<div><input type="radio" name="response_${questionId}" value="${value}" data-question-id="${questionId}" data-answer-id="${answerId}"> <label>${value}</label></div>`;
 }
@@ -305,6 +210,9 @@ function displayTemplate(template, questions, options) {
     questions.forEach(q => {
         let optionsHtml = "";
         let showDefaultInputs = true;
+        const savedAnswer = answers.find(a => a.question_id === q.id || a.question_id === q.question_id) || {};
+        const savedValue = savedAnswer.answer || '';
+        const savedOptionId = savedAnswer.option_id || null;
 
         let relatedOptions = options.filter(o => o.question_id === q.question_id);
 
@@ -348,9 +256,9 @@ function displayTemplate(template, questions, options) {
                 <div class="row">
                     <div class="col-12">
                     <input class="field-type" value="${q.answer_type}" type="hidden">
-                        <input class="form-control mb-3" type="text" value="${q.question_title}" id="question-title-${q.question_id}">
-                        <input class="form-control" type="text" value="${q.question_description}" id="question-description-${q.question_id}">
-                        <div class="mt-3 responseDiv">
+                        <p class="" id="question-title-${q.question_id}">${q.question_title.trim()} </p>
+                        <p class="" value="" id="question-description-${q.question_id}">${q.question_description.trim()} </p>
+                        <div class="mt-3 ms-3 responseDiv">
                             ${optionsHtml}
                             ${showDefaultInputs ? `
                                 ${q.answer_type === 'text' ? `<input type="text" class="form-control" name="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter text">` : ''}
@@ -368,7 +276,7 @@ function displayTemplate(template, questions, options) {
     });
 
     html += questionsHtml + `</ul>`;
-    html += `<button type="button" class="btn btn-primary save-answers" data-template-id="${template.id}">Save Answers</button>`;
+    html += `<button type="button" class="btn btn-primary save-answers float-sm-end me-2" data-template-id="${template.id}">Save Answers</button>`;
     html += `</form>`;
     // $("#template-container").html(html);
     $('#questionsContainer').html(html);
@@ -377,6 +285,9 @@ function displayTemplate(template, questions, options) {
 
         saveAnswers(template.id, questions);
     });
+    form = $("#questionsContainer"); // jQuery object
+    form.find('input, select, button').prop('disabled', true);
+    form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
 }
 
 function saveAnswers(templateId, questions) {
@@ -384,6 +295,7 @@ function saveAnswers(templateId, questions) {
     const answers = {
         template_id: templateId,
         schedule_id:scheduleId,
+        status : "submitted",
         responses: []
     };
 
