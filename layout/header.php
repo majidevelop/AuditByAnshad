@@ -502,6 +502,12 @@
 
                                 <li><a href="view_create_master_footer" data-key="t-form-elements">Master - Footer</a></li>
 
+
+                                <li><a href="form_design_audit_plan" data-key="t-form-elements">Create Audit Plan</a></li>
+                                <li><a href="view_audit_plans" data-key="t-form-elements">View Audit Plans</a></li>
+
+
+
                                     <li><a href="list_schedule_inspection" data-key="t-form-elements">View Scheduled Inspection</a></li>
                                     <li><a href="list_schedule_inspection_calendar" data-key="t-form-elements">View Scheduled Inspection Calendar</a></li>
 

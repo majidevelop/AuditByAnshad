@@ -6,36 +6,17 @@ header("Access-Control-Allow-Headers: Content-Type");
 include('../functionPDO.php');
 try {
 
+
+   
+// Decode JSON input
 $input = json_decode(file_get_contents("php://input"), true);
 
-// Check if templateId is provided
-if (!isset($input['templateId'])) {
-    echo json_encode(["error" => "Missing templateId"]);
-    exit;
+// Convert audit_team (array) to comma-separated string
+$audit_team_str = '';
+if (isset($input['audit_team']) && is_array($input['audit_team'])) {
+    $audit_team_str = implode(",", $input['audit_team']);
 }
 
-$inspection_title = $input['inspection_title'];
-$inspection_desc = $input['inspection_desc'];
-$template_id = $input['templateId'];
-// $assignees = $input['assigned_to'];
-$audit_lead = $input['audit_lead'];
-$audit_manager = $input['audit_manager'];
-$audit_date = $input['auditDate'];
-
-$site = $input['site'];
-$asset = $input['asset'];
-$auditee = $input['auditee'];
-$report_template = $input['report_template'];
-
-
-
-$assignees = isset($input['assigned_to']) ? implode(',', $input['assigned_to']) : '';
-
-// Validate required fields
-if (empty($inspection_title) || empty($inspection_desc)) {
-    echo json_encode(['message' => 'Title and Description are required.']);
-    exit;
-}
 // Define value array: field name, value, type (STR or INT)
 $values = array(
     array('audit_id', $input['audit_id'], 'INT'),
@@ -51,9 +32,7 @@ $values = array(
     array('Comments', $input['Comments'], 'STR')
 );
 
-   
-
- $productid = insertrow('scheduled_inspections', $value);
+ $productid = insertrow('audit_plans', $value);
 //if ($success) {
 //    echo json_encode(['success' => 1]);
 //} else {
