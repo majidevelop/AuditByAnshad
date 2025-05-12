@@ -141,12 +141,13 @@
                                                         
                                                 </div>
                                                 <div class="col-6 p-3">
-                                                <label for="" class="">Audit Date</label>
-                                                <input type="date" class="form-control" name="audit_date" id="audit_date">
+                                                <label for="" class="">planned_start_date Date</label>
+                                                <input type="date" class="form-control" name="planned_start_date" id="planned_start_date">
 
                                                     
 
                                                 </div>
+                                                
                                                 <div class="col-6 p-3">
                                                         <label for="select_headers">Select Checklist</label>
                                                         <select name="select_headers" id="select_headers"  class="form-control form-input">
@@ -274,8 +275,8 @@
     function load_func(){
         
         // saveTemplate();
-        get_application_users();
         // get_report_covers();
+        get_application_users();
         get_audit_plan(plan_id);
 
         // getFooters();
@@ -301,7 +302,19 @@
 
     }
     function renderAuditPlan(plan){
-        $("#Audit_title").val(plan.audit_title);
+        $("#audit_title").val(plan.audit_title);
+        $("#audit_type").val(plan.audit_type);
+        $("#department_name").val(plan.department_name);
+        $("#audit_scope").val(plan.audit_scope);
+        $("#audit_criteria").val(plan.audit_criteria);
+        $("#audit_lead").val(plan.lead_auditor);
+        console.log(plan.lead_auditor);
+        // document.getElementById("audit_lead").disabled=true;
+// choiceInstances['audit_lead'].setChoiceByValue(plan.lead_auditor);
+
+        $("#audit_team").val(plan.audit_team);
+        $("#audit_comments").val(plan.Comments);
+
     }
     function get_report_covers(){
         $.ajax({
@@ -419,9 +432,14 @@
             audit_lead: { multiple: false },
             audit_manager: { multiple: false }
         };
+        const choiceInstances = {};
 
         Object.entries(selectConfigs).forEach(([id, config]) => {
             const select = document.getElementById(id);
+            // console.log(select);
+            if(select== null){
+                return;
+            }
             select.innerHTML = ""; // clear existing options
 
             if (!config.multiple) {
@@ -438,11 +456,12 @@
                 select.appendChild(option);
             });
 
-            new Choices(select, {
-                removeItemButton: config.multiple,
-                placeholderValue: config.multiple ? "Select users..." : "Select user",
-                shouldSort: false
-            });
+            // new Choices(select, {
+            //     removeItemButton: config.multiple,
+            //     placeholderValue: config.multiple ? "Select users..." : "Select user",
+            //     shouldSort: false
+            // });
+
         });
     }
   

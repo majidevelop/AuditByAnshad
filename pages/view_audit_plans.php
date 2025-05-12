@@ -146,6 +146,7 @@ function approve_audit_plan(plan_id){
         application_users = data.data;
 
         console.log("Last Updated:", data);
+        location.reload();
     })
     .catch(error => console.error("Error:", error));
 }

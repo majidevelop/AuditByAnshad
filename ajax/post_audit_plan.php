@@ -19,9 +19,11 @@ if (isset($input['audit_team']) && is_array($input['audit_team'])) {
 
 // Define value array: field name, value, type (STR or INT)
 $values = array(
-    array('audit_id', $input['audit_id'], 'INT'),
+    // array('audit_id', $input['audit_id'], 'INT'),
     array('audit_title', $input['audit_title'], 'STR'),
     array('audit_type', $input['audit_type'], 'INT'),
+    array('department_name', $input['department_name'], 'STR'),
+
     array('audit_scope', $input['audit_scope'], 'STR'),
     array('audit_criteria', $input['audit_criteria'], 'STR'),
     array('planned_start_date', $input['planned_start_date'], 'STR'),
@@ -32,7 +34,7 @@ $values = array(
     array('Comments', $input['Comments'], 'STR')
 );
 
- $productid = insertrow('audit_plans', $value);
+ $productid = insertrow('audit_plans', $values);
 //if ($success) {
 //    echo json_encode(['success' => 1]);
 //} else {

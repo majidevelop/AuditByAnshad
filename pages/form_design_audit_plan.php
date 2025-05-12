@@ -307,10 +307,11 @@ function submitAuditPlan() {
     $.ajax({
         url: 'ajax/post_audit_plan.php',
         type: 'POST',
-        data: data,
+        data: JSON.stringify(data),
         success: function(response) {
             alert('Audit plan submitted successfully!');
             console.log(response);
+            location.reload();
         },
         error: function(xhr, status, error) {
             alert('Submission failed: ' + error);
