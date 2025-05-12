@@ -508,7 +508,7 @@
 
 
 
-                                    <li><a href="list_schedule_inspection" data-key="t-form-elements">View Scheduled Inspection</a></li>
+                                    <li><a href="list_audit_schedules" data-key="t-form-elements">View Scheduled Audits</a></li>
                                     <li><a href="list_schedule_inspection_calendar" data-key="t-form-elements">View Scheduled Inspection Calendar</a></li>
 
                                     <!-- <li><a href="list_schedule_inspection" data-key="t-form-elements">Inspections</a></li> -->

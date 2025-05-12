@@ -1,6 +1,6 @@
 
 
-                <div class="page-content">
+<div class="page-content">
                     <div class="container-fluid">
 
                         <!-- start page title -->
@@ -40,6 +40,8 @@
                                                             <th data-priority="3">Title</th>
                                                             <th data-priority="1">Description</th>
                                                             <th data-priority="3">Created By</th>
+                                                            <th data-priority="3">Assigned To</th>
+
                                                             <th data-priority="3">CreatedAt</th>
                                                         </tr>
                                                     </thead>
@@ -62,16 +64,42 @@
                 </div>
                 <!-- End Page-content -->
 
-           <script>
-            function load_func()
-                {
-                    get_form_templates();
+<script>
+    let audit_plans;
+    async function load_func()
+    {
+        await get_audit_plans();
 
-                }
+        await get_inspections();
+        // get_users();
 
-                function get_form_templates() {
-                    $.ajax({
-            url: "ajax/get_form_templates.php", // Update URL if needed
+
+    }
+    async function get_audit_plans(){
+        console.log("aa");
+      
+
+        try {
+        const response = await fetch("ajax/get_audit_plans.php", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+        audit_plans = data.data;
+        console.log("Last Updated:", data);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+    }
+
+    async function get_inspections() {
+console.log(audit_plans);
+        console.log("bb");
+
+        $.ajax({
+            url: "ajax/get_scheduled_audits.php", // Update URL if needed
             type: "POST", // Changed from GET to POST
             dataType: "json",
             data: {}, // Add any necessary data here
@@ -79,7 +107,7 @@
                 console.log("Form Templates:", response);
 
                 if (response.success) {
-                    displayTemplates(response.data); // Call function to handle UI display
+                    renderScheduledAudits(response.data); // Call function to handle UI display
                 } else {
                     alert("Error: " + response.error);
                 }
@@ -93,26 +121,34 @@
             }
         });
 
+    }
 
-}
 
-
-function displayTemplates(templates) {
+function renderScheduledAudits(templates) {
+    
     let table = "";
     let ctr =0 ;
 
     templates.forEach(template => {
+        try{
+
+        let audit_plan = audit_plans.find(auditplan => template.audit_id === auditplan.audit_id);
+        console.log(template.audit_id);
         ctr++;
         table += `
         <tr>
-            <td> <a href="view_template?id=${template.id}">${ctr} </a></td>
-            <td><a href="view_template?id=${template.id}"> ${template.id} </a></td>
-            <td><a href="view_template?id=${template.id}">${template.title} </a></td>
-            <td><a href="view_template?id=${template.id}">${template.description ? '' : 'Default Value'} </a></td>
-            <td><a href="view_template?id=${template.id}">${template.created_by ? '' : 'Default Value'} </a></td>
-            <td><a href="view_template?id=${template.id}">${template.created_at} </a></td>
+            <td> <a href="view_schedule?id=${template.scheduled_id}">${ctr} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.audit_title} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.created_by ? '' : 'Default Value'} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} </a></td>
         </tr> 
                   `;
+        }
+        catch( error){
+
+        }
     });
 
 

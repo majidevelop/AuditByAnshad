@@ -9,51 +9,30 @@ try {
 $input = json_decode(file_get_contents("php://input"), true);
 
 // Check if templateId is provided
-if (!isset($input['templateId'])) {
-    echo json_encode(["error" => "Missing templateId"]);
+if (!isset($input['checklist_id'])) {
+    echo json_encode(["error" => "Missing templateId", "payload" => $input["audit_id"]]);
     exit;
 }
 
-$inspection_title = $input['inspection_title'];
-$inspection_desc = $input['inspection_desc'];
-$template_id = $input['templateId'];
-// $assignees = $input['assigned_to'];
-$audit_lead = $input['audit_lead'];
-$audit_manager = $input['audit_manager'];
-$audit_date = $input['auditDate'];
 
-$site = $input['site'];
-$asset = $input['asset'];
-$auditee = $input['auditee'];
-$report_template = $input['report_template'];
+$start = new DateTime($input['planned_start_date']);
+$end = new DateTime($input['planned_end_date']);
+$diff = $start->diff($end)->days;
 
-
-
-$assignees = isset($input['assigned_to']) ? implode(',', $input['assigned_to']) : '';
-
-// Validate required fields
-if (empty($inspection_title) || empty($inspection_desc)) {
-    echo json_encode(['message' => 'Title and Description are required.']);
-    exit;
-}
 // Define value array: field name, value, type (STR or INT)
 $values = array(
     array('audit_id', $input['audit_id'], 'INT'),
-    array('audit_title', $input['audit_title'], 'STR'),
-    array('audit_type', $input['audit_type'], 'INT'),
-    array('audit_scope', $input['audit_scope'], 'STR'),
-    array('audit_criteria', $input['audit_criteria'], 'STR'),
+    array('checklist_id', $input['audit_id'], 'INT'),
+
     array('planned_start_date', $input['planned_start_date'], 'STR'),
     array('planned_end_date', $input['planned_end_date'], 'STR'),
-    array('auto_calculated_duration', $input['auto_calculated_duration'], 'INT'),
-    array('lead_auditor', $input['lead_auditor'], 'INT'),
-    array('audit_team', $audit_team_str, 'STR'),
-    array('Comments', $input['Comments'], 'STR')
+    array('auto_calculated_duration', $diff, 'INT'),
+    array('audit_process', $input['audit_process'], 'STR')
 );
 
    
 
- $productid = insertrow('scheduled_inspections', $value);
+ $productid = insertrow('scheduled_audits', $values);
 //if ($success) {
 //    echo json_encode(['success' => 1]);
 //} else {

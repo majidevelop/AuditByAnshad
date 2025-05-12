@@ -133,27 +133,40 @@
                                                     </select>
                                                     
                                                 </div>
-                                                <div class="col-6 p-3">
-                                                    <label for="" class="">Audit Manager</label>
-                                                        <select name="audit_manager" id="audit_manager" class="form-select field-type">
+                                                <!-- <div class="col-6 p-3">
+                                                    <label for="" class="">Audit Team</label>
+                                                        <select name="audit_team" id="audit_team" class="form-select field-type">
                                                             <option value="">Select </option>
                                                         </select>
                                                         
-                                                </div>
+                                                </div> -->
                                                 <div class="col-6 p-3">
-                                                <label for="" class="">planned_start_date Date</label>
-                                                <input type="date" class="form-control" name="planned_start_date" id="planned_start_date">
+                                                    <label for="" class="">Planned Start Date</label>
+                                                    <input type="date" class="form-control" name="planned_start_date" id="planned_start_date">
+                                                </div>
 
-                                                    
-
+                                                <div class="col-6 p-3">
+                                                    <label for="" class="">Planned End Date</label>
+                                                    <input type="date" class="form-control" name="planned_end_date" id="planned_end_date">
                                                 </div>
                                                 
                                                 <div class="col-6 p-3">
-                                                        <label for="select_headers">Select Checklist</label>
-                                                        <select name="select_headers" id="select_headers"  class="form-control form-input">
+                                                        <label for="select_checklist">Select Checklist</label>
+                                                        <select name="select_checklist" id="select_checklist"  class="form-control form-input">
                                                             <option value=""><p>dfdffddf <b>ewe</b></p></option>
                                                         </select>
-                                                    </div>
+                                                </div>
+
+                                                <div class="col-6 p-3">
+                                                        <label for="select_checklist">Select Process</label>
+                                                        <select name="select_process" id="select_process"  class="form-control form-input">
+                                                            <option value="0"><p>Process <b>ewe</b></p></option>
+                                                            <option value="1"><p>Process <b>1</b></p></option>
+                                                            <option value="2"><p>Process <b>2</b></p></option>
+                                                            <option value="3"><p>Process <b>3</b></p></option>
+
+                                                        </select>
+                                                </div>
                                                    
                                             </div>
                                         
@@ -210,7 +223,7 @@
     });
 }
     document.getElementById("saveBtn").addEventListener("click", function () {
-        const Audit_title = document.getElementById('Audit_title').value;
+        /*    const Audit_title = document.getElementById('Audit_title').value;
         const Audit_desc = document.getElementById('Audit_desc').value;
 
         // Get selected values
@@ -228,25 +241,20 @@
 
         const report_template = document.getElementById("select_headers").value;
 
-        const templateId = new URLSearchParams(window.location.search).get("id");
+        const templateId = new URLSearchParams(window.location.search).get("id"); */
 
         // Build payload
         const payload = {
-            Audit_title:Audit_title,
-            Audit_desc:Audit_desc,
-            assigned_to: assignedTo,
-            audit_lead: auditLead,
-            audit_manager: auditManager,
-            templateId: templateId,
-            auditDate:auditDate,
-            site:site,
-            asset:asset,
-            auditee:auditee,
-            report_template: report_template
+            audit_id:new URLSearchParams(window.location.search).get("id"),
+            checklist_id:$("#select_checklist").val(),
+            planned_start_date: $("#planned_start_date").val(),
+            planned_end_date: $("#planned_end_date").val(),
+            // auto_calculated_duration: $("#auto_calculated_duration").val(),
+            audit_process: $("#select_process").val()
         };
         console.log(payload);
         // Send AJAX POST request
-        fetch("ajax/post_schedule_Audit.php", {
+        fetch("ajax/post_schedule_inspection.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json" // Tell server it's JSON
@@ -257,6 +265,7 @@
         .then(data => {
             console.log("Success:", data);
             alert(data.message);
+            location.reload();
         })
         .catch(error => {
             console.error("Error:", error);
@@ -272,16 +281,15 @@
     let headers = [];
     plan_id = new URLSearchParams(window.location.search).get("id");
 
-    function load_func(){
+    async function load_func(){
         
         // saveTemplate();
         // get_report_covers();
-        get_application_users();
+        await get_application_users();
+        
         get_audit_plan(plan_id);
-
-        // getFooters();
-        // getHeaders();
-        // getCovers();
+        get_form_templates();
+       
     }
     function get_audit_plan(id){
         $.ajax({
@@ -311,11 +319,113 @@
         console.log(plan.lead_auditor);
         // document.getElementById("audit_lead").disabled=true;
 // choiceInstances['audit_lead'].setChoiceByValue(plan.lead_auditor);
+        $("#planned_start_date").val(plan.planned_start_date);
+        $("#planned_end_date").val(plan.planned_end_date);
+
 
         $("#audit_team").val(plan.audit_team);
         $("#audit_comments").val(plan.Comments);
 
     }
+
+
+async function get_application_users() {
+    try {
+        const response = await fetch("ajax/get_application_users.php", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+        application_users = data.data;
+        console.log("Last Updated:", data);
+
+        await renderApplicationUsers(); // ✅ now correctly awaited
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+    async function renderApplicationUsers() {
+
+        const selectConfigs = {
+            assigned_to: { multiple: true },
+            audit_lead: { multiple: false },
+            audit_manager: { multiple: false }
+        };
+        const choiceInstances = {};
+
+        Object.entries(selectConfigs).forEach(([id, config]) => {
+            const select = document.getElementById(id);
+            // console.log(select);
+            if(select== null){
+                return;
+            }
+            select.innerHTML = ""; // clear existing options
+
+            if (!config.multiple) {
+                const defaultOption = document.createElement("option");
+                defaultOption.value = 0;
+                defaultOption.textContent = "-- Select User --";
+                select.appendChild(defaultOption);
+            }
+
+            application_users.forEach(user => {
+                const option = document.createElement("option");
+                option.value = user.user_id;
+                option.textContent = user.name;
+                select.appendChild(option);
+            });
+
+            // new Choices(select, {
+            //     removeItemButton: config.multiple,
+            //     placeholderValue: config.multiple ? "Select users..." : "Select user",
+            //     shouldSort: false
+            // });
+
+        });
+    }
+  
+    function get_form_templates() {
+                    $.ajax({
+            url: "ajax/get_form_templates.php", // Update URL if needed
+            type: "POST", // Changed from GET to POST
+            dataType: "json",
+            data: {}, // Add any necessary data here
+            success: function(response) {
+                console.log("Form Templates:", response);
+
+                if (response.success) {
+                    displayTemplates(response.data); // Call function to handle UI display
+                } else {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Request URL:", this.url); // Print the request URL
+                console.log("Status:", status);
+                console.log("Error:", error);
+                console.error("AJAX Error:", error, status);
+                alert("Failed to load templates. Check console for details.");
+            }
+        });
+
+
+}
+    
+    function displayTemplates(checklists){
+            const select = document.getElementById("select_checklist");
+        
+            checklists.forEach(user => {
+                const option = document.createElement("option");
+                option.value = user.id;
+                option.textContent = user.title;
+                select.appendChild(option);
+            });
+
+
+    }    
+    
     function get_report_covers(){
         $.ajax({
             url: "ajax/get_master_layouts.php", // Update URL if needed
@@ -350,6 +460,7 @@
             }
         });
     }
+    
     function getFooters(){
         fetch("ajax/get_footers.php", {
         method: "GET"
@@ -394,7 +505,6 @@
 
     }
 
-    
     function renderHeaders(){
         const select = document.getElementById("select_headers");
         headers.forEach( footer => {
@@ -408,64 +518,6 @@
         });
 
     }
-
-
-    function get_application_users(){
-        fetch("ajax/get_application_users.php", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-       
-    })
-    .then(response => response.json())
-    .then(data => {
-        application_users = data.data;
-
-        console.log("Last Updated:", data);
-        renderApplicationUsers();
-    })
-    .catch(error => console.error("Error:", error));
-    }
-
-    function renderApplicationUsers() {
-        const selectConfigs = {
-            assigned_to: { multiple: true },
-            audit_lead: { multiple: false },
-            audit_manager: { multiple: false }
-        };
-        const choiceInstances = {};
-
-        Object.entries(selectConfigs).forEach(([id, config]) => {
-            const select = document.getElementById(id);
-            // console.log(select);
-            if(select== null){
-                return;
-            }
-            select.innerHTML = ""; // clear existing options
-
-            if (!config.multiple) {
-                const defaultOption = document.createElement("option");
-                defaultOption.value = "";
-                defaultOption.textContent = "-- Select User --";
-                select.appendChild(defaultOption);
-            }
-
-            application_users.forEach(user => {
-                const option = document.createElement("option");
-                option.value = user.user_id;
-                option.textContent = user.name;
-                select.appendChild(option);
-            });
-
-            // new Choices(select, {
-            //     removeItemButton: config.multiple,
-            //     placeholderValue: config.multiple ? "Select users..." : "Select user",
-            //     shouldSort: false
-            // });
-
-        });
-    }
-  
-
 
 </script>
 

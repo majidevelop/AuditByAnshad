@@ -138,15 +138,16 @@
 <script>
 function get_schedule_by_id(id){
     $.ajax({
-            url: `ajax/get_schedule_by_id.php?id=${id}`,
+            url: `ajax/get_scheduled_audit_by_id.php?id=${id}`,
             type: "GET",
             dataType: "json",
             success: function(response) {
                 if (response.success) {
                     console.log("Schedule Details:", response);
-                    templateId = response.data[0].template_id;
+                    templateId = response.data[0].checklist_id;
                     answers = response.answers;
                     get_template_details_by_id(templateId);
+                    get_audit_plan_by_id(response.data[0].audit_id);
                     // renderSchedule(response.data);
                 } else {
                     alert("Error: " + response.error);
@@ -158,7 +159,32 @@ function get_schedule_by_id(id){
             }
         });
 }
+function get_audit_plan_by_id(id){
+     $.ajax({
+            url: `ajax/get_audit_plan_by_id.php?id=`+id,
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                if (response.success) {
+                    console.log("Audit Plan:", response);
+                    // renderSchedule(response.data);
+                    // displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
+                    renderAuditPlan(response.data[0]);
+                } else {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+                alert("Failed to load template. Check console for details.");
+            }
+        });
+}
+function renderAuditPlan(audit_plan){
+    let html = `<h1> ${audit_plan.audit_title}</h1> `;
+    $('#questionsContainer').html(html);
 
+}
 function get_template_details_by_id(id){
     $.ajax({
             url: `ajax/get_template_by_id.php?id=${id}`,
@@ -168,7 +194,7 @@ function get_template_details_by_id(id){
                 if (response.success) {
                     console.log("Template Details:", response);
                     // renderSchedule(response.data);
-                    displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
+                    // displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
                 } else {
                     alert("Error: " + response.error);
                 }
