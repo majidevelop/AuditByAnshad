@@ -10,13 +10,22 @@ include('../functionPDO.php');
 // echo json_encode(["success" => true, "data" => "sad"]);
 
 try {
+    // Get template ID from the URL
+    if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+        echo json_encode(["success" => false, "error" => "Invalid template ID"]);
+        exit;
+    }
+
+    $template_id = $_GET['id'];
+$where=array(array('schedule_id',$template_id,'STR'));
+
     // $pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
     // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // $stmt = $pdo->query("SELECT id, title, description, created_at FROM form_templates ORDER BY created_at DESC");
     // $templates = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $templates = array();
-    $templates=allrows('scheduled_audits',"1",'row_created_at DESC');
+    $templates=allrows('form_answers',$where,'created_at DESC');
 
 
     echo json_encode(["success" => true, "data" => $templates]);

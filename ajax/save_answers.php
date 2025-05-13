@@ -51,20 +51,21 @@ try {
         
          $productid = insertrow('form_answers', $value);
 
-         $update_value = array(
-            array('status', $status, 'STR'),
-
-            
-             
-            );
+       
            
-    $where=array(array('id',$schedule_id,'STR'));
-
-
-                updaterow("scheduled_inspections",$update_value,$where);
 
     }
 
+    $update_value = array(
+        array('scheduled_audit_status', $status, 'STR'),
+
+        
+         
+        );
+    $where=array(array('scheduled_id',$schedule_id,'STR'));
+
+
+                updaterow("scheduled_audits",$update_value,$where);
     // Return success response
     http_response_code(200);
     echo json_encode(['message' => 'Answers saved successfully']);

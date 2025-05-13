@@ -133,7 +133,8 @@ function renderScheduledAudits(templates) {
         try{
 
         let audit_plan = audit_plans.find(auditplan => template.audit_id === auditplan.audit_id);
-        console.log(template.audit_id);
+        console.log(audit_plan);
+        console.log(audit_plan.lead_auditor);
         ctr++;
         table += `
         <tr>
@@ -141,7 +142,9 @@ function renderScheduledAudits(templates) {
             <td><a href="view_schedule?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.audit_title} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.created_by ? '' : 'Default Value'} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.created_by} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.lead_auditor}</a></td>
+
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} </a></td>
         </tr> 
                   `;

@@ -85,11 +85,11 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(data => {
             // console.log(data.data);
             data.data.forEach(meeting => {
-                const el = document.querySelector(`.day[data-date="${meeting.audit_date}"] .meeting-container`);
+                const el = document.querySelector(`.day[data-date="${meeting.planned_start_date}"] .meeting-container`);
                 if (el) {
                     const div = document.createElement('div');
                     div.classList.add('meeting');
-                    div.innerText = meeting.title;
+                    div.innerText = meeting.audit_title;
                     el.appendChild(div);
                 }
             });

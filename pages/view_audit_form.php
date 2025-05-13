@@ -119,11 +119,12 @@
 </html>
 
 <script>
+    let template_questions;
     let scheduleId = null;
     let templateId = null;
     let isSubmitted = false;
     let answers;
-
+    let audit_plan;
     function load_func(){
         scheduleId = new URLSearchParams(window.location.search).get("id");
         if (scheduleId) {
@@ -136,30 +137,86 @@
 </script>
 
 <script>
-    let schedule;
-function get_schedule_by_id(id){
-    $.ajax({
-            url: `ajax/get_scheduled_audit_by_id.php?id=${id}`,
-            type: "GET",
-            dataType: "json",
-            success: function(response) {
-                if (response.success) {
-                    console.log("Schedule Details:", response);
-                    templateId = response.data[0].checklist_id;
-                    schedule = response.data[0];
-                    answers = response.answers;
-                    get_template_details_by_id(templateId);
-                    get_audit_plan_by_id(response.data[0].audit_id);
-                    // renderSchedule(response.data);
-                } else {
-                    alert("Error: " + response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", error);
-                alert("Failed to load template. Check console for details.");
+async function get_schedule_by_id(id){
+        
+        try {
+            const response = await fetch(`ajax/get_scheduled_audit_by_id.php?id=${id}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            console.log("Schedule Details:", data);
+            templateId = data.data[0].checklist_id;
+            answers = data.answers;
+            await get_audit_plan_by_id(data.data[0].audit_id);
+            audit_plan = data.data[0];
+            await get_template_details_by_id(templateId);
+            await get_template_questions(templateId);
+            await get_answers(id);
+            if( data.data[0].scheduled_audit_status == "submitted"){
+                form = $("#questionsContainer"); // jQuery object
+    form.find('input, select, button').prop('disabled', true);
+    form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
+
             }
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+
+}
+
+async function get_template_questions(templateId) {
+    try {
+        const response = await fetch(`ajax/get_questions_by_template_id.php?id=${templateId}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
         });
+
+        const data = await response.json();
+        console.log("Questions:", data.data);
+        template_questions = data.data;
+                    
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+async function get_answers(id){
+            
+    try {
+        const response = await fetch(`ajax/get_answers_byscheduled_id.php?id=${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+        console.log("Answers:", data.data);
+        data.data.forEach(answer => {
+            const question = template_questions.find(a => a.question_id === answer.question_id || a.question_id === answer.question_id) || {};
+            if(question){
+                console.log(question);
+                if (["text", "dropdown", "number"].includes(question.answer_type)) {
+
+
+                    $("#response_"+answer.question_id).val(answer.answer);
+
+                }else{
+                    $(`input[name="response_${answer.question_id}"][value="${answer.answer}"]`).prop("checked", true);
+
+                }
+           
+            }
+          
+        });
+
+                    
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+
 }
 function get_audit_plan_by_id(id){
      $.ajax({
@@ -171,7 +228,7 @@ function get_audit_plan_by_id(id){
                     console.log("Audit Plan:", response);
                     // renderSchedule(response.data);
                     // displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
-                    renderAuditPlan(response.data[0]);
+                    // renderAuditPlan(response.data[0]);
                 } else {
                     alert("Error: " + response.error);
                 }
@@ -186,47 +243,32 @@ function renderAuditPlan(audit_plan){
     let html = `<h1> ${audit_plan.audit_title}</h1>
         <p>Start Date : ${audit_plan.planned_start_date}</p>
         <p>End Date : ${audit_plan.planned_end_date}</p>
-        <br>
+        
 
     `;
 
-    console.log(schedule);
-    if(schedule.scheduled_audit_status == "submitted"){
-        form = $("#questionsContainer"); // jQuery object
-    form.find('input, select, button , a').prop('disabled', true);
-    form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
-html += `
-        <a href=view_audit_form?id=${scheduleId} class="btn btn-secondary">View Audit</a>
-
-`;
-    }else{
-        html +=` 
-        <a href=view_audit_form?id=${scheduleId} class="btn btn-secondary">Start Audit</a>
-`;
-    }
     $('#questionsContainer').html(html);
 
-   
 }
-function get_template_details_by_id(id){
-    $.ajax({
-            url: `ajax/get_template_by_id.php?id=${id}`,
-            type: "GET",
-            dataType: "json",
-            success: function(response) {
-                if (response.success) {
-                    console.log("Template Details:", response);
-                    // renderSchedule(response.data);
-                    // displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
-                } else {
-                    alert("Error: " + response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", error);
-                alert("Failed to load template. Check console for details.");
-            }
+async function get_template_details_by_id(id){
+
+
+        try {
+        const data = await fetch(`ajax/get_template_by_id.php?id=${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
         });
+
+        const response = await data.json();
+        console.log("Answers:", response.data);
+        await displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
+
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+
+
 }
    
 function createRadioItem(value, questionId, answerId) {
@@ -247,7 +289,7 @@ function displayTemplate(template, questions, options) {
         return;
     }
 
-    let html = `<h2>${template.title}</h2>`;
+    let html = `<h2>${audit_plan.audit_title}</h2>`;
     $("#example-text-input-desc").val(template.description);
     $("#example-text-input-title").val(template.title);
 
@@ -280,7 +322,7 @@ function displayTemplate(template, questions, options) {
                 });
                 optionsHtml += `</div>`;
             } else if (q.answer_type === "dropdown") {
-                optionsHtml += `<select class="form-select" name="response_${q.question_id}" data-question-id="${q.question_id}">`;
+                optionsHtml += `<select class="form-select" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}">`;
                 relatedOptions.forEach(option => {
                     optionsHtml += createDropdownItem(option.option_value, option.option_id);
                 });
@@ -310,9 +352,9 @@ function displayTemplate(template, questions, options) {
                         <div class="mt-3 ms-3 responseDiv">
                             ${optionsHtml}
                             ${showDefaultInputs ? `
-                                ${q.answer_type === 'text' ? `<input type="text" class="form-control" name="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter text">` : ''}
-                                ${q.answer_type === 'number' ? `<input type="number" class="form-control" name="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter number">` : ''}
-                                ${q.answer_type === 'date' ? `<input type="date" class="form-control" name="response_${q.question_id}" data-question-id="${q.question_id}">` : ''}
+                                ${q.answer_type === 'text' ? `<input type="text" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter text">` : ''}
+                                ${q.answer_type === 'number' ? `<input type="number" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter number">` : ''}
+                                ${q.answer_type === 'date' ? `<input type="date" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}">` : ''}
                             ` : ''}
                         </div>
                     </div>
@@ -335,8 +377,8 @@ function displayTemplate(template, questions, options) {
         saveAnswers(template.id, questions);
     });
     form = $("#questionsContainer"); // jQuery object
-    form.find('input, select, button').prop('disabled', true);
-    form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
+    // form.find('input, select, button').prop('disabled', true);
+    // form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
 }
 
 function saveAnswers(templateId, questions) {
@@ -412,6 +454,7 @@ function saveAnswers(templateId, questions) {
         success: function(response) {
             console.log('Answers saved successfully:', response);
             alert('Answers saved!');
+            location.reload();
         },
         error: function(error) {
             console.error('Error saving answers:', error);
