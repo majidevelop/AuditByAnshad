@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2025 at 06:14 PM
+-- Generation Time: May 16, 2025 at 02:49 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -29,10 +29,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `roles` (
   `role_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `role_name` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `roles`
+--
+
+INSERT INTO `roles` (`role_id`, `role_name`, `created_at`, `updated_at`) VALUES
+(1, 'admin', '2025-05-16 11:56:35', '2025-05-16 11:56:35'),
+(2, 'audit lead', '2025-05-16 11:58:30', '2025-05-16 11:58:30'),
+(3, 'viewer', '2025-05-16 11:59:08', '2025-05-16 11:59:08'),
+(4, 'editor', '2025-05-16 11:59:47', '2025-05-16 11:59:47');
 
 --
 -- Indexes for dumped tables
@@ -52,7 +62,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `role_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

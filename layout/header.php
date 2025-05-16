@@ -486,7 +486,20 @@
                                     <li><a href="extended-notifications.html" data-key="t-notifications">Notifications</a></li>
                                 </ul>
                             </li>
+                            <li>
+                                <a href="javascript: void(0);">
+                                    <i data-feather="box"></i>
+                                    <span class="badge rounded-pill badge-soft-danger  text-danger float-end">7</span>
+                                    <span data-key="t-members">Members</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="view_master_members" data-key="t-form-elements">Members</a></li>
+                                    <li><a href="view_master_roles" data-key="t-form-elements">Roles</a></li>
+                                    <li><a href="view_master_companies" data-key="t-form-elements">Companies</a></li>
 
+
+                                </ul>
+                            </li>
                             <li>
                                 <a href="javascript: void(0);">
                                     <i data-feather="box"></i>
@@ -494,17 +507,17 @@
                                     <span data-key="t-forms">Forms</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="forms_master_layout" data-key="t-form-elements">Master</a></li>
-                                <li><a href="list_master_layouts" data-key="t-form-elements">Master Layouts</a></li>
+                                    <li><a href="forms_master_layout" data-key="t-form-elements">Master</a></li>
+                                    <li><a href="list_master_layouts" data-key="t-form-elements">Master Layouts</a></li>
 
-                                
-                                <li><a href="view_create_master_header" data-key="t-form-elements">Master - Header</a></li>
+                                    
+                                    <li><a href="view_create_master_header" data-key="t-form-elements">Master - Header</a></li>
 
-                                <li><a href="view_create_master_footer" data-key="t-form-elements">Master - Footer</a></li>
+                                    <li><a href="view_create_master_footer" data-key="t-form-elements">Master - Footer</a></li>
 
 
-                                <li><a href="form_design_audit_plan" data-key="t-form-elements">Create Audit Plan</a></li>
-                                <li><a href="view_audit_plans" data-key="t-form-elements">View Audit Plans</a></li>
+                                    <li><a href="form_design_audit_plan" data-key="t-form-elements">Create Audit Plan</a></li>
+                                    <li><a href="view_audit_plans" data-key="t-form-elements">View Audit Plans</a></li>
 
 
 
