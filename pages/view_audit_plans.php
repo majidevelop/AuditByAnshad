@@ -51,17 +51,39 @@
                                         <!-- <p class="card-title-desc">This is an experimental awesome solution for responsive tables with complex data.</p> -->
                                     </div>
                                     <div class="card-body">
-                                        <div class="row" id="auditPlansContainer">
+                                        <div class="row" id="">
 
                                         </div>
                                         <div class="table-rep-plugin">
                                             <div class="table-responsive mb-0" data-pattern="priority-columns">
                                              
                                                 <div id="" class="container-fluid">
-                                                    <div class="row" id="templateContainer">
+                                                    <!-- <div class="row" id="templateContainer">
 
-                                                    </div>
+                                                    </div> -->
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Title</th>
+                                                                <th>Type</th>
+                                                                <th>Department</th>
+                                                                <th>Scope</th>
+                                                                <th>Criteria</th>
+                                                                <th>Start Date</th>
+                                                                <th>End Date</th>
+                                                                <th>Lead Auditor</th>
+                                                                <th>Audit Team</th>
+                                                                <th>Comments</th>
+                                                                <th>Action</th>
 
+
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="auditPlansContainer">
+
+                                                        </tbody>
+                                                    </table>
 
                                                 </div>
                                             </div>
@@ -80,42 +102,76 @@
 
            <script>
             let audit_plans_list;
-            function load_func()
+            let application_users;
+            let audit_types;
+            let departments;
+            async function load_func()
                 {
-                    // get_form_templates();
-                    // get_application_users();
-                    get_audit_plans();
+                    await get_departments();
+                    await get_audit_types();
+                    await get_application_users();
+                    await get_audit_plans();
                 }
+                function findNameById(list, idField, idValue, nameField, defaultValue = "undefined") {
+    const match = list.find(item => item[idField] == idValue);
+    return match ? match[nameField] : defaultValue;
+}
+function get_user_name(id){
+            user = application_users.find( x=> x.user_id == id);
+            if(user){
+                return user.name;
+            }else{
+                return "undefined";
+            }
+        }
+async function get_audit_plans(){
 
-function get_audit_plans(){
-    fetch("ajax/get_audit_plans.php", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        
-    })
-    .then(response => response.json())
-    .then(data => {
+    const response = await fetch("ajax/get_audit_plans.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+    
+        const data = await response.json();
         audit_plans_list = data.data;
+        console.log("application_users:", application_users);
 
         console.log("Last Updated:", data);
-        renderAuditPlans();
-    })
-    .catch(error => console.error("Error:", error));
+        await renderAuditPlans();
+   
 }
 
-function renderAuditPlans() {
-    const container = document.getElementById('auditPlansContainer'); // Ensure this element exists
-    container.innerHTML = ''; // Clear any existing content
 
+
+    async function renderAuditPlans() {
+    // const container = document.getElementById('auditPlansContainer'); // Ensure this element exists
+    // container.innerHTML = ''; // Clear any existing content
+    let html =``;
     audit_plans_list.forEach(plan => {
-        const card = document.createElement('div');
-        card.className = 'card p-3 mb-3';
+        // const card = document.createElement('div');
+        // card.className = 'card p-3 mb-3';
 
         const approveButton = plan.audit_plan_status === 'APPROVED'
-            ? `<button class="btn btn-primary" onClick="approve_audit_plan(${plan.audit_id})" disabled>Approved</button> <br><a class="btn btn-primary" href="create_audit_schedule?id=${plan.audit_id}" >Create Audit Schedule</a>`
+            ? `<button class="btn btn-primary" onClick="approve_audit_plan(${plan.audit_id})" disabled>Approved</button> <br><br><a class="btn btn-primary" href="create_audit_schedule?id=${plan.audit_id}" >Create Audit Schedule</a>`
             : `<button class="btn btn-primary" onClick="approve_audit_plan(${plan.audit_id})">Approve Plan</button>`;
+lead_auditor_name  = get_user_name(plan.lead_auditor);
+let audit_team_names =``;
 
-        card.innerHTML = `
+
+if(plan.audit_team){
+audit_team_array = plan.audit_team.split(",");
+audit_team_array.forEach( x=> {
+    console.log(x);
+    name = get_user_name(x);
+    console.log(name);
+
+    audit_team_names += `${name}<br>`;
+});
+}
+const audit_type_name = findNameById(audit_types, "audit_type_id", plan.audit_type, "audit_type_name");
+const audit_department_name = findNameById(departments, "department_id", plan.department_name, "department_name");
+
+
+    /*    card.innerHTML = `
             <h5>${plan.audit_title}</h5>
             <p><strong>Type:</strong> ${plan.audit_type}</p>
             <p><strong>Scope:</strong> ${plan.audit_scope}</p>
@@ -126,16 +182,33 @@ function renderAuditPlans() {
             <p><strong>Team:</strong> ${plan.audit_team}</p>
             <p><strong>Comments:</strong> ${plan.Comments}</p>
             ${approveButton}
-        `;
+        `;  */
+html += `
+    <tr>
+        <td>${plan.audit_title}</td>
+        <td>${audit_type_name}</td>
+        <td>${audit_department_name}</td>
 
-        container.appendChild(card);
+        <td>${plan.audit_scope}</td>
+        <td>${plan.audit_criteria}</td>
+        <td>${plan.planned_start_date}</td>
+        <td>${plan.planned_end_date}</td>
+        <td>${lead_auditor_name}</td>
+        <td>${audit_team_names}</td>
+        <td>${plan.Comments}</td>
+        <td>${approveButton}</td>
+    </tr>
+`;
+
     });
-}
-
-function create_audit_schedule(plan_id){
+        $("#auditPlansContainer").html(html);
 
 }
-function approve_audit_plan(plan_id){
+
+    function create_audit_schedule(plan_id){
+
+}
+    function approve_audit_plan(plan_id){
     fetch("ajax/update_audit_plan_approval_status.php?id="+plan_id,{
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -151,7 +224,7 @@ function approve_audit_plan(plan_id){
     .catch(error => console.error("Error:", error));
 }
 
-                function get_application_users(){
+    function get_application_users(){
         fetch("ajax/get_application_users.php", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -200,9 +273,9 @@ function approve_audit_plan(plan_id){
         });
     }
     
-                function get_form_templates() {
+    function get_form_templates() {
   
-
+        
 
 $.ajax({
     url: "ajax/get_form_templates.php", // Update URL if needed
@@ -313,4 +386,58 @@ function submitAuditPlan() {
         }
     });
 }
+
+async function get_application_users(){
+        try {
+            const response = await fetch("ajax/get_application_users.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            application_users = data.data;
+            console.log("application_users:", application_users);
+
+            // await renderapplication_users(); // ✅ now correctly awaited
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function get_audit_types(){
+        try {
+            const response = await fetch("ajax/get_audit_types.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            audit_types = data.data;
+            console.log("audit_types:", audit_types);
+            if(audit_types.length > 0 ){
+                // await renderaudit_types(); // ✅ now correctly awaited
+
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+ async function get_departments(){
+        try {
+            const response = await fetch("ajax/get_departments.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            departments = data.data;
+            console.log("departments:", departments);
+            if(departments.length > 0 ){
+                // await renderdepartments(); // ✅ now correctly awaited
+
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
 </script>

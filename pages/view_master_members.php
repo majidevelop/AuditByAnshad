@@ -84,7 +84,10 @@
                                             <th>SI No.</th>
                                             <th>User Name</th>
                                             <th>Email</th>
+                                            <th>Phone</th>
                                             <th>Company</th>
+                                            <th>Roles</th>
+
 
                                         </tr>
 
@@ -112,6 +115,7 @@
 let application_users;
 let roles;
 let companies;
+let choicesInstance;
 
     async function load_func(){
         
@@ -144,20 +148,33 @@ let companies;
         application_users.forEach(element => {
             company_name= "undefined";
 
-            company = companies.find( c => c.company_id == element.company_id
-
-            );
+            company = companies.find( c => c.company_id == element.company_id);
             if(company){
                 company_name = company.company_name;
             }
+
+            let roles_string = element.roles;
+            roles_array = roles_string.split(",");
+            let role_names = [];
+            roles_array.forEach( r => {
+                role = roles.find( a=> a.role_id == r);
+                if(role){
+                role_names.push(role.role_name);
+
+                }
+            });
+            role_names_string = role_names.toString(); 
             ctr++;
              row += `
                 <tr>
                     <td>${ctr}</td>
                     <td>${element.name}</td>
                     <td>${element.email}</td>
+                    <td>${element.phone}</td>
+
 
                     <td>${company_name}</td>
+                    <td>${role_names_string}</td>
 
                     
                 </tr>
@@ -171,34 +188,56 @@ let companies;
     }
 
 async function save_application_users() {
+ // Trim input values
+    const name = $("#name").val().trim();
+    const email = $("#email").val().trim();
+    const phone = $("#phone").val().trim();
+    const company_id = $("#company").val();
+    const roles = $("#roles").val(); // array
+    const roles_string = roles ? roles.toString() : '';
 
-    const name = $("#name").val(); // Correctly calling the .val() function
-    const roles = $("#roles").val(); // Correctly calling the .val() function
-    roles_string = roles.toString();
-    if(!name){
-        alert("Name required");
-        return;
+    const errors = [];
+
+    // Validate Name
+    if (!name) errors.push("Name is required.");
+
+    // Validate Email
+    if (!email) {
+        errors.push("Email is required.");
+    } else if (!validateEmail(email)) {
+        errors.push("Invalid email format.");
     }
-    if(!$("#email").val()){
-        alert("Email required");
-        return;
+
+    // Validate Phone
+    const numericPhone = phone.replace(/\D/g, ""); // remove non-numeric characters
+    if (!phone) {
+        errors.push("Phone is required.");
+    } else if (numericPhone.length < 10) {
+        errors.push("Phone number must be at least 10 digits.");
     }
-    if(!$("#phone").val()){
-        alert("Phone required");
+
+    // Validate Company
+    if (!company_id) errors.push("Company is required.");
+
+    // Validate Roles
+    if (!roles || roles.length === 0) errors.push("At least one role must be selected.");
+
+    // Show errors
+    if (errors.length > 0) {
+        alert(errors.join("\n"));
         return;
     }
 
+    // Submit form
     const response = await fetch("ajax/post_application_users.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-            name: name,
-            email: $("#email").val(),
-            company_id: $("#company").val(),
-            phone: $("#phone").val(),
-            roles:roles_string
-
-
+            name,
+            email,
+            phone,
+            company_id,
+            roles: roles_string
         })
     });
 
@@ -215,12 +254,17 @@ async function save_application_users() {
 
     }
 }
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
 function clearfields() {
     // Clear text inputs, textareas, and selects
-    $("input:not([type=radio]):not([type=checkbox]), textarea, select").val("");
+    $("input:not([type=radio]):not([type=checkbox]):not([type=search]), textarea, select").val("");
 
     // Uncheck all radio buttons and checkboxes
     $("input[type=radio], input[type=checkbox]").prop("checked", false);
+    choicesInstance.removeActiveItems();
 }
 
 
@@ -240,7 +284,6 @@ async function get_roles(){
             console.error("Error:", error);
         }
     }
-let choicesInstance;
 
 async function renderroles() {
     let row = '';

@@ -60,17 +60,15 @@
                                             <div class="col-6 p-3">
                                                 <label for="">Audit Type</label>
                                                 <select name="audit_type" id="audit_type" class="form-control">
-                                                    <option value="">Select Audit Type</option>
-                                                    <option value="Audit Type 1">Audit Type 1</option>
-                                                    <option value="Audit Type 2">Audit Type 2</option>
-                                                    <option value="Audit Type 3">Audit Type 3</option>
-                                                    <option value="Audit Type 4">Audit Type 4</option>
+                                                   
 
                                                 </select>
 
                                             </div><div class="col-6 p-3">
                                                 <label for="">Department Name</label>
-                                                <input type="text" class="form-control" name="department_name" id="department_name" placeholder="Department Name">
+                                                <select class="form-control" name="department_name" id="department_name" >
+                                                    <option value="">Select department</option>
+                                                    </select>
 
                                             </div><div class="col-6 p-3">
                                                 <label for="">Audit Scope</label>
@@ -91,11 +89,7 @@
                                             </div><div class="col-6 p-3">
                                                 <label for="">Lead Auditor</label>
                                                 <select name="lead_auditor" id="lead_auditor" class="form-control">
-                                                    <option value="0">Select Lead Auditor</option>
-                                                    <option value="1">Lead Auditor 1</option>
-                                                    <option value="2">Lead Auditor 2</option>
-                                                    <option value="3">Lead Auditor 3</option>
-                                                    <option value="4">Lead Auditor 4</option>
+                                                    
 
                                                 </select>
 
@@ -103,9 +97,7 @@
                                             <div class="col-6 p-3">
                                                 <label for="">Audit Team (Multi Select)</label>
                                                 <select name="audit_team[]" id="audit_team" class="form-control" multiple>
-                                                    <option value="1">John Doe</option>
-                                                    <option value="2">Jane Smith</option>
-                                                    <option value="3">Alice Brown</option>
+                                                    
                                                 </select>
 
                                             </div>
@@ -150,10 +142,14 @@
                 <!-- End Page-content -->
 
            <script>
+            let departments;
+            let audit_types;
             function load_func()
                 {
                     // get_form_templates();
                     get_application_users();
+                    get_departments();
+                    get_audit_types();
                 }
 
                 function get_application_users(){
@@ -175,7 +171,7 @@
     function renderApplicationUsers() {
         const selectConfigs = {
             audit_team: { multiple: true },
-            // audit_lead: { multiple: false },
+            lead_auditor: { multiple: false },
             // audit_manager: { multiple: false }
         };
 
@@ -319,4 +315,79 @@ function submitAuditPlan() {
         }
     });
 }
+
+    async function get_departments(){
+        try {
+            const response = await fetch("ajax/get_departments.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            departments = data.data;
+            console.log("departments:", departments);
+            if(departments.length > 0 ){
+                await renderdepartments(); // ✅ now correctly awaited
+
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+    async function renderdepartments(){
+        let ctr = 0;
+        let row = `
+        <option value="">Select department</option>
+        `;
+        departments.forEach(element => {
+            ctr++;
+             row += `
+                <option value="${element.department_id}">
+        ${element.department_name}
+                </option>
+            `;
+
+        });
+            $("#department_name").html('');
+
+            $("#department_name").append(row);
+        
+    }
+
+     async function get_audit_types(){
+        try {
+            const response = await fetch("ajax/get_audit_types.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            audit_types = data.data;
+            console.log("audit_types:", audit_types);
+            if(audit_types.length > 0 ){
+                await renderaudit_types(); // ✅ now correctly awaited
+
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+    async function renderaudit_types(){
+        let ctr = 0;
+        let row = `<option>Select Audit Type</option>`;
+        audit_types.forEach(element => {
+            ctr++;
+             row += `
+                <option value="${element.audit_type_id}">
+        ${element.audit_type_name}
+                </option>
+            `;
+
+        });
+            $("#audit_type").html('');
+
+            $("#audit_type").append(row);
+        
+    }
+
 </script>

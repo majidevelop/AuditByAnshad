@@ -11,7 +11,8 @@ include('../functionPDO.php');
 
 try {
 
-    
+    session_start();
+
 // Read raw POST input
 $input = json_decode(file_get_contents("php://input"), true);
 
@@ -27,16 +28,17 @@ $input = json_decode(file_get_contents("php://input"), true);
     // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // $stmt = $pdo->query("SELECT id, title, description, created_at FROM form_templates ORDER BY created_at DESC");
+$company_id = $_SESSION['company_id'];
 
     
-// $where = array(
-//     array('id', $templateId, 'INT')
-//               );
+$where = array(
+    array('company_id', $company_id, 'INT')
+              );
 
               
     // $templates = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $templates = array();
-    $templates=allrows('application_users',"1",'name ASC');
+    $templates=allrows('application_users',$where,'name ASC');
 
 
     echo json_encode(["success" => true, "data" => $templates]);

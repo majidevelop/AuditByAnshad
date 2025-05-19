@@ -316,7 +316,7 @@
                                 <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
                                 <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
+                                <a class="dropdown-item" href="logout"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                             </div>
                         </div>
 
@@ -496,6 +496,8 @@
                                     <li><a href="view_master_members" data-key="t-form-elements">Members</a></li>
                                     <li><a href="view_master_roles" data-key="t-form-elements">Roles</a></li>
                                     <li><a href="view_master_companies" data-key="t-form-elements">Companies</a></li>
+                                    <li><a href="view_master_departments" data-key="t-form-elements">Departments</a></li>
+                                    <li><a href="view_master_audit_types" data-key="t-form-elements">Audit Types</a></li>
 
 
                                 </ul>

@@ -21,7 +21,19 @@ try {
     
     );
 
+    $username = explode('@', $input['email'])[0];
+
     $productid = insertrow('application_users', $values);
+
+    $data = array(
+        array('application_user_id', $productid, 'STR'),
+        array('eid', $username, 'STR'),
+        array('password', $input['phone'], 'STR'),
+        array('name', $input['name'], 'STR'),
+        array('email', $input['email'], 'STR')
+
+    );
+    $user_id = insertrow('users', $data);
 
     echo json_encode(['pid' => $productid, 'message' => "Success"]);
 

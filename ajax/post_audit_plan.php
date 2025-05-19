@@ -6,7 +6,12 @@ header("Access-Control-Allow-Headers: Content-Type");
 include('../functionPDO.php');
 try {
 
+session_start();
+$created_by_company_id = $_SESSION['company_id'];
+$created_by = $_SESSION['application_user_id'];
 
+
+   
    
 // Decode JSON input
 $input = json_decode(file_get_contents("php://input"), true);
@@ -31,7 +36,10 @@ $values = array(
     array('auto_calculated_duration', $input['auto_calculated_duration'], 'INT'),
     array('lead_auditor', $input['lead_auditor'], 'INT'),
     array('audit_team', $audit_team_str, 'STR'),
-    array('Comments', $input['Comments'], 'STR')
+    array('Comments', $input['Comments'], 'STR'),
+    array('created_by' , $created_by, 'STR'),
+    array('created_by_company_id' , $created_by_company_id, 'STR'),
+
 );
 
  $productid = insertrow('audit_plans', $values);

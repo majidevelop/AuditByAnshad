@@ -10,16 +10,20 @@ include('../functionPDO.php');
 // echo json_encode(["success" => true, "data" => "sad"]);
 
 try {
+    session_start();
+    $company_id = $_SESSION['company_id'];
+
+    $where = array(
+        array('created_by_company_id', $company_id, 'INT')
+    );
     // $pdo = new PDO("mysql:host=localhost;dbname=ehse", "root", "");
     // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     // $stmt = $pdo->query("SELECT id, title, description, created_at FROM form_templates ORDER BY created_at DESC");
     // $templates = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $templates = array();
-    $templates=allrows('audit_plans',"1",'row_created_at DESC');
-
-
+    $templates=allrows('audit_plans',$where,'row_created_at DESC');
     echo json_encode(["success" => true, "data" => $templates]);
+
 } catch (Exception $e) {
     echo json_encode(["Fail" => false, "error" => $e->getMessage()]);
 }
