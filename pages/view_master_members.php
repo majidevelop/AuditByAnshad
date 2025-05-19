@@ -82,7 +82,9 @@
                                     <thead>
                                         <tr>
                                             <th>SI No.</th>
-                                            <th>Company Name</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th>Company</th>
 
                                         </tr>
 
@@ -108,11 +110,14 @@
 
     
 let application_users;
+let roles;
+let companies;
+
     async function load_func(){
         
         await get_roles();
         await get_companies();
-      await get_application_users();
+        await get_application_users();
 
        
     }
@@ -135,12 +140,26 @@ let application_users;
     async function renderapplication_users(){
         let ctr = 0;
         let row;
+        
         application_users.forEach(element => {
+            company_name= "undefined";
+
+            company = companies.find( c => c.company_id == element.company_id
+
+            );
+            if(company){
+                company_name = company.company_name;
+            }
             ctr++;
              row += `
                 <tr>
                     <td>${ctr}</td>
                     <td>${element.name}</td>
+                    <td>${element.email}</td>
+
+                    <td>${company_name}</td>
+
+                    
                 </tr>
             `;
 
@@ -152,15 +171,34 @@ let application_users;
     }
 
 async function save_application_users() {
-    const name = $("#name").val(); // Correctly calling the .val() function
 
+    const name = $("#name").val(); // Correctly calling the .val() function
+    const roles = $("#roles").val(); // Correctly calling the .val() function
+    roles_string = roles.toString();
+    if(!name){
+        alert("Name required");
+        return;
+    }
+    if(!$("#email").val()){
+        alert("Email required");
+        return;
+    }
+    if(!$("#phone").val()){
+        alert("Phone required");
+        return;
+    }
 
     const response = await fetch("ajax/post_application_users.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             name: name,
-            email: 
+            email: $("#email").val(),
+            company_id: $("#company").val(),
+            phone: $("#phone").val(),
+            roles:roles_string
+
+
         })
     });
 

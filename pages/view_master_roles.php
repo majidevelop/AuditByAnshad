@@ -101,8 +101,10 @@ let roles;
             const data = await response.json();
             roles = data.data;
             console.log("roles:", roles);
+            if(roles.length > 0 ){
+                await renderroles(); // ✅ now correctly awaited
 
-            await renderroles(); // ✅ now correctly awaited
+            }
         } catch (error) {
             console.error("Error:", error);
         }
