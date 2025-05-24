@@ -199,7 +199,26 @@
 
         <!-- Datatable init js -->
         <script src="assets/js/pages/datatables.init.js"></script>   
+        <script>
+            let session_data;
+            let current_company_id;
+            let current_user_id;
+            async function get_session_data(){
+                
+                const response = await fetch("ajax/get_session_data.php", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+    
+                const data = await response.json();
+                session_data = data.data;
+                current_company_id = session_data.company_id;
+                current_user_id = session_data.application_user_id;
 
+                console.log("session_data:", session_data);
+
+            }
+        </script>
     </body>
 
 </html>

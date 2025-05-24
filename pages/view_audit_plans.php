@@ -100,45 +100,48 @@
                 </div>
                 <!-- End Page-content -->
 
-           <script>
-            let audit_plans_list;
-            let application_users;
-            let audit_types;
-            let departments;
-            async function load_func()
-                {
-                    await get_departments();
-                    await get_audit_types();
-                    await get_application_users();
-                    await get_audit_plans();
-                }
-                function findNameById(list, idField, idValue, nameField, defaultValue = "undefined") {
-    const match = list.find(item => item[idField] == idValue);
-    return match ? match[nameField] : defaultValue;
-}
-function get_user_name(id){
-            user = application_users.find( x=> x.user_id == id);
-            if(user){
-                return user.name;
-            }else{
-                return "undefined";
-            }
+<script>
+    let audit_plans_list;
+    let application_users;
+    let audit_types;
+    let departments;
+
+    async function load_func()
+        {
+            await get_departments();
+            await get_audit_types();
+            await get_application_users();
+            await get_audit_plans();
         }
-async function get_audit_plans(){
 
-    const response = await fetch("ajax/get_audit_plans.php", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-            });
+    function findNameById(list, idField, idValue, nameField, defaultValue = "undefined") {
+        const match = list.find(item => item[idField] == idValue);
+        return match ? match[nameField] : defaultValue;
+    }
+
+    function get_user_name(id){
+        user = application_users.find( x=> x.user_id == id);
+        if(user){
+            return user.name;
+        }else{
+            return "undefined";
+        }
+    }
+
+    async function get_audit_plans(){
+        const response = await fetch("ajax/get_audit_plans.php", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+        
+            const data = await response.json();
+            audit_plans_list = data.data;
+            console.log("application_users:", application_users);
+
+            console.log("Last Updated:", data);
+            await renderAuditPlans();
     
-        const data = await response.json();
-        audit_plans_list = data.data;
-        console.log("application_users:", application_users);
-
-        console.log("Last Updated:", data);
-        await renderAuditPlans();
-   
-}
+    }
 
 
 
@@ -150,9 +153,22 @@ async function get_audit_plans(){
         // const card = document.createElement('div');
         // card.className = 'card p-3 mb-3';
 
-        const approveButton = plan.audit_plan_status === 'APPROVED'
-            ? `<button class="btn btn-primary" onClick="approve_audit_plan(${plan.audit_id})" disabled>Approved</button> <br><br><a class="btn btn-primary" href="create_audit_schedule?id=${plan.audit_id}" >Create Audit Schedule</a>`
-            : `<button class="btn btn-primary" onClick="approve_audit_plan(${plan.audit_id})">Approve Plan</button>`;
+        const isApproved = plan.audit_plan_status === 'APPROVED';
+        const isLeadAuditor = plan.lead_auditor === current_user_id;
+
+        const approveButton = isApproved
+            ? `<button class="btn btn-primary" disabled>Approved</button>
+            <br><br>
+            <a class="btn btn-primary ${!isLeadAuditor ? 'disabled' : ''}" 
+                href="${isLeadAuditor ? `create_audit_schedule?id=${plan.audit_id}` : '#'}"
+                ${!isLeadAuditor ? 'tabindex="-1" aria-disabled="true"' : ''}>
+                Create Audit Schedule
+            </a>`
+            : `<button class="btn btn-primary" onClick="approve_audit_plan(${plan.audit_id})" ${!isLeadAuditor ? 'disabled' : ''}>
+                Approve Plan
+            </button>`;
+
+
 lead_auditor_name  = get_user_name(plan.lead_auditor);
 let audit_team_names =``;
 
@@ -274,34 +290,29 @@ html += `
     }
     
     function get_form_templates() {
-  
-        
+        $.ajax({
+            url: "ajax/get_form_templates.php", // Update URL if needed
+            type: "POST", // Changed from GET to POST
+            dataType: "json",
+            data: {}, // Add any necessary data here
+            success: function(response) {
+                console.log("Form Templates:", response);
 
-$.ajax({
-    url: "ajax/get_form_templates.php", // Update URL if needed
-    type: "POST", // Changed from GET to POST
-    dataType: "json",
-    data: {}, // Add any necessary data here
-    success: function(response) {
-        console.log("Form Templates:", response);
-
-        if (response.success) {
-            displayTemplates(response.data); // Call function to handle UI display
-        } else {
-            alert("Error: " + response.error);
-        }
-    },
-    error: function(xhr, status, error) {
-        console.log("Request URL:", this.url); // Print the request URL
-        console.log("Status:", status);
-        console.log("Error:", error);
-        console.error("AJAX Error:", error, status);
-        alert("Failed to load templates. Check console for details.");
+                if (response.success) {
+                    displayTemplates(response.data); // Call function to handle UI display
+                } else {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Request URL:", this.url); // Print the request URL
+                console.log("Status:", status);
+                console.log("Error:", error);
+                console.error("AJAX Error:", error, status);
+                alert("Failed to load templates. Check console for details.");
+            }
+        });
     }
-});
-
-
-}
 
 
 function displayTemplates(templates) {

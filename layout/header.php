@@ -49,7 +49,7 @@
 
     </head>
 
-    <body onload="load_func();">
+    <body onload="load_func();get_session_data();">
 
     <!-- <body data-layout="horizontal"> -->
 
