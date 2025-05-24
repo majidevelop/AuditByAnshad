@@ -102,24 +102,30 @@ let companies;
             console.error("Error:", error);
         }
     }
-    async function renderCompanies(){
-        let ctr = 0;
-        let row;
-        companies.forEach(element => {
-            ctr++;
-             row += `
-                <tr>
-                    <td>${ctr}</td>
-                    <td>${element.company_name}</td>
-                </tr>
-            `;
+async function renderCompanies(){
+    let ctr = 0;
+    let row = ""; // ✅ Correct initialization
 
-        });
-            $("#rendertable").html('');
-
-            $("#rendertable").append(row);
+    companies.forEach(element => {
         
-    }
+        try{
+
+        ctr++;
+        row += `
+            <tr>
+                <td>${ctr}</td>
+                <td>${element.company_name}</td>
+            </tr>
+        `;
+        }
+        catch(err){
+
+        }
+    });
+
+    $("#rendertable").html(row); // use html() directly
+}
+
 
 async function save_company() {
     const companyName = $("#company_name").val(); // Correctly calling the .val() function

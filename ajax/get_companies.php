@@ -10,10 +10,17 @@ include('../functionPDO.php');
 try {
     session_start();
 $company_id = $_SESSION['company_id'];
-
-    $where = array(
+  $where = array(
     array('company_id', $company_id, 'INT')
               );
+if(!$company_id){
+    $where = "1";
+}else{
+
+}
+    // $where = array(
+    // array('company_id', $company_id, 'INT')
+    //           );
 
 // Read raw POST input
 $input = json_decode(file_get_contents("php://input"), true);

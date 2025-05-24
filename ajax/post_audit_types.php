@@ -7,10 +7,18 @@ include('../functionPDO.php');
 try {
 
     $input = json_decode(file_get_contents("php://input"), true);
+    session_start();
+    
+    $company_id = $_SESSION['company_id'];
+    $user_id = $_SESSION['application_user_id'];
+
 
     // Define value array: field name, value, type (STR or INT)
     $values = array(
-        array('audit_type_name', $input['audit_type_name'], 'STR')
+        array('audit_type_name', $input['audit_type_name'], 'STR'),
+        array('audit_type_company_id', $company_id, 'STR'),
+        array('created_by', $user_id, 'STR')
+
 
     
     );

@@ -5,12 +5,18 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 include('../functionPDO.php');
 try {
+    session_start();
 
     $input = json_decode(file_get_contents("php://input"), true);
+    $department_company_id = $_SESSION['company_id'];
+    $created_by = $_SESSION['application_user_id'];
 
     // Define value array: field name, value, type (STR or INT)
     $values = array(
-        array('department_name', $input['department_name'], 'STR')
+        array('department_name', $input['department_name'], 'STR'),
+        array('department_company_id', $department_company_id, 'STR'),
+        array('created_by', $created_by, 'STR')
+
 
     
     );

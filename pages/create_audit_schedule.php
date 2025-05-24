@@ -287,29 +287,25 @@
         // get_report_covers();
         await get_application_users();
         
-        get_audit_plan(plan_id);
-        get_form_templates();
+        await get_audit_plan(plan_id);
+        await get_form_templates();
        
     }
-    function get_audit_plan(id){
-        $.ajax({
-            url:"ajax/get_audit_plan_by_id.php?id="+id,
-            type:"GET",
-            success:function(response){
-                console.log(response);
-                renderAuditPlan(response.data[0]);
-
-            },
-            error:function(xhr, status, error){
-                console.log(status);
-                console.log(error);
-
-            }
+    async function get_audit_plan(id){
+         const response = await fetch("ajax/get_audit_plan_by_id.php?id="+id, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
         });
 
+        const data = await response.json();
+        application_users = data.data;
+        console.log("audit_plan : ", application_users);
+                        renderAuditPlan(application_users[0]);
 
+           
     }
     function renderAuditPlan(plan){
+        console.log(plan);
         $("#audit_title").val(plan.audit_title);
         $("#audit_type").val(plan.audit_type);
         $("#department_name").val(plan.department_name);
@@ -338,15 +334,15 @@ async function get_application_users() {
 
         const data = await response.json();
         application_users = data.data;
-        console.log("Last Updated:", data);
+        console.log("application_users : ", data);
 
-        await renderApplicationUsers(); // ✅ now correctly awaited
+         renderApplicationUsers(); // ✅ now correctly awaited
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-    async function renderApplicationUsers() {
+     function renderApplicationUsers() {
 
         const selectConfigs = {
             assigned_to: { multiple: true },
@@ -376,12 +372,6 @@ async function get_application_users() {
                 option.textContent = user.name;
                 select.appendChild(option);
             });
-
-            // new Choices(select, {
-            //     removeItemButton: config.multiple,
-            //     placeholderValue: config.multiple ? "Select users..." : "Select user",
-            //     shouldSort: false
-            // });
 
         });
     }

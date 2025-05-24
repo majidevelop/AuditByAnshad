@@ -16,6 +16,17 @@ try {
 // Read raw POST input
 $input = json_decode(file_get_contents("php://input"), true);
 
+
+$company_id = $_SESSION['company_id'];
+  $where = array(
+    array('company_id', $company_id, 'INT')
+              );
+if(!$company_id){
+    $where = "1";
+}else{
+
+}
+
 // Check if templateId is provided
 // if (!isset($input['templateId'])) {
 //     echo json_encode(["error" => "Missing templateId"]);
@@ -28,12 +39,7 @@ $input = json_decode(file_get_contents("php://input"), true);
     // $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // $stmt = $pdo->query("SELECT id, title, description, created_at FROM form_templates ORDER BY created_at DESC");
-$company_id = $_SESSION['company_id'];
 
-    
-$where = array(
-    array('company_id', $company_id, 'INT')
-              );
 
               
     // $templates = $stmt->fetchAll(PDO::FETCH_ASSOC);
