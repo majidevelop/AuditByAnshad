@@ -264,6 +264,7 @@
         .then(response => response.json())
         .then(data => {
             console.log("Success:", data);
+            approve_audit_plan(plan_id);
             alert(data.message);
             location.reload();
         })
@@ -272,6 +273,9 @@
             alert("Failed to save!");
         });
     });
+
+
+
 </script>
 
 <script>
@@ -279,14 +283,18 @@
     let application_users = [];
     let footers = [];
     let headers = [];
+    let audit_types = [];
+    let departments = [];
+    let audit_plan;
     plan_id = new URLSearchParams(window.location.search).get("id");
 
     async function load_func(){
         
         // saveTemplate();
         // get_report_covers();
+        await get_departments();
+        await get_audit_types();
         await get_application_users();
-        
         await get_audit_plan(plan_id);
         await get_form_templates();
        
@@ -298,17 +306,63 @@
         });
 
         const data = await response.json();
-        application_users = data.data;
-        console.log("audit_plan : ", application_users);
-                        renderAuditPlan(application_users[0]);
+        audit_plan = data.data[0];
+        console.log("audit_plan : ", audit_plan);
+        renderAuditPlan(audit_plan);
+        if(audit_plan.audit_plan_status === "APPROVED->SCHEDULED"){
+            document.getElementById("saveBtn").disabled = true;
+
+        }
 
            
     }
+
+     async function get_departments(){
+        try {
+            const response = await fetch("ajax/get_departments.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            departments = data.data;
+            console.log("departments:", departments);
+            
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function get_audit_types(){
+        try {
+            const response = await fetch("ajax/get_audit_types.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            audit_types = data.data;
+            console.log("audit_types:", audit_types);
+            
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+
     function renderAuditPlan(plan){
         console.log(plan);
         $("#audit_title").val(plan.audit_title);
-        $("#audit_type").val(plan.audit_type);
-        $("#department_name").val(plan.department_name);
+        let audit_type_name;
+        const audit_type = audit_types.find( x=> x.audit_type_id === plan.audit_type);
+        audit_type_name = audit_type.audit_type_name;
+
+        let department_name;
+        const department = departments.find( x=> x.department_id == plan.department_name);
+        department_name = department.department_name; 
+
+        $("#audit_type").val(audit_type_name);
+        $("#department_name").val(department_name);
         $("#audit_scope").val(plan.audit_scope);
         $("#audit_criteria").val(plan.audit_criteria);
         $("#audit_lead").val(plan.lead_auditor);
@@ -508,6 +562,27 @@ async function get_application_users() {
         });
 
     }
+
+
+function approve_audit_plan(plan_id) {
+    let status = "APPROVED->SCHEDULED";
+    fetch("ajax/update_audit_plan_approval_status.php?id=" + plan_id, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            status: status
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Last Updated:", data);
+        location.reload();
+    })
+    .catch(error => console.error("Error:", error));
+}
+
 
 </script>
 

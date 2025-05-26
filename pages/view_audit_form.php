@@ -125,11 +125,14 @@
     let isSubmitted = false;
     let answers;
     let audit_plan;
-    function load_func(){
+    async function load_func(){
         scheduleId = new URLSearchParams(window.location.search).get("id");
         if (scheduleId) {
-            get_schedule_by_id(scheduleId);
+            await get_schedule_by_id(scheduleId);
             // setLastUpdated();
+            await get_template_details_by_id(templateId);
+            await get_template_questions(templateId);
+            // await get_answers(id);
         } else {
             alert("No template ID provided.");
         }
@@ -145,16 +148,15 @@ async function get_schedule_by_id(id){
                 headers: { "Content-Type": "application/json" },
             });
 
-            const data = await response.json();
-            console.log("Schedule Details:", data);
-            templateId = data.data[0].checklist_id;
-            answers = data.answers;
-            await get_audit_plan_by_id(data.data[0].audit_id);
-            audit_plan = data.data[0];
-            await get_template_details_by_id(templateId);
-            await get_template_questions(templateId);
-            await get_answers(id);
-            if( data.data[0].scheduled_audit_status == "submitted"){
+            const resp = await response.json();
+
+
+            templateId = resp.data[0].checklist_id;
+            answers = resp.answers;
+            await get_audit_plan_by_id(resp.data[0].audit_id);
+            
+            
+            if( resp.data[0].scheduled_audit_status == "submitted"){
                 form = $("#questionsContainer"); // jQuery object
     form.find('input, select, button').prop('disabled', true);
     form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
@@ -218,27 +220,27 @@ async function get_answers(id){
     }
 
 }
-function get_audit_plan_by_id(id){
-     $.ajax({
-            url: `ajax/get_audit_plan_by_id.php?id=`+id,
-            type: "GET",
-            dataType: "json",
-            success: function(response) {
-                if (response.success) {
-                    console.log("Audit Plan:", response);
-                    // renderSchedule(response.data);
-                    // displayTemplate(response.data[0], response.form_template_questions, response.form_template_answer_options);
-                    // renderAuditPlan(response.data[0]);
-                } else {
-                    alert("Error: " + response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", error);
-                alert("Failed to load template. Check console for details.");
-            }
-        });
+
+async function get_audit_plan_by_id(id) {
+    try {
+        const response = await fetch(`ajax/get_audit_plan_by_id.php?id=${id}`);
+        const result = await response.json();
+
+        if (result.success) {
+            console.log("Audit Plan:", result.data[0]);
+            audit_plan = result.data[0];
+            return result.data; // Return the data if needed elsewhere
+        } else {
+            alert("Error: " + result.error);
+        }
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        alert("Failed to load audit plan. Check console for details.");
+    }
 }
+
+
+
 function renderAuditPlan(audit_plan){
     let html = `<h1> ${audit_plan.audit_title}</h1>
         <p>Start Date : ${audit_plan.planned_start_date}</p>
@@ -284,6 +286,9 @@ function createDropdownItem(value, answerId) {
 }
 
 function displayTemplate(template, questions, options) {
+    console.log( audit_plan);
+
+    console.log( audit_plan.audit_title);
     if (!template || !questions || !options) {
         console.error("Invalid input data");
         return;

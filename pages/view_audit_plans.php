@@ -224,21 +224,25 @@ html += `
     function create_audit_schedule(plan_id){
 
 }
-    function approve_audit_plan(plan_id){
-    fetch("ajax/update_audit_plan_approval_status.php?id="+plan_id,{
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        
+function approve_audit_plan(plan_id) {
+    let status = "APPROVED";
+    fetch("ajax/update_audit_plan_approval_status.php?id=" + plan_id, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            status: status
+        })
     })
     .then(response => response.json())
     .then(data => {
-        application_users = data.data;
-
         console.log("Last Updated:", data);
         location.reload();
     })
     .catch(error => console.error("Error:", error));
 }
+
 
     function get_application_users(){
         fetch("ajax/get_application_users.php", {
