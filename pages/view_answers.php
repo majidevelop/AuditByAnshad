@@ -113,6 +113,8 @@
         <script src="assets/js/pages/form-editor.init.js"></script>
 
         <script src="assets/js/app.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 
     </body>
 </html>
@@ -130,14 +132,11 @@
         if (scheduleId) {
             await get_schedule_by_id(scheduleId);
             // setLastUpdated();
-
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
             await get_answers(scheduleId);
 
-             if( scheduled_audit.scheduled_audit_status == "submitted"){
-
-             
+            if( scheduled_audit.scheduled_audit_status == "submitted"){
 
             }
         } else {
@@ -228,10 +227,8 @@ async function get_template_questions(templateId) {
     }
 }
 
-async function get_answers(id){
-            
+async function get_answers(id) {
     try {
-        let html;
         const response = await fetch(`ajax/get_answers_byscheduled_id.php?id=${id}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
@@ -239,67 +236,129 @@ async function get_answers(id){
 
         const data = await response.json();
         let ctr = 0;
-        html +=`
-          <center>
-                        <h4>
-            ${audit_plan.audit_title}
-                        </h4>
-                    </center>
-                    <br>
-                    <div style="padding:1rem">
+
+        let html = `
+            <center>
+                <h4>${audit_plan.audit_title}</h4>
+            </center>
+            <br>
+            <div style="padding:1rem">
         `;
+
         data.data.forEach(answer => {
             ctr++;
-            const question = template_questions.find(a => a.question_id === answer.question_id || a.question_id === answer.question_id);
-            if(question){
-                console.log(question.question_title);
-                    html +=`
-                  
 
-                <p>
-            ${ctr} -
-            <b> 
-            ${question.question_title} </b>
-                </p>
-                <p>
-                    ${question.question_description}
-                </p>
-                <p>
-                <strong>Answer</strong> <br>
-            ${answer.answer}
-                </p>
-        `;
+            const question = template_questions.find(q =>
+                q.question_id == answer.question_id
+            );
+
+            if (question) {
+                html += `
+                    <p>
+                        ${ctr} - <b>${question.question_title}</b>
+                    </p>
+                    <p>${question.question_description}</p>
+                    <p><strong>Answer</strong><br>${answer.answer}</p>
+                `;
+
                 if (["text", "dropdown", "number"].includes(question.answer_type)) {
-
-
-                    $("#response_"+answer.question_id).val(answer.answer);
-
-                }else{
+                    $(`#response_${answer.question_id}`).val(answer.answer);
+                } else {
                     $(`input[name="response_${answer.question_id}"][value="${answer.answer}"]`).prop("checked", true);
-
                 }
-           
             }
-          
         });
-        html += `</div>
-        <div>
-        <center>
-        <button class="btn btn-primary" onclick="printToPdf()"> Print </button>
-        </center>
-        </div>
-        `;
-    
-console.log(html);
-                    $("#questionsContainer").html(html);    
 
+        html += `
+            </div>
+            <div>
+                <div class="row mt-3">
+                    <div class="col-sm-4">
+                        <center>
+                            <button class="btn btn-success" onclick="approveAnswers(${scheduleId})">Approve Answers</button>
+                        </center>
+                    </div>
+                    <div class="col-sm-4">
+                        <center>
+                            <button class="btn btn-danger" onclick="rejectAnswers(${scheduleId})">Reject Answers</button>
+                        </center>
+                    </div>
+                    <div class="col-sm-4">
+                        <center>
+                            <button class="btn btn-primary" onclick="printToPdf()">Print</button>
+                        </center>
+                    </div>
+
+                </div>
+
+                
+            </div>
+        `;
+
+        $("#questionsContainer").html(html);
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching answers:", error);
+    }
+}
+async function approveAnswers(id){
+    await submitStatusUpdate(id, "APPROVED", current_user_id);
+    location.href = 'list_audit_schedules';
+
+}
+
+async function rejectAnswers(id){
+    await submitStatusUpdate(id, "IN REVIEW", current_user_id);
+    location.href = 'list_audit_schedules';
+
+}
+
+async function submitStatusUpdate(id, status, created_by) {
+    try {
+        const response = await fetch('ajax/post_scheduled_audit_status.php', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+
+            },
+            body: JSON.stringify({
+                id: id,
+                status: status,
+                created_by: created_by
+            })
+        });
+
+        const result = await response.text(); // or response.json() if your PHP returns JSON
+        console.log("Server response:", result);
+    } catch (error) {
+        console.error("Error submitting status update:", error);
+    }
+}
+
+
+function printToPdf() {
+    const element = document.getElementById("questionsContainer");
+    const printButton = element.querySelector("button");
+
+    if (!element) {
+        alert("No content to print.");
+        return;
     }
 
+    // Hide the print button
+    if (printButton) printButton.style.display = "none";
+
+    const opt = {
+        margin:       0.5,
+        filename:     'audit_report.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    // Convert and save PDF
+    html2pdf().set(opt).from(element).save();
 }
-function printToPdf(){
-    alert("Function Not Configured");
-}
+
+
 </script>
 

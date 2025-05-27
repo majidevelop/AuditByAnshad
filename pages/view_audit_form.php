@@ -133,7 +133,7 @@
             // setLastUpdated();
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
-            // await get_answers(id);
+            await get_answers(scheduleId);
 
              if( scheduled_audit.scheduled_audit_status == "submitted"){
 
@@ -191,7 +191,6 @@ async function get_template_questions(templateId) {
     }
 }
 async function get_answers(id){
-            
     try {
         const response = await fetch(`ajax/get_answers_byscheduled_id.php?id=${id}`, {
             method: "GET",
@@ -199,11 +198,10 @@ async function get_answers(id){
         });
 
         const data = await response.json();
-        console.log("Answers:", data.data);
         data.data.forEach(answer => {
-            const question = template_questions.find(a => a.question_id === answer.question_id || a.question_id === answer.question_id) || {};
+            const question = template_questions.find(a => a.question_id === answer.question_id || a.question_id === answer.question_id);
             if(question){
-                console.log(question);
+                console.log(answer);
                 if (["text", "dropdown", "number"].includes(question.answer_type)) {
 
 
@@ -377,7 +375,7 @@ function displayTemplate(template, questions, options) {
     });
 
     html += questionsHtml + `</ul>`;
-    html += `<button type="button" class="btn btn-primary save-answers float-sm-end me-2" data-template-id="${template.id}">Save Answers</button>`;
+    html += `<button type="button" class="btn btn-primary save-answers float-sm-end me-2" data-template-id="${template.id}">Submit Answers</button>`;
     html += `</form>`;
     // $("#template-container").html(html);
     $('#questionsContainer').html(html);

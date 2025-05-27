@@ -1,7 +1,7 @@
 Array
 (
-    [header_text] => <ul><li>dfg gdg</li><li>df</li><li>g</li><li>fdg</li></ul><p><br data-cke-filler="true"></p>
-    [footer_text] => <p>fgjfgg<strong>dfdg</strong>h<strong>fhfghfghdfh </strong><i><strong>f</strong></i><strong> h</strong><i><strong>fg</strong></i><strong>h fgd</strong><i><strong>h</strong></i><strong>fdg </strong><i><strong>⁠⁠⁠⁠⁠⁠⁠hfg h</strong></i></p>
-    [layout_description] => sdfsdfsd hfgh fg hfgh fgh fgh
-    [layout_title] => fhfdgfh fsdfsd fh
+    [header_text] => <ol><li><i>fghfg</i></li><li><i>ghf</i></li><li><i>gxh</i></li></ol>
+    [footer_text] => <p>&nbsp;ef ewe &nbsp;ret<strong> re</strong>treter tre<strong> re ret ert&nbsp;</strong></p><ul><li><strong>re</strong></li><li><strong>hv</strong></li><li><strong>fh</strong></li></ul>
+    [layout_description] => S1 desc
+    [layout_title] => S1 
 )

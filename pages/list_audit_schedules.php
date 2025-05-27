@@ -69,6 +69,8 @@
 
 <script>
     let audit_plans;
+    let scheduled_audits;
+
     async function load_func()
     {
         await get_audit_plans();
@@ -79,7 +81,6 @@
 
     }
     async function get_audit_plans(){
-        console.log("aa");
       
 
         try {
@@ -90,7 +91,7 @@
 
         const data = await response.json();
         audit_plans = data.data;
-        console.log("Last Updated:", data);
+        console.log("audit_plans :", data);
 
     } catch (error) {
         console.error("Error:", error);
@@ -98,8 +99,6 @@
     }
 
     async function get_inspections() {
-console.log(audit_plans);
-        console.log("bb");
 
         $.ajax({
             url: "ajax/get_scheduled_audits.php", // Update URL if needed
@@ -108,7 +107,7 @@ console.log(audit_plans);
             data: {}, // Add any necessary data here
             success: function(response) {
                 console.log("Form Templates:", response);
-
+                scheduled_audits = response.data;
                 if (response.success) {
                     renderScheduledAudits(response.data); // Call function to handle UI display
                 } else {
@@ -138,17 +137,38 @@ function renderScheduledAudits(templates) {
         let audit_plan = audit_plans.find(auditplan => template.audit_id === auditplan.audit_id);
         console.log(audit_plan);
         console.log(audit_plan.lead_auditor);
-        ctr++;
-        let view_answer_button = `<td></td>`;
-        if(template.scheduled_audit_status === "submitted"){
+        console.log(audit_plan.audit_plan_status);
 
+        ctr++;
         
-        view_answer_button = 
-        `
-            <td><a href="view_answers?id=${template.scheduled_id}">View Answers </a></td>
-        
-        `;
+
+        const isLeadAuditor = audit_plan.lead_auditor === current_user_id;
+        const isApproved = template.scheduled_audit_status === 'SUBMITTED FOR REVIEW';
+
+        let approveButton;
+
+        if (isLeadAuditor) {
+            const url = isApproved 
+                ? `view_answers?id=${template.scheduled_id}&audit_lead=true` 
+                : `view_schedule?id=${template.scheduled_id}`;
+            const linkText = isApproved ? 'View Answers' : 'View Schedule';
+            approveButton = `
+                <td>
+                    <a href="${url}">${linkText}</a>
+                </td>
+            `;
+        } else {
+            const url = isApproved 
+                ? `view_answers?id=${template.scheduled_id}` 
+                : `view_schedule?id=${template.scheduled_id}`;
+            const linkText = isApproved ? 'View Answers' : 'View Schedule';
+            approveButton = `
+                <td>
+                    <a href="${url}">${linkText}</a>
+                </td>
+            `;
         }
+
         table += `
 
         
@@ -162,8 +182,10 @@ function renderScheduledAudits(templates) {
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.scheduled_audit_status}</a></td>
 
 
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} </a></td>
-    ${view_answer_button}
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} 
+            
+            </a></td>
+    ${approveButton}
         </tr> 
                   `;
         }
