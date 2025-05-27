@@ -125,6 +125,7 @@
     let isSubmitted = false;
     let answers;
     let audit_plan;
+    let scheduled_audit;
     async function load_func(){
         scheduleId = new URLSearchParams(window.location.search).get("id");
         if (scheduleId) {
@@ -133,6 +134,14 @@
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
             // await get_answers(id);
+
+             if( scheduled_audit.scheduled_audit_status == "submitted"){
+
+                form = $("#questionsContainer"); // jQuery object
+    form.find('input, select, button').prop('disabled', true);
+    form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
+
+            }
         } else {
             alert("No template ID provided.");
         }
@@ -155,13 +164,9 @@ async function get_schedule_by_id(id){
             answers = resp.answers;
             await get_audit_plan_by_id(resp.data[0].audit_id);
             
-            
-            if( resp.data[0].scheduled_audit_status == "submitted"){
-                form = $("#questionsContainer"); // jQuery object
-    form.find('input, select, button').prop('disabled', true);
-    form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
+            scheduled_audit = resp.data[0];
 
-            }
+           
 
         } catch (error) {
             console.error("Error:", error);

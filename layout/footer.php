@@ -216,6 +216,8 @@
                 current_user_id = session_data.application_user_id;
 
                 console.log("session_data:", session_data);
+                let html = `Hi ${session_data.session_username}`;
+                $("#set_username").html(html);
 
             }
         </script>

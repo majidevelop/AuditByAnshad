@@ -153,7 +153,7 @@
                                                 <div class="col-6 p-3">
                                                         <label for="select_checklist">Select Checklist</label>
                                                         <select name="select_checklist" id="select_checklist"  class="form-control form-input">
-                                                            <option value=""><p>dfdffddf <b>ewe</b></p></option>
+                                                            <option value="0"><p>dfdffddf <b>ewe</b></p></option>
                                                         </select>
                                                 </div>
 
@@ -460,10 +460,10 @@ async function get_application_users() {
     function displayTemplates(checklists){
             const select = document.getElementById("select_checklist");
         
-            checklists.forEach(user => {
+            checklists.forEach(checklist => {
                 const option = document.createElement("option");
-                option.value = user.id;
-                option.textContent = user.title;
+                option.value = checklist.id;
+                option.textContent = checklist.title;
                 select.appendChild(option);
             });
 

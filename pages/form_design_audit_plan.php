@@ -297,7 +297,8 @@ function submitAuditPlan() {
         auto_calculated_duration: $('#auto_calculated_duration').val(),
         lead_auditor: $('#lead_auditor').val(),
         audit_team: $('#audit_team').val(),
-        Comments: $('#Comments').val()
+        Comments: $('#Comments').val(),
+        department_name : $('#department_name').val()
     };
 
     $.ajax({

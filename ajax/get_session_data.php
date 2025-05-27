@@ -15,6 +15,8 @@ try {
 
     $session_data["company_id"] = $company_id;
     $session_data["application_user_id"]    =   $_SESSION["application_user_id"];
+    $session_data["session_username"]    =   $_SESSION["session_username"];
+
     
     echo json_encode(["success" => true, "data" => $session_data]);
 

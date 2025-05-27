@@ -41,8 +41,11 @@
                                                             <th data-priority="1">Description</th>
                                                             <th data-priority="3">Created By</th>
                                                             <th data-priority="3">Assigned To</th>
+                                                            <th data-priority="3">Status</th>
+
 
                                                             <th data-priority="3">CreatedAt</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="templateContainer">
@@ -136,7 +139,19 @@ function renderScheduledAudits(templates) {
         console.log(audit_plan);
         console.log(audit_plan.lead_auditor);
         ctr++;
+        let view_answer_button = `<td></td>`;
+        if(template.scheduled_audit_status === "submitted"){
+
+        
+        view_answer_button = 
+        `
+            <td><a href="view_answers?id=${template.scheduled_id}">View Answers </a></td>
+        
+        `;
+        }
         table += `
+
+        
         <tr>
             <td> <a href="view_schedule?id=${template.scheduled_id}">${ctr} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
@@ -144,8 +159,11 @@ function renderScheduledAudits(templates) {
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.created_by} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.lead_auditor}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.scheduled_audit_status}</a></td>
+
 
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} </a></td>
+    ${view_answer_button}
         </tr> 
                   `;
         }

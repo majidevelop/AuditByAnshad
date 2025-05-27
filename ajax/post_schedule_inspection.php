@@ -22,7 +22,7 @@ $diff = $start->diff($end)->days;
 // Define value array: field name, value, type (STR or INT)
 $values = array(
     array('audit_id', $input['audit_id'], 'INT'),
-    array('checklist_id', $input['audit_id'], 'INT'),
+    array('checklist_id', $input['checklist_id'], 'INT'),
 
     array('planned_start_date', $input['planned_start_date'], 'STR'),
     array('planned_end_date', $input['planned_end_date'], 'STR'),
