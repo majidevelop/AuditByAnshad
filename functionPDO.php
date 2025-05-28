@@ -126,6 +126,42 @@ return $row;
 };
 
 
+function getLatestRow($table, $where, $order)
+{
+    if ($where == "1") {
+        $wherestat = "1";
+    } else {
+        $wherestat = "";
+        foreach ($where as $items) {
+            if (!$wherestat) {
+                $wherestat = $items[0] . " = :" . $items[0];
+            } else {
+                $wherestat .= " AND " . $items[0] . " = :" . $items[0];
+            }
+        }
+    }
+
+    $pdo = $GLOBALS["pdoconnection"];
+    $query = "SELECT * FROM $table WHERE $wherestat ORDER BY $order LIMIT 1";
+    $doquery = $pdo->prepare($query);
+
+    if ($where != "1") {
+        foreach ($where as $items) {
+            if ($items[2] == 'INT') {
+                $curitem = filter_var($items[1], FILTER_VALIDATE_INT);
+                $doquery->bindValue(':' . $items[0], $curitem, PDO::PARAM_INT);
+            } elseif ($items[2] == 'STR') {
+                $curitem = filter_var($items[1], FILTER_SANITIZE_STRING);
+                $curitem = strip_tags($curitem);
+                $doquery->bindValue(':' . $items[0], $curitem, PDO::PARAM_STR);
+            }
+        }
+    }
+
+    $doquery->execute();
+    $row = $doquery->fetch(PDO::FETCH_ASSOC);
+    return $row;
+}
 
 
 function rowslimit($table,$where,$order,$asc,$lim)

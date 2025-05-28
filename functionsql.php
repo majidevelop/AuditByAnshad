@@ -37,6 +37,10 @@ return $row;
 };
 
 
+
+
+
+
 function alldistrows ($table,$where,$dist,$order)
 {
 $queryc = ("SELECT * from $table WHERE $where GROUP BY $dist  ");
