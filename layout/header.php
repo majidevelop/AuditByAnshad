@@ -515,9 +515,9 @@
                                     <li><a href="list_master_layouts" data-key="t-form-elements">Master Layouts</a></li>
 
                                     
-                                    <li><a href="view_create_master_header" data-key="t-form-elements">Master - Header</a></li>
+                                    <!-- <li><a href="view_create_master_header" data-key="t-form-elements">Master - Header</a></li> -->
 
-                                    <li><a href="view_create_master_footer" data-key="t-form-elements">Master - Footer</a></li>
+                                    <!-- <li><a href="view_create_master_footer" data-key="t-form-elements">Master - Footer</a></li> -->
 
 
                                     <li><a href="form_design_audit_plan" data-key="t-form-elements">Create Audit Plan</a></li>
@@ -535,7 +535,7 @@
 
 
                                     <li><a href="forms_home" data-key="t-form-elements">Create Form Templates</a></li>
-                                    <li><a href="view_lead_auditor_approval_page" data-key="t-form-elements">Lead Auditor Approval Page</a></li>
+                                    <!-- <li><a href="view_lead_auditor_approval_page" data-key="t-form-elements">Lead Auditor Approval Page</a></li> -->
 
                                     <li><a href="form-validation.html" data-key="t-form-validation">Validation</a></li>
                                     <li><a href="form-advanced.html" data-key="t-form-advanced">Advanced Plugins</a></li>
