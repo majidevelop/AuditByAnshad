@@ -70,12 +70,15 @@
 <script>
     let audit_plans;
     let scheduled_audits;
-
+    let application_users;
     async function load_func()
     {
+        await get_application_users();
+
         await get_audit_plans();
 
         await get_inspections();
+
         // get_users();
 
 
@@ -124,23 +127,7 @@
 }
 
 
-async function getScheduledAuditStatus(scheduled_id) {
-    try {
-        const response = await fetch(`ajax/get_scheduled_audit_status.php?id=${scheduled_id}`);
-        const result = await response.json();
 
-        if (result.success) {
-            // console.log("Scheduled Audit Status:", result.schedule_audit_status_log.status); // assuming result.data has a 'status' field
-            return result.schedule_audit_status_log.status;
-        } else {
-            console.warn("Error fetching status:", result.error);
-            return null;
-        }
-    } catch (error) {
-        console.error("Fetch Error:", error);
-        return null;
-    }
-}
 
 async function renderScheduledAudits(templates) {
     
@@ -151,17 +138,21 @@ async function renderScheduledAudits(templates) {
         try{
 
             const status = await getScheduledAuditStatus(template.scheduled_id);
-            console.log(status);
+            console.log("status " + status);
             let audit_plan = audit_plans.find(auditplan => template.audit_id === auditplan.audit_id);
             console.log(audit_plan);
             console.log(audit_plan.lead_auditor);
             console.log(audit_plan.audit_plan_status);
+            console.log("template.created_by : "+audit_plan.created_by);
 
         ctr++;
-        
+        const created_by_name = application_users.find(user => user.user_id === audit_plan.created_by).name;
+        console.log("created_by" + created_by_name);
+        const lead_auditor_name = application_users.find(user => user.user_id === audit_plan.lead_auditor).name;
 
         const isLeadAuditor = audit_plan.lead_auditor === current_user_id;
-        const isApproved = status === 'SUBMITTED FOR REVIEW';
+        const isApproved = status === 'SUBMITTED' || status === 'APPROVED';
+
 
         let approveButton;
 
@@ -195,8 +186,8 @@ async function renderScheduledAudits(templates) {
             <td><a href="view_schedule?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.audit_title} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.created_by} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.lead_auditor}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${created_by_name} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${status}</a></td>
 
 

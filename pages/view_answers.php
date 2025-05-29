@@ -268,34 +268,53 @@ async function get_answers(id) {
                 }
             }
         });
+    const status = await getScheduledAuditStatus(scheduleId);
+const isApproved = status === "APPROVED";
 
-        html += `
+html += `
+    </div>
+    <div>
+        <div class="row mt-3">
+`;
+
+// Conditionally render buttons
+if (!isApproved) {
+    html += `
+            <div class="col-sm-4">
+                <center>
+                    <button class="btn btn-success" onclick="approveAnswers(${scheduleId})">Approve Answers</button>
+                </center>
             </div>
-            <div>
-                <div class="row mt-3">
-                    <div class="col-sm-4">
-                        <center>
-                            <button class="btn btn-success" onclick="approveAnswers(${scheduleId})">Approve Answers</button>
-                        </center>
-                    </div>
-                    <div class="col-sm-4">
-                        <center>
-                            <button class="btn btn-danger" onclick="rejectAnswers(${scheduleId})">Reject Answers</button>
-                        </center>
-                    </div>
-                    <div class="col-sm-4">
-                        <center>
-                            <button class="btn btn-primary" onclick="printToPdf()">Print</button>
-                        </center>
-                    </div>
-
-                </div>
-
-                
+            <div class="col-sm-4">
+                <center>
+                    <button class="btn btn-danger" onclick="rejectAnswers(${scheduleId})">Reject Answers</button>
+                </center>
             </div>
-        `;
+            <div class="col-sm-4">
+                <center>
+                    <button class="btn btn-primary" onclick="printToPdf()">Print</button>
+                </center>
+            </div>
+    `;
+} else {
+    // Center the Print button if only it is shown
+    html += `
+            <div class="col-sm-12">
+                <center>
+                    <button class="btn btn-primary" onclick="printToPdf()">Print</button>
+                </center>
+            </div>
+    `;
+}
 
-        $("#questionsContainer").html(html);
+html += `
+        </div>
+    </div>
+`;
+
+$("#questionsContainer").html(html);
+
+
     } catch (error) {
         console.error("Error fetching answers:", error);
     }
