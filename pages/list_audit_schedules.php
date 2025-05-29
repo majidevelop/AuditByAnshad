@@ -70,12 +70,15 @@
 <script>
     let audit_plans;
     let scheduled_audits;
-
+    let application_users;
     async function load_func()
     {
+        await get_application_users();
+
         await get_audit_plans();
 
         await get_inspections();
+
         // get_users();
 
 
@@ -99,51 +102,57 @@
     }
 
     async function get_inspections() {
-
-        $.ajax({
-            url: "ajax/get_scheduled_audits.php", // Update URL if needed
-            type: "POST", // Changed from GET to POST
-            dataType: "json",
-            data: {}, // Add any necessary data here
-            success: function(response) {
-                console.log("Form Templates:", response);
-                scheduled_audits = response.data;
-                if (response.success) {
-                    renderScheduledAudits(response.data); // Call function to handle UI display
-                } else {
-                    alert("Error: " + response.error);
-                }
+    try {
+        const response = await fetch("ajax/get_scheduled_audits.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
             },
-            error: function(xhr, status, error) {
-                console.log("Request URL:", this.url); // Print the request URL
-                console.log("Status:", status);
-                console.log("Error:", error);
-                console.error("AJAX Error:", error, status);
-                alert("Failed to load templates. Check console for details.");
-            }
+            body: JSON.stringify({}) // Add necessary POST data here
         });
 
+        const data = await response.json();
+        console.log("Form Templates:", data);
+
+        if (data.success) {
+            scheduled_audits = data.data;
+            await renderScheduledAudits(data.data); // Call function to handle UI display
+        } else {
+            alert("Error: " + data.error);
+        }
+    } catch (error) {
+        console.error("Fetch Error:", error);
+        alert("Failed to load templates. Check console for details.");
     }
+}
 
 
-function renderScheduledAudits(templates) {
+
+
+async function renderScheduledAudits(templates) {
     
     let table = "";
     let ctr =0 ;
 
-    templates.forEach(template => {
+    for (const template of templates) {
         try{
 
-        let audit_plan = audit_plans.find(auditplan => template.audit_id === auditplan.audit_id);
-        console.log(audit_plan);
-        console.log(audit_plan.lead_auditor);
-        console.log(audit_plan.audit_plan_status);
+            const status = await getScheduledAuditStatus(template.scheduled_id);
+            console.log("status " + status);
+            let audit_plan = audit_plans.find(auditplan => template.audit_id === auditplan.audit_id);
+            console.log(audit_plan);
+            console.log(audit_plan.lead_auditor);
+            console.log(audit_plan.audit_plan_status);
+            console.log("template.created_by : "+audit_plan.created_by);
 
         ctr++;
-        
+        const created_by_name = application_users.find(user => user.user_id === audit_plan.created_by).name;
+        console.log("created_by" + created_by_name);
+        const lead_auditor_name = application_users.find(user => user.user_id === audit_plan.lead_auditor).name;
 
         const isLeadAuditor = audit_plan.lead_auditor === current_user_id;
-        const isApproved = template.scheduled_audit_status === 'SUBMITTED FOR REVIEW';
+        const isApproved = status === 'SUBMITTED' || status === 'APPROVED';
+
 
         let approveButton;
 
@@ -177,9 +186,9 @@ function renderScheduledAudits(templates) {
             <td><a href="view_schedule?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.audit_title} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.created_by} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.lead_auditor}</a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.scheduled_audit_status}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${created_by_name} </a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${status}</a></td>
 
 
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} 
@@ -192,8 +201,7 @@ function renderScheduledAudits(templates) {
         catch( error){
 
         }
-    });
-
+    }
 
     $("#templateContainer").html(table);
 }

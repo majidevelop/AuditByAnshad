@@ -84,41 +84,13 @@
                     
 
 
-                    <script>
-                        let header_text = null;
-                        let footer_text = null;
+<script>
+    let header_text = null;
+    let footer_text = null;
 
 
-                    </script>
                      
 
-     <!-- /Right-bar -->
-
-        <!-- Right bar overlay-->
-        <div class="rightbar-overlay"></div>
-
-        <!-- JAVASCRIPT -->
-        <script src="assets/libs/jquery/jquery.min.js"></script>
-        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/libs/metismenu/metisMenu.min.js"></script>
-        <script src="assets/libs/simplebar/simplebar.min.js"></script>
-        <script src="assets/libs/node-waves/waves.min.js"></script>
-        <script src="assets/libs/feather-icons/feather.min.js"></script>
-        <!-- pace js -->
-        <script src="assets/libs/pace-js/pace.min.js"></script>
-
-        <!-- ckeditor -->
-        <script src="assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
-
-        <!-- init js -->
-        <script src="assets/js/pages/form-editor.init.js"></script>
-
-        <script src="assets/js/app.js"></script>
-
-    </body>
-</html>
-
-<script>
     let template_questions;
     let scheduleId = null;
     let templateId = null;
@@ -134,8 +106,10 @@
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
             await get_answers(scheduleId);
+            const status = await getScheduledAuditStatus(scheduleId);
+            console.log("status : "+status);
 
-             if( scheduled_audit.scheduled_audit_status == "submitted"){
+             if( status == "SUBMITTED"){
 
                 form = $("#questionsContainer"); // jQuery object
     form.find('input, select, button').prop('disabled', true);
@@ -394,8 +368,9 @@ function saveAnswers(templateId, questions) {
     const answers = {
         template_id: templateId,
         schedule_id:scheduleId,
-        status : "submitted",
-        responses: []
+        status : "SUBMITTED",
+        responses: [],
+        created_by: current_user_id
     };
 
     form.find('.question-card').each(function() {

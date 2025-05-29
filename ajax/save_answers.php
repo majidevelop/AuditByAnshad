@@ -14,9 +14,13 @@ try {
         exit;
     }
 
+    $created_by = $data['created_by'];
+
     $templateId = (int)$data['template_id'];
     $schedule_id = (int)$data['schedule_id'];
     $status = $data['status'];
+    $scheduled_audit_id = $schedule_id;
+
     foreach ($data['responses'] as $response) {
         if (!isset($response['question_id']) || !isset($response['answer'])) {
             http_response_code(400);
@@ -47,25 +51,37 @@ try {
             
              
             );
+        $where =array(
+                    array('schedule_id', $schedule_id, 'STR'),
+                    array('template_id', $templateId, 'STR'),
+                    array('question_id', (int)$response['question_id'], 'STR')
+
+        );
            
+        $existence = rowExists('form_answers',$where);
+
+        if ($existence) {
+                updaterow("form_answers",$value,$where);
+
+        } else {
+            $productid = insertrow('form_answers', $value);
+
+        }
         
-         $productid = insertrow('form_answers', $value);
 
        
            
 
     }
 
-    $update_value = array(
-        array('scheduled_audit_status', $status, 'STR'),
+    $values=array(
+        array('status',$status,'STR'),
+        array('created_by',$created_by,'INT'),
+        array('scheduled_audit_id',$scheduled_audit_id,'INT')
 
-        
-         
-        );
-    $where=array(array('scheduled_id',$schedule_id,'STR'));
+    );
+    $productid = insertrow('schedule_audit_status_log', $values);
 
-
-                updaterow("scheduled_audits",$update_value,$where);
     // Return success response
     http_response_code(200);
     echo json_encode(['message' => 'Answers saved successfully']);
