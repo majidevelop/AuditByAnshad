@@ -118,33 +118,18 @@ let companies;
 let choicesInstance;
 
     async function load_func(){
+        await get_application_users();
         
         await get_roles();
         await get_companies();
-        await get_application_users();
+        await renderapplication_users(); // ✅ now correctly awaited
 
        
     }
-    async function get_application_users(){
-        try {
-            const response = await fetch("ajax/get_application_users.php", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-            });
 
-            const data = await response.json();
-            application_users = data.data;
-            console.log("application_users:", application_users);
-
-            await renderapplication_users(); // ✅ now correctly awaited
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
     async function renderapplication_users(){
         let ctr = 0;
         let row;
-        
         application_users.forEach(element => {
             company_name= "undefined";
 

@@ -222,57 +222,40 @@
         }
     });
 }
-    document.getElementById("saveBtn").addEventListener("click", function () {
-        /*    const Audit_title = document.getElementById('Audit_title').value;
-        const Audit_desc = document.getElementById('Audit_desc').value;
-
-        // Get selected values
-        const assignedTo = Array.from(document.getElementById("assigned_to").selectedOptions).map(option => option.value);
-        const auditLead = document.getElementById("audit_lead").value;
-        const auditDate = document.getElementById("audit_date").value;
-
-        const auditManager = document.getElementById("audit_manager").value;
-
-        const site = document.getElementById("sites").value;
-
-        const asset = document.getElementById("assets").value;
-
-        const auditee = document.getElementById("auditee").value;
-
-        const report_template = document.getElementById("select_headers").value;
-
-        const templateId = new URLSearchParams(window.location.search).get("id"); */
-
-        // Build payload
-        const payload = {
-            audit_id:new URLSearchParams(window.location.search).get("id"),
-            checklist_id:$("#select_checklist").val(),
-            planned_start_date: $("#planned_start_date").val(),
-            planned_end_date: $("#planned_end_date").val(),
-            // auto_calculated_duration: $("#auto_calculated_duration").val(),
-            audit_process: $("#select_process").val()
-        };
-        console.log(payload);
+    document.getElementById("saveBtn").addEventListener("click", async function () {
+    // Build payload
+    const payload = {
+        audit_id: new URLSearchParams(window.location.search).get("id"),
+        checklist_id: $("#select_checklist").val(),
+        planned_start_date: $("#planned_start_date").val(),
+        planned_end_date: $("#planned_end_date").val(),
+        // auto_calculated_duration: $("#auto_calculated_duration").val(),
+        audit_process: $("#select_process").val()
+    };
+    console.log(payload);
+    
+    try {
         // Send AJAX POST request
-        fetch("ajax/post_schedule_inspection.php", {
+        const response = await fetch("ajax/post_schedule_inspection.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json" // Tell server it's JSON
             },
             body: JSON.stringify(payload)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Success:", data);
-            approve_audit_plan(plan_id);
-            alert(data.message);
-            location.reload();
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("Failed to save!");
         });
-    });
+        const data = await response.json();
+        console.log("Success:", data);
+        
+        // Await the async approve_audit_plan function
+        await approve_audit_plan(payload.audit_id);
+        
+        alert(data.message);
+        location.href = 'list_audit_schedules';
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Failed to save!");
+    }
+});
 
 
 
@@ -564,23 +547,23 @@ async function get_application_users() {
     }
 
 
-function approve_audit_plan(plan_id) {
+async function approve_audit_plan(plan_id) {
     let status = "APPROVED->SCHEDULED";
-    fetch("ajax/update_audit_plan_approval_status.php?id=" + plan_id, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            status: status
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch("ajax/update_audit_plan_approval_status.php?id=" + plan_id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                status: status
+            })
+        });
+        const data = await response.json();
         console.log("Last Updated:", data);
-        location.reload();
-    })
-    .catch(error => console.error("Error:", error));
+    } catch (error) {
+        console.error("Error:", error);
+    }
 }
 
 

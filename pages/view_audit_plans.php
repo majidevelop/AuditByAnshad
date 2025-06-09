@@ -153,21 +153,34 @@
         // const card = document.createElement('div');
         // card.className = 'card p-3 mb-3';
 
-        const isApproved = plan.audit_plan_status === 'APPROVED';
+        const isApproved = plan.audit_plan_status === 'APPROVED' || plan.audit_plan_status === 'APPROVED->SCHEDULED';
+        const isScheduled =  plan.audit_plan_status === 'APPROVED->SCHEDULED';
         const isLeadAuditor = plan.lead_auditor === current_user_id;
+    // Determine if the "Create Audit Schedule" link should be disabled
+        // It's disabled if not lead auditor OR if the plan is already scheduled
+        const disableCreateSchedule = !isLeadAuditor || isScheduled;
+         let createScheduleButtonHtml = '';
+        if (isLeadAuditor) {
+            createScheduleButtonHtml = `
+                <br><br>
+                <!-- Link to create audit schedule -->
+                <a class="btn btn-primary ${isScheduled ? 'disabled' : ''}"
+                   href="${!isScheduled ? `create_audit_schedule?id=${plan.audit_id}` : '#'}"
+                   ${isScheduled ? 'tabindex="-1" aria-disabled="true"' : ''}>
+                    Create Audit Schedule
+                </a>
+            `;
+        }
+
 
         const approveButton = isApproved
-            ? `<button class="btn btn-primary" disabled>Approved</button>
-            <br><br>
-            <a class="btn btn-primary ${!isLeadAuditor ? 'disabled' : ''}" 
-                href="${isLeadAuditor ? `create_audit_schedule?id=${plan.audit_id}` : '#'}"
-                ${!isLeadAuditor ? 'tabindex="-1" aria-disabled="true"' : ''}>
-                Create Audit Schedule
-            </a>`
-            : `<button class="btn btn-primary" onClick="approve_audit_plan(${plan.audit_id})" ${!isLeadAuditor ? 'disabled' : ''}>
-                Approve Plan
-            </button>`;
-
+            ? `<!-- Button for Approved status -->
+               <button class="btn btn-primary" disabled>Approved</button>
+               ${createScheduleButtonHtml}` // Conditionally include the create schedule button
+            : `<!-- Button to approve plan -->
+               <button class="btn btn-primary" onClick="approve_audit_plan(${plan.audit_id})" ${!isLeadAuditor ? 'disabled' : ''}>
+                   Approve Plan
+               </button>`;
 
 lead_auditor_name  = get_user_name(plan.lead_auditor);
 let audit_team_names =``;

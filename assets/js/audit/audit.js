@@ -16,16 +16,22 @@ async function getScheduledAuditStatus(scheduled_id) {
     }
 }
 
-async function get_application_users(){
-    fetch("ajax/get_application_users.php", {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    
-})
-.then(response => response.json())
-.then(data => {
-    application_users = data.data;
-console.log(application_users);
-})
-.catch(error => console.error("Error:", error));
-}
+
+
+    async function get_application_users(){
+        try {
+
+            const response = await fetch("ajax/get_application_users.php", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },
+            });
+
+            const data = await response.json();
+            application_users = data.data;
+            console.log("application_users:", application_users);
+            return application_users;
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    } 

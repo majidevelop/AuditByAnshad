@@ -199,7 +199,6 @@
 
         <!-- Datatable init js -->
         <script src="assets/js/pages/datatables.init.js"></script>   
-        <script src="assets/js/audit/audit.js"></script>   
 
         <script>
             let session_data;

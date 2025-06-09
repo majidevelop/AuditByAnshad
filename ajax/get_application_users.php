@@ -13,19 +13,20 @@ try {
 
     session_start();
 
-// Read raw POST input
-$input = json_decode(file_get_contents("php://input"), true);
+    // Read raw POST input
+    $input = json_decode(file_get_contents("php://input"), true);
 
 
-$company_id = $_SESSION['company_id'];
-  $where = array(
-    array('company_id', $company_id, 'INT')
-              );
-if(!$company_id){
-    $where = "1";
-}else{
+    $company_id = $_SESSION['company_id'];
+    $where = array(
+            array('company_id', $company_id, 'INT')
+        );
+        
+    if(!$company_id){
+        $where = "1";
+    }else{
 
-}
+    }
 
 // Check if templateId is provided
 // if (!isset($input['templateId'])) {

@@ -144,31 +144,18 @@
            <script>
             let departments;
             let audit_types;
-            function load_func()
+            async function load_func()
                 {
                     // get_form_templates();
-                    get_application_users();
-                    get_departments();
-                    get_audit_types();
-                }
+                    await get_application_users();
+                    await get_departments();
+                    await get_audit_types();
+                    await renderApplicationUsers();
+                }  
 
-                function get_application_users(){
-        fetch("ajax/get_application_users.php", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        
-    })
-    .then(response => response.json())
-    .then(data => {
-        application_users = data.data;
+               
 
-        console.log("Last Updated:", data);
-        renderApplicationUsers();
-    })
-    .catch(error => console.error("Error:", error));
-    }
-
-    function renderApplicationUsers() {
+    async function renderApplicationUsers() {
         const selectConfigs = {
             audit_team: { multiple: true },
             lead_auditor: { multiple: false },
@@ -308,7 +295,7 @@ function submitAuditPlan() {
         success: function(response) {
             alert('Audit plan submitted successfully!');
             console.log(response);
-            location.reload();
+            location.href = 'view_audit_plans';
         },
         error: function(xhr, status, error) {
             alert('Submission failed: ' + error);

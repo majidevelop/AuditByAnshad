@@ -1,4 +1,32 @@
-
+ <style>
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            width: 90%;
+            max-width: 500px;
+        }
+        .modal-backdrop.show, .modal.show {
+            display: block;
+        }
+    </style>
 <style>
     .flex{
         display: flex;
@@ -64,8 +92,8 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div id="questionsContainer">
+                                        <div class="row m-0">
+                                            <div id="questionsContainer" >
 
                                             </div>
 
@@ -81,7 +109,19 @@
                             
                             
                     </div>
-                    
+                    <!-- Modal -->
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal" id="modal">
+        <h2 class="text-lg font-semibold mb-4">Enter Details</h2>
+        <div class="mb-4">
+            <label for="questionIdInput" class="block text-sm font-medium text-gray-700">Question ID</label>
+            <input type="text" id="questionIdInput" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" readonly>
+        </div>
+        <div class="flex justify-end space-x-2">
+            <button id="closeModalBtn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Close</button>
+            <button id="saveModalBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Save</button>
+        </div>
+    </div>
 
 
 <script>
@@ -108,7 +148,7 @@
             await get_answers(scheduleId);
             const status = await getScheduledAuditStatus(scheduleId);
             console.log("status : "+status);
-
+await setupSeverityListeners();
              if( status == "SUBMITTED"){
 
                 form = $("#questionsContainer"); // jQuery object
@@ -327,7 +367,7 @@ function displayTemplate(template, questions, options) {
             <div class="card-body question-card" data-question-id="${q.question_id}">
                 <hr>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-6">
                     <input class="field-type" value="${q.answer_type}" type="hidden">
                         <p class="" id="question-title-${q.question_id}">${q.question_title.trim()} </p>
                         <p class="" value="" id="question-description-${q.question_id}">${q.question_description.trim()} </p>
@@ -339,6 +379,31 @@ function displayTemplate(template, questions, options) {
                                 ${q.answer_type === 'date' ? `<input type="date" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}">` : ''}
                             ` : ''}
                         </div>
+                    </div>
+                    <div class="col-6">
+                        <p>
+                            Please fill out this form to document and manage a non-conformity.
+                        </p>
+                        <input class="field-type form-control"  type="file">
+                        <textarea id="description" name="description" rows="4"
+                          class="mt-1 block w-100 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                          placeholder="Provide a detailed description of the non-conformity observed." required></textarea>
+            <div>
+                <label for="severity" class="block text-sm font-medium text-gray-700 mb-1">Severity</label>
+                <br>
+                <select id="severity${q.question_id}" name="severity"
+                        class="mt-1 block w-100 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        required>
+                    <option value="">Select Severity</option>
+                    <option value="Complied">Complied</option>
+                    <option value="OFI">OFI</option>
+                    <option value="Minor NC">Minor NC</option>
+                    <option value="Major NC">Major NC</option>
+
+                </select>
+            </div>
+                        
+
                     </div>
                    
                     
@@ -445,4 +510,43 @@ function saveAnswers(templateId, questions) {
         }
     });
 }
+
+
+
+// Setup event listeners for severity selects
+         function setupSeverityListeners() {
+            console.log('Setting up severity listeners...');
+            const selects = document.querySelectorAll('select[id^="severity"]');
+            console.log('Found severity selects:', selects.length);
+            if (selects.length === 0) {
+                console.warn('No select elements found with ID starting with "severity". Retrying in 1s...');
+                setTimeout(setupSeverityListeners, 1000); // Retry if elements not found
+                return;
+            }
+            selects.forEach(select => {
+                // Remove existing listeners to prevent duplicates
+                select.removeEventListener('change', handleSeverityChange);
+                select.addEventListener('change', handleSeverityChange);
+            });
+        }
+
+        
+         // Handle severity change
+         function handleSeverityChange(event) {
+            const selectedValue = event.target.value;
+            const questionId = event.target.id.replace('severity', '');
+            console.log('Severity changed:', selectedValue, 'Question ID:', questionId);
+            if (['OFI', 'Minor NC', 'Major NC'].includes(selectedValue)) {
+                const questionIdInput = document.getElementById('questionIdInput');
+                const modalBackdrop = document.getElementById('modalBackdrop');
+                const modal = document.getElementById('modal');
+                if (questionIdInput && modalBackdrop && modal) {
+                    questionIdInput.value = questionId;
+                    modalBackdrop.classList.add('show');
+                    modal.classList.add('show');
+                } else {
+                    console.error('Modal elements not found');
+                }
+            }
+        }
 </script>

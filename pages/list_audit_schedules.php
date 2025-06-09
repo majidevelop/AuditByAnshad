@@ -188,7 +188,7 @@ async function renderScheduledAudits(templates) {
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${created_by_name} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${status}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${status ? status : 'draft'}</a></td>
 
 
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} 
