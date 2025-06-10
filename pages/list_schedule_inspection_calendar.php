@@ -76,17 +76,91 @@ $startDay = date('w', strtotime("$year-$month-01"));
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const year = <?= $year ?>;
-    const month = <?= $month ?>;
+    let audit_plans;
+    async function load_func(){
+        const year = <?= $year ?>;
+        const month = <?= $month ?>;
+        await get_audit_plans();
+        await get_scheduled_audits(year, month);
+    }
+    async function get_audit_plans(){
+      
 
-    fetch('ajax/get_inspections.php?year=' + year + '&month=' + month)
+        try {
+        const response = await fetch("ajax/get_audit_plans.php", {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+        audit_plans = data.data;
+        console.log("audit_plans :", data);
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+    }
+
+    async function get_scheduled_audits(year, month) {
+        try {
+        const response = await fetch(`ajax/get_scheduled_audits.php?year=${year}&month=${month}`);
+        const data = await response.json();
+        
+        data.data.forEach(meeting => {
+            let audit_plan = audit_plans.find(auditplan => meeting.audit_id === auditplan.audit_id);
+
+             const isLeadAuditor = audit_plan.lead_auditor === current_user_id;
+        const isApproved = status === 'SUBMITTED' || status === 'APPROVED';
+        let approveButton;
+
+        if (isLeadAuditor) {
+            const url = isApproved 
+                ? `view_answers?id=${meeting.scheduled_id}&audit_lead=true` 
+                : `view_schedule?id=${meeting.scheduled_id}`;
+            const linkText = isApproved ? 'View Answers' : 'View Schedule';
+            approveButton = `
+                    <a href="${url}">${audit_plan.audit_title}</a>
+            `;
+        } else {
+            const url = isApproved 
+                ? `view_answers?id=${meeting.scheduled_id}` 
+                : `view_schedule?id=${meeting.scheduled_id}`;
+            const linkText = isApproved ? 'View Answers' : 'View Schedule';
+            approveButton = `
+                    <a href="${url}">${audit_plan.audit_title}</a>
+            `;
+        }
+
+            
+            const el = document.querySelector(`.day[data-date="${meeting.planned_start_date}"] .meeting-container`);
+            if (el) {
+                const div = document.createElement('div');
+                div.classList.add('meeting');
+                div.innerHTML = approveButton;
+                el.appendChild(div);
+            }
+        });
+    } catch (err) {
+        console.error('Fetch error:', err);
+    }
+        
+    }
+
+    /*
+document.addEventListener('DOMContentLoaded', function () {
+    
+
+    fetch('ajax/get_scheduled_audits.php?year=' + year + '&month=' + month)
         .then(res => res.json())
         .then(data => {
             // console.log(data.data);
             data.data.forEach(meeting => {
+                console.log(meeting);
+            let audit_plan = audit_plans.find(auditplan => meeting.audit_id === auditplan.audit_id);
+
                 const el = document.querySelector(`.day[data-date="${meeting.planned_start_date}"] .meeting-container`);
                 if (el) {
+                    console.log(meeting);
                     const div = document.createElement('div');
                     div.classList.add('meeting');
                     div.innerText = meeting.audit_title;
@@ -95,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         })
         .catch(err => console.error('Fetch error:', err));
-});
+});*/
 </script>
 
 
@@ -287,12 +361,6 @@ document.addEventListener('DOMContentLoaded', function () {
         <script src="assets/libs/feather-icons/feather.min.js"></script>
         <!-- pace js -->
         <script src="assets/libs/pace-js/pace.min.js"></script>
-
-        <!-- ckeditor -->
-        <script src="assets/libs/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
-
-        <!-- init js -->
-        <script src="assets/js/pages/form-editor.init.js"></script>
 
         <script src="assets/js/app.js"></script>
 

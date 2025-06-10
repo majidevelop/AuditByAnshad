@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2025 at 06:14 PM
+-- Generation Time: Jun 10, 2025 at 02:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `uploaded_files` (
-  `id` int(11) NOT NULL,
-  `file_path` text NOT NULL,
-  `file_name` text NOT NULL,
+  `file_id` int(11) NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -38,9 +38,19 @@ CREATE TABLE `uploaded_files` (
 -- Dumping data for table `uploaded_files`
 --
 
-INSERT INTO `uploaded_files` (`id`, `file_path`, `file_name`, `created_at`) VALUES
-(1, 'uploads/cover_pages/1744466808_CopyofHSE.pdf', '1744466808_CopyofHSE.pdf', '2025-04-12 14:06:48'),
-(2, 'uploads/cover_pages/1744467773_2.png', '1744467773_2.png', '2025-04-12 14:22:53');
+INSERT INTO `uploaded_files` (`file_id`, `file_name`, `file_path`, `created_at`) VALUES
+(1, '1749549061_Screenshot2023-12-22153102.png', 'uploads/1749549061_Screenshot2023-12-22153102.png', '2025-06-10 09:51:01'),
+(2, '1749549642_Screenshot2024-01-29120221.png', 'uploads/1749549642_Screenshot2024-01-29120221.png', '2025-06-10 10:00:42'),
+(3, '1749549764_Screenshot2024-02-12100426.png', 'uploads/1749549764_Screenshot2024-02-12100426.png', '2025-06-10 10:02:44'),
+(4, '1749549922_Screenshot2024-01-29120221.png', 'uploads/1749549922_Screenshot2024-01-29120221.png', '2025-06-10 10:05:22'),
+(5, '1749549952_Screenshot2024-02-07144255.png', 'uploads/1749549952_Screenshot2024-02-07144255.png', '2025-06-10 10:05:52'),
+(6, '1749554091_Screenshot2023-12-22153102.png', 'uploads/1749554091_Screenshot2023-12-22153102.png', '2025-06-10 11:14:51'),
+(7, '1749554134_Screenshot2023-12-22153102.png', 'uploads/1749554134_Screenshot2023-12-22153102.png', '2025-06-10 11:15:34'),
+(8, '1749554199_Screenshot2023-12-22153102.png', 'uploads/1749554199_Screenshot2023-12-22153102.png', '2025-06-10 11:16:39'),
+(9, '1749554226_Screenshot2023-12-22153102.png', 'uploads/1749554226_Screenshot2023-12-22153102.png', '2025-06-10 11:17:06'),
+(10, '1749554375_Screenshot2023-12-22153102.png', 'uploads/1749554375_Screenshot2023-12-22153102.png', '2025-06-10 11:19:35'),
+(11, '1749554421_Screenshot2023-12-22153102.png', 'uploads/1749554421_Screenshot2023-12-22153102.png', '2025-06-10 11:20:21'),
+(12, '1749554744_Screenshot2023-12-22153102.png', 'uploads/1749554744_Screenshot2023-12-22153102.png', '2025-06-10 11:25:44');
 
 --
 -- Indexes for dumped tables
@@ -50,7 +60,7 @@ INSERT INTO `uploaded_files` (`id`, `file_path`, `file_name`, `created_at`) VALU
 -- Indexes for table `uploaded_files`
 --
 ALTER TABLE `uploaded_files`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`file_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -60,7 +70,7 @@ ALTER TABLE `uploaded_files`
 -- AUTO_INCREMENT for table `uploaded_files`
 --
 ALTER TABLE `uploaded_files`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

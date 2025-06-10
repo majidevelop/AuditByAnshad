@@ -62,6 +62,33 @@
     transform: scale(1.05);
     cursor: pointer;
 }
+.text-gray-800 {
+    --tw-text-opacity: 1;
+    color: rgb(31 41 55 / var(--tw-text-opacity, 1));
+}
+.bg-gray-300 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(209 213 219 / var(--tw-bg-opacity, 1));
+}
+.rounded-md {
+    border-radius: 0.375rem;
+}
+[role=button], button {
+    cursor: pointer;
+}
+.space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 0;
+    margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+.text-white {
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+}
+.bg-blue-600 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
+}
 
 </style>
 <div class="page-content">
@@ -114,8 +141,19 @@
     <div class="modal" id="modal">
         <h2 class="text-lg font-semibold mb-4">Enter Details</h2>
         <div class="mb-4">
-            <label for="questionIdInput" class="block text-sm font-medium text-gray-700">Question ID</label>
-            <input type="text" id="questionIdInput" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm" readonly>
+            <!-- <label for="questionIdInput" class="block text-sm font-medium text-gray-700">Question ID</label> -->
+            <input type="hidden" id="questionIdInput" class="mt-1 block w-100 p-2 border border-gray-300 rounded-md shadow-sm" readonly>
+            <label for="severityInput" class="block text-sm font-medium text-gray-700">Severity</label>
+
+            <input type="text" id="severityInput" class="mt-1 block w-100 p-2 border border-gray-300 rounded-md shadow-sm" readonly>
+
+            <p>
+                Please fill out this form to document and manage a non-conformity.
+            </p>
+            <input class="field-type form-control"  type="file" id="fileInput">
+            <textarea id="description" name="description" rows="4"
+                class="mt-1 block w-100 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Provide a detailed description of the non-conformity observed." required></textarea>
         </div>
         <div class="flex justify-end space-x-2">
             <button id="closeModalBtn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Close</button>
@@ -123,14 +161,12 @@
         </div>
     </div>
 
+        <script src="assets/js/common/file_upload.js"></script>   
 
 <script>
     let header_text = null;
     let footer_text = null;
-
-
-                     
-
+    let non_conformities;  
     let template_questions;
     let scheduleId = null;
     let templateId = null;
@@ -143,22 +179,24 @@
         if (scheduleId) {
             await get_schedule_by_id(scheduleId);
             // setLastUpdated();
+            await fetchNonConformities(scheduleId, templateId)
+
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
             await get_answers(scheduleId);
             const status = await getScheduledAuditStatus(scheduleId);
             console.log("status : "+status);
-await setupSeverityListeners();
-             if( status == "SUBMITTED"){
+            await setupSeverityListeners();
+            if( status == "SUBMITTED"){
 
                 form = $("#questionsContainer"); // jQuery object
-    form.find('input, select, button').prop('disabled', true);
-    form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
+                form.find('input, select, button').prop('disabled', true);
+                form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
 
             }
-        } else {
-            alert("No template ID provided.");
-        }
+            } else {
+                alert("No template ID provided.");
+            }
     }
 </script>
 
@@ -324,6 +362,7 @@ function displayTemplate(template, questions, options) {
         let optionsHtml = "";
         let showDefaultInputs = true;
         const savedAnswer = answers.find(a => a.question_id === q.id || a.question_id === q.question_id) || {};
+        const non_confirmity = non_conformities.find(n => n.nc_question_id === q.question_id) || {};
         const savedValue = savedAnswer.answer || '';
         const savedOptionId = savedAnswer.option_id || null;
 
@@ -381,13 +420,7 @@ function displayTemplate(template, questions, options) {
                         </div>
                     </div>
                     <div class="col-6">
-                        <p>
-                            Please fill out this form to document and manage a non-conformity.
-                        </p>
-                        <input class="field-type form-control"  type="file">
-                        <textarea id="description" name="description" rows="4"
-                          class="mt-1 block w-100 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                          placeholder="Provide a detailed description of the non-conformity observed." required></textarea>
+                        
             <div>
                 <label for="severity" class="block text-sm font-medium text-gray-700 mb-1">Severity</label>
                 <br>
@@ -401,6 +434,7 @@ function displayTemplate(template, questions, options) {
                     <option value="Major NC">Major NC</option>
 
                 </select>
+                <img src="${non_confirmity.nc_image}">
             </div>
                         
 
@@ -532,7 +566,7 @@ function saveAnswers(templateId, questions) {
 
         
          // Handle severity change
-         function handleSeverityChange(event) {
+function handleSeverityChange(event) {
             const selectedValue = event.target.value;
             const questionId = event.target.id.replace('severity', '');
             console.log('Severity changed:', selectedValue, 'Question ID:', questionId);
@@ -540,8 +574,12 @@ function saveAnswers(templateId, questions) {
                 const questionIdInput = document.getElementById('questionIdInput');
                 const modalBackdrop = document.getElementById('modalBackdrop');
                 const modal = document.getElementById('modal');
+                const severityInput = document.getElementById('severityInput');
+
+                
                 if (questionIdInput && modalBackdrop && modal) {
                     questionIdInput.value = questionId;
+                    severityInput.value = selectedValue;
                     modalBackdrop.classList.add('show');
                     modal.classList.add('show');
                 } else {
@@ -549,4 +587,126 @@ function saveAnswers(templateId, questions) {
                 }
             }
         }
+
+        // Modal event listeners
+        document.getElementById('closeModalBtn').addEventListener('click', function () {
+            document.getElementById('modalBackdrop').classList.remove('show');
+            document.getElementById('modal').classList.remove('show');
+        });
+
+        /*  document.getElementById('saveModalBtn').addEventListener('click', function () {
+            console.log('Save clicked, Question ID:', document.getElementById('questionIdInput').value);
+            document.getElementById('modalBackdrop').classList.remove('show');
+            document.getElementById('modal').classList.remove('show');
+        }); */
+        document.getElementById('saveModalBtn').addEventListener('click', saveNonConformity);
+
+
+        document.getElementById('modalBackdrop').addEventListener('click', function () {
+            document.getElementById('modalBackdrop').classList.remove('show');
+            document.getElementById('modal').classList.remove('show');
+        });
+
+        // Save non-conformity data
+async function saveNonConformity() {
+            const questionIdInput = document.getElementById('questionIdInput');
+            const severityInput = document.getElementById('severityInput');
+            const descriptionInput = document.getElementById('description');
+            const fileInput = document.getElementById('fileInput');
+            const modalBackdrop = document.getElementById('modalBackdrop');
+            const modal = document.getElementById('modal');
+
+            // Validate inputs
+            if (!questionIdInput || !severityInput || !descriptionInput || !modalBackdrop || !modal) {
+                console.error('Modal elements not found');
+                alert('Error: Modal elements are missing.');
+                return;
+            }
+
+            if (!descriptionInput.value.trim()) {
+                alert('Please provide a description for the non-conformity.');
+                return;
+            }
+
+            // Prepare payload
+            const payload = {
+                question_id: questionIdInput.value,
+                severity: severityInput.value,
+                description: descriptionInput.value,
+                file_id: null,
+                filepath: null,
+                schedule_id: scheduleId,
+                template_id:    templateId
+            };
+
+            // Handle file upload
+            try {
+                if (fileInput.files.length > 0) {
+
+                    const fileData = await uploadFile(fileInput.files[0]);
+                    if (fileData) {
+
+                        payload.file_id = fileData.file_id;
+                        payload.filepath = fileData.filepath;
+                    }else{
+                        alert('File upload failed.');
+                        return;
+                    }
+                }
+
+                // Send non-conformity data
+                const response = await fetch('ajax/post_non_conformity.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                console.log('Save response:', data);
+
+                if (data.success) {
+                    alert(data.message || 'Non-conformity saved successfully!');
+                    modalBackdrop.classList.remove('show');
+                    modal.classList.remove('show');
+                    descriptionInput.value = '';
+                    fileInput.value = '';
+                } else {
+                    alert(data.message || 'Failed to save non-conformity.');
+                }
+            } catch (error) {
+                console.error('Error saving non-conformity:', error);
+                alert('Error: Failed to save non-conformity.');
+            }
+        }
+
+async function fetchNonConformities(scheduleId, templateId) {
+    try {
+        const payload = {};
+        if (scheduleId) payload.scheduleId = scheduleId;
+        if (templateId) payload.templateId = templateId;
+
+        const response = await fetch('ajax/get_non_conformities.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        console.log('Non-conformities response:', data);
+        non_conformities = data.data;
+
+        if (data.success) {
+            console.log('Non-conformities:', data.data);
+            // Render data in UI (e.g., table or list)
+        } else {
+            alert(data.message || 'Failed to retrieve non-conformities.');
+        }
+    } catch (error) {
+        console.error('Error fetching non-conformities:', error);
+        alert('Error: Failed to retrieve non-conformities.');
+    }
+}
+
 </script>

@@ -152,8 +152,6 @@ async function renderScheduledAudits(templates) {
 
         const isLeadAuditor = audit_plan.lead_auditor === current_user_id;
         const isApproved = status === 'SUBMITTED' || status === 'APPROVED';
-
-
         let approveButton;
 
         if (isLeadAuditor) {
