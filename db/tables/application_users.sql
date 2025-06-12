@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2025 at 06:13 PM
+-- Generation Time: Jun 12, 2025 at 02:36 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `application_users` (
   `user_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `department` int(11) NOT NULL,
   `roles` varchar(255) NOT NULL,
   `company_id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -42,9 +43,25 @@ CREATE TABLE `application_users` (
 -- Dumping data for table `application_users`
 --
 
-INSERT INTO `application_users` (`user_id`, `name`, `roles`, `company_id`, `email`, `phone`, `created_at`, `updated_at`) VALUES
-(1, 'test user 1', '[\"1\",\"2\"]', 0, 'user@acs.com', '3456', '2025-04-12 06:43:34', '2025-04-12 06:43:34'),
-(2, 'test manager 1', '[\"1\",\"3\"]', 0, '0', '0', '2025-04-12 06:43:34', '2025-04-12 06:43:34');
+INSERT INTO `application_users` (`user_id`, `name`, `department`, `roles`, `company_id`, `email`, `phone`, `created_at`, `updated_at`) VALUES
+(1, 'test user 1', 1, '[\"1\",\"2\"]', 0, 'user@acs.com', '3456', '2025-04-12 06:43:34', '2025-04-12 06:43:34'),
+(2, 'test manager 1', 1, '[\"1\",\"3\"]', 0, '0', '0', '2025-04-12 06:43:34', '2025-04-12 06:43:34'),
+(5, 'hfdh', 1, '1', 2, 'ghjg@gj.com', '8484884', '2025-05-19 05:07:19', '2025-05-19 05:07:19'),
+(6, 'hfdh', 1, '4', 1, 'gsdfhjg@gj.com', '435435', '2025-05-19 05:07:38', '2025-05-19 05:07:38'),
+(7, 'hfdh', 1, '1,2', 1, 'ghjg@gj.com', '3423423', '2025-05-19 05:09:19', '2025-05-19 05:09:19'),
+(8, 'yutu', 1, '1,4', 3, 'ghjytutyug@gj.com', '657567567', '2025-05-19 05:13:27', '2025-05-19 05:13:27'),
+(9, 'ghjghj', 1, '1', 3, 'gghjghjhjg@gj.com', '66546546', '2025-05-19 05:15:38', '2025-05-19 05:15:38'),
+(10, 'hfdhsdfsf', 1, '2,3', 3, 'ghcvcvjg@gj.com', '45435435435', '2025-05-19 05:16:55', '2025-05-19 05:16:55'),
+(11, 'fdgdfsgdfg', 1, '2,4', 5, 'gherewrjg@gj.com', '34234234234', '2025-05-19 05:27:51', '2025-05-19 05:27:51'),
+(12, 'sdfsfsdf', 1, '2', 1, 'ghjg@gj.in', '2020202020', '2025-05-19 05:32:22', '2025-05-19 05:32:22'),
+(13, 'hfdhsdfs', 1, '2', 1, 'ghjg@gj.com', '2020202054rr', '2025-05-19 05:32:46', '2025-05-19 05:32:46'),
+(14, 'asdfg', 1, '2', 2, 'asdfg@as.in', '454354354345', '2025-05-19 08:30:57', '2025-05-19 08:30:57'),
+(15, 'asdasd', 1, '2,4,3', 2, 'asdasd@df.in', '45435435444', '2025-05-19 08:32:08', '2025-05-19 08:32:08'),
+(16, 'Basic User', 1, '3', 7, 'basicuser@inventruck.in', '9878987898', '2025-05-19 08:36:47', '2025-05-19 08:36:47'),
+(17, 'Basic User 2', 1, '4,3', 7, 'basicuser2@inventruck.in', '9878987899', '2025-05-19 09:28:27', '2025-05-19 09:28:27'),
+(18, 'Audit lead', 1, '2', 7, 'audit_lead@inventruck.in', '9878987897', '2025-05-19 09:28:57', '2025-05-19 09:28:57'),
+(19, 'Auditor 1', 3, '3', 7, 'auditor1@inventruck.in', '45435435436', '2025-06-11 09:55:21', '2025-06-11 09:55:21'),
+(20, 'Auditor 2', 3, '2,4,3', 7, 'auditor2@inventruck.in', '45435435422', '2025-06-11 10:01:08', '2025-06-11 10:01:08');
 
 --
 -- Indexes for dumped tables
@@ -65,7 +82,7 @@ ALTER TABLE `application_users`
 -- AUTO_INCREMENT for table `application_users`
 --
 ALTER TABLE `application_users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -28,6 +28,8 @@ $values = array(
     array('audit_title', $input['audit_title'], 'STR'),
     array('audit_type', $input['audit_type'], 'INT'),
     array('department_name', $input['department_name'], 'STR'),
+    array('department_poc', $input['department_poc'], 'INT'),
+
 
     array('audit_scope', $input['audit_scope'], 'STR'),
     array('audit_criteria', $input['audit_criteria'], 'STR'),

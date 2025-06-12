@@ -309,15 +309,14 @@
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
                                     alt="Header Avatar">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium">Shawn L.</span>
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium"><span id="set_username"></span></span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
-                                <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> <span id="set_username"></span></a>
 
                                 <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
-                                <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a>
+                                 <!--<a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a> -->
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="logout"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
                             </div>
@@ -528,6 +527,8 @@
 
                                     <li><a href="list_audit_schedules" data-key="t-form-elements">View Scheduled Audits</a></li>
                                     <li><a href="list_schedule_inspection_calendar" data-key="t-form-elements">View Scheduled Inspection Calendar</a></li>
+                                    <li><a href="view_compliance_reports_list" data-key="t-form-elements">View Compliance Reports</a></li>
+
 
                                     <!-- <li><a href="list_schedule_inspection" data-key="t-form-elements">Inspections</a></li> -->
 

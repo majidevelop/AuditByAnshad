@@ -58,14 +58,23 @@
 
                             </div>
                             <div class="row mt-3">
-                                <div class="col-sm-6">
+                                <div class="col-4">
+                                                <label for="">Department Name</label>
+                                                <select class="form-control" name="department_name" id="department_name" >
+                                                    <option value="">Select department</option>
+                                                </select>
+                                                
+
+                                            </div>
+
+                                <div class="col-sm-4">
                                     <label for="roles">
                                         Select Roles
                                     </label>
                                         <select name="roles" id="roles" multiple class="form-control"></select>
 
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4">
                                     <label for="company">Select Company</label>
                                     <select name="company" id="company" class="form-control">
                                     </select>
@@ -85,6 +94,7 @@
                                             <th>User Name</th>
                                             <th>Email</th>
                                             <th>Phone</th>
+                                            <th>Department</th>
                                             <th>Company</th>
                                             <th>Roles</th>
 
@@ -98,15 +108,11 @@
                                 </table>
                             </div>
                          </div>
-                   
-
-
-
-               
 
                     </div> <!-- container-fluid -->
                 </div>
                 <!-- End Page-content -->
+        <script src="assets/js/common/admin.js"></script>   
                  
 <script>
    
@@ -116,12 +122,17 @@ let application_users;
 let roles;
 let companies;
 let choicesInstance;
+let departments;
 
     async function load_func(){
+        await get_departments();
+
         await get_application_users();
         
         await get_roles();
         await get_companies();
+        await renderdepartments(); // ✅ now correctly awaited
+
         await renderapplication_users(); // ✅ now correctly awaited
 
        
@@ -132,10 +143,15 @@ let choicesInstance;
         let row;
         application_users.forEach(element => {
             company_name= "undefined";
+            department_name = "undefined";
 
             company = companies.find( c => c.company_id == element.company_id);
             if(company){
                 company_name = company.company_name;
+            }
+             department = departments.find( c => c.department_id == element.department);
+            if(department){
+                department_name = department.department_name;
             }
 
             let roles_string = element.roles;
@@ -156,6 +172,8 @@ let choicesInstance;
                     <td>${element.name}</td>
                     <td>${element.email}</td>
                     <td>${element.phone}</td>
+                    <td>${department_name}</td>
+
 
 
                     <td>${company_name}</td>
@@ -180,6 +198,7 @@ async function save_application_users() {
     const company_id = $("#company").val();
     const roles = $("#roles").val(); // array
     const roles_string = roles ? roles.toString() : '';
+    const department = $('#department_name').val();
 
     const errors = [];
 
@@ -222,6 +241,7 @@ async function save_application_users() {
             email,
             phone,
             company_id,
+            department,
             roles: roles_string
         })
     });
@@ -230,11 +250,13 @@ async function save_application_users() {
         const result = await response.json();
         console.log("role saved:", result);
         clearfields();
-        get_application_users();
+        await get_application_users();
+        await renderapplication_users(); // ✅ now correctly awaited
+
+        
     } else {
         console.error("Failed to save role:", response.statusText);
         clearfields();
-        get_application_users();
 
 
     }

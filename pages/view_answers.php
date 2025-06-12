@@ -95,31 +95,18 @@
      <!-- /Right-bar -->
 
         <!-- Right bar overlay-->
-        <div class="rightbar-overlay"></div>
 
-        <!-- JAVASCRIPT -->
-        <script src="assets/libs/jquery/jquery.min.js"></script>
-        <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/libs/metismenu/metisMenu.min.js"></script>
-        <script src="assets/libs/simplebar/simplebar.min.js"></script>
-        <script src="assets/libs/node-waves/waves.min.js"></script>
-        <script src="assets/libs/feather-icons/feather.min.js"></script>
-        <!-- pace js -->
-        <script src="assets/libs/pace-js/pace.min.js"></script>
-
-        <!-- ckeditor -->
-
-        <!-- init js -->
-        <script src="assets/js/pages/form-editor.init.js"></script>
+       
 
         <script src="assets/js/app.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+        <script src="assets/js/audit/audit.js"></script>   
 
 
-    </body>
 </html>
 
 <script>
+    let non_conformities;  
     let template_questions;
     let scheduleId = null;
     let templateId = null;
@@ -132,6 +119,7 @@
         if (scheduleId) {
             await get_schedule_by_id(scheduleId);
             // setLastUpdated();
+            await fetchNonConformities(scheduleId, templateId)
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
             await get_answers(scheduleId);
@@ -236,6 +224,8 @@ async function get_answers(id) {
 
         const data = await response.json();
         let ctr = 0;
+        console.log("Answers : ", data.data);
+        console.log("template_questions : ", template_questions);
 
         let html = `
             <center>
@@ -253,12 +243,30 @@ async function get_answers(id) {
             );
 
             if (question) {
+                let nc_image_html = ``;
+                const non_confirmity = non_conformities.find(n => n.nc_question_id === question.question_id) || {};
+                if(non_confirmity){
+                    if(non_confirmity.nc_image){
+                        nc_image_html = `<p>${non_confirmity.severity}</p>
+                        <img class="" width="200" src="ajax/${non_confirmity.nc_image}">
+                         <p>${non_confirmity.description}</p>`;
+                    }
+                }
                 html += `
-                    <p>
-                        ${ctr} - <b>${question.question_title}</b>
-                    </p>
-                    <p>${question.question_description}</p>
-                    <p><strong>Answer</strong><br>${answer.answer}</p>
+                <div class="row border border-1">
+                    <div class="col-sm-6">
+                        <p>
+                            ${ctr} - <b>${question.question_title}</b>
+                        </p>
+                        <p>${question.question_description}</p>
+                        <p><strong>Answer</strong><br>${answer.answer}</p>
+                    </div>
+                    <div class="col-sm-6">
+                        ${nc_image_html}
+                    </div>
+                
+                </div>
+           
                 `;
 
                 if (["text", "dropdown", "number"].includes(question.answer_type)) {
@@ -268,51 +276,51 @@ async function get_answers(id) {
                 }
             }
         });
-    const status = await getScheduledAuditStatus(scheduleId);
-const isApproved = status === "APPROVED";
+        const status = await getScheduledAuditStatus(scheduleId);
+        const isApproved = status === "APPROVED";
 
-html += `
-    </div>
-    <div>
-        <div class="row mt-3">
-`;
+        html += `
+            </div>
+            <div>
+                <div class="row mt-3">
+        `;
 
-// Conditionally render buttons
-if (!isApproved) {
-    html += `
-            <div class="col-sm-4">
-                <center>
-                    <button class="btn btn-success" onclick="approveAnswers(${scheduleId})">Approve Answers</button>
-                </center>
-            </div>
-            <div class="col-sm-4">
-                <center>
-                    <button class="btn btn-danger" onclick="rejectAnswers(${scheduleId})">Reject Answers</button>
-                </center>
-            </div>
-            <div class="col-sm-4">
-                <center>
-                    <button class="btn btn-primary" onclick="printToPdf()">Print</button>
-                </center>
-            </div>
-    `;
-} else {
-    // Center the Print button if only it is shown
-    html += `
-            <div class="col-sm-12">
-                <center>
-                    <button class="btn btn-primary" onclick="printToPdf()">Print</button>
-                </center>
-            </div>
-    `;
-}
+        // Conditionally render buttons
+        if (!isApproved) {
+            html += `
+                    <div class="col-sm-4">
+                        <center>
+                            <button class="btn btn-success" onclick="approveAnswers(${scheduleId})">Approve Answers</button>
+                        </center>
+                    </div>
+                    <div class="col-sm-4">
+                        <center>
+                            <button class="btn btn-danger" onclick="rejectAnswers(${scheduleId})">Reject Answers</button>
+                        </center>
+                    </div>
+                    <div class="col-sm-4">
+                        <center>
+                            <button class="btn btn-primary" onclick="printToPdf()">Print</button>
+                        </center>
+                    </div>
+            `;
+        } else {
+            // Center the Print button if only it is shown
+            html += `
+                    <div class="col-sm-12">
+                        <center>
+                            <button class="btn btn-primary" onclick="printToPdf()">Print</button>
+                        </center>
+                    </div>
+            `;
+        }
 
-html += `
-        </div>
-    </div>
-`;
+        html += `
+                </div>
+            </div>
+        `;
 
-$("#questionsContainer").html(html);
+        $("#questionsContainer").html(html);
 
 
     } catch (error) {

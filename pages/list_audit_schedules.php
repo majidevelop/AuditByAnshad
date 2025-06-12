@@ -41,11 +41,11 @@
                                                             <th data-priority="1">Description</th>
                                                             <th data-priority="3">Created By</th>
                                                             <th data-priority="3">Assigned To</th>
+                                                            <th data-priority="3">Auditee Department</th>
+                                                            <th data-priority="3">Auditee</th>
                                                             <th data-priority="3">Status</th>
-
-
                                                             <th data-priority="3">CreatedAt</th>
-                                                            <th></th>
+                                                            <th>Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody id="templateContainer">
@@ -66,65 +66,32 @@
                     </div> <!-- container-fluid -->
                 </div>
                 <!-- End Page-content -->
+<script src="assets/js/common/admin.js"></script>
+                <script src="assets/js/audit/audit.js"></script>
 
 <script>
     let audit_plans;
     let scheduled_audits;
     let application_users;
+    let departments;
     async function load_func()
     {
+        await get_inspections();
+
+        await get_departments();
         await get_application_users();
 
         await get_audit_plans();
 
-        await get_inspections();
+        await renderScheduledAudits(scheduled_audits); // Call function to handle UI display
 
         // get_users();
 
 
     }
-    async function get_audit_plans(){
-      
+    
 
-        try {
-        const response = await fetch("ajax/get_audit_plans.php", {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-        });
 
-        const data = await response.json();
-        audit_plans = data.data;
-        console.log("audit_plans :", data);
-
-    } catch (error) {
-        console.error("Error:", error);
-    }
-    }
-
-    async function get_inspections() {
-    try {
-        const response = await fetch("ajax/get_scheduled_audits.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({}) // Add necessary POST data here
-        });
-
-        const data = await response.json();
-        console.log("Form Templates:", data);
-
-        if (data.success) {
-            scheduled_audits = data.data;
-            await renderScheduledAudits(data.data); // Call function to handle UI display
-        } else {
-            alert("Error: " + data.error);
-        }
-    } catch (error) {
-        console.error("Fetch Error:", error);
-        alert("Failed to load templates. Check console for details.");
-    }
-}
 
 
 
@@ -140,14 +107,14 @@ async function renderScheduledAudits(templates) {
             const status = await getScheduledAuditStatus(template.scheduled_id);
             console.log("status " + status);
             let audit_plan = audit_plans.find(auditplan => template.audit_id === auditplan.audit_id);
-            console.log(audit_plan);
+           /* console.log(audit_plan);
             console.log(audit_plan.lead_auditor);
             console.log(audit_plan.audit_plan_status);
-            console.log("template.created_by : "+audit_plan.created_by);
+            console.log("template.created_by : "+audit_plan.created_by);*/
 
         ctr++;
         const created_by_name = application_users.find(user => user.user_id === audit_plan.created_by).name;
-        console.log("created_by" + created_by_name);
+        // console.log("created_by" + created_by_name);
         const lead_auditor_name = application_users.find(user => user.user_id === audit_plan.lead_auditor).name;
 
         const isLeadAuditor = audit_plan.lead_auditor === current_user_id;
@@ -175,7 +142,18 @@ async function renderScheduledAudits(templates) {
                 </td>
             `;
         }
+        let department_name = 'udefined';
+        let department_poc_name = 'udefined';
 
+        const department = departments.find(d => d.department_id == audit_plan.department_name);
+        if(department){
+
+            department_name = department.department_name;
+        }
+        const department_poc = application_users.find(user => user.user_id == audit_plan.department_poc);
+        if(department_poc){
+            department_poc_name = department_poc.name;
+        }
         table += `
 
         
@@ -186,7 +164,10 @@ async function renderScheduledAudits(templates) {
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${created_by_name} </a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${department_name ? department_name : 'undefined'}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${department_poc_name ? department_poc_name : 'undefined'}</a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${status ? status : 'draft'}</a></td>
+
 
 
             <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} 

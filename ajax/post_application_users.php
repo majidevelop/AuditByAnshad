@@ -14,7 +14,8 @@ try {
         array('roles', $input['roles'], 'STR'),
         array('company_id', $input['company_id'], 'INT'),
         array('email', $input['email'], 'STR'),
-        array('phone', $input['phone'], 'STR')
+        array('phone', $input['phone'], 'STR'),
+        array('department', $input['department'], 'STR')
 
 
 

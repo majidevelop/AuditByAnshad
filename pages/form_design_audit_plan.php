@@ -68,9 +68,17 @@
                                                 <label for="">Department Name</label>
                                                 <select class="form-control" name="department_name" id="department_name" >
                                                     <option value="">Select department</option>
-                                                    </select>
+                                                </select>
+                                                
 
-                                            </div><div class="col-6 p-3">
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <label for="">Department Head / Contact Person</label>
+                                                <select class="form-control" name="department_poc" id="department_poc" >
+                                                    <option value="">Select contact person</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-6 p-3">
                                                 <label for="">Audit Scope</label>
                                                 <input type="text" class="form-control" name="audit_scope" id="audit_scope" placeholder="Audit Scope">
 
@@ -140,6 +148,7 @@
                     </div> <!-- container-fluid -->
                 </div>
                 <!-- End Page-content -->
+        <script src="assets/js/common/admin.js"></script>   
 
            <script>
             let departments;
@@ -151,6 +160,8 @@
                     await get_departments();
                     await get_audit_types();
                     await renderApplicationUsers();
+                    await renderdepartments(); // ✅ now correctly awaited
+
                 }  
 
                
@@ -285,7 +296,8 @@ function submitAuditPlan() {
         lead_auditor: $('#lead_auditor').val(),
         audit_team: $('#audit_team').val(),
         Comments: $('#Comments').val(),
-        department_name : $('#department_name').val()
+        department_name : $('#department_name').val(),
+                department_poc : $('#department_poc').val()
     };
 
     $.ajax({
@@ -304,43 +316,8 @@ function submitAuditPlan() {
     });
 }
 
-    async function get_departments(){
-        try {
-            const response = await fetch("ajax/get_departments.php", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" },
-            });
-
-            const data = await response.json();
-            departments = data.data;
-            console.log("departments:", departments);
-            if(departments.length > 0 ){
-                await renderdepartments(); // ✅ now correctly awaited
-
-            }
-        } catch (error) {
-            console.error("Error:", error);
-        }
-    }
-    async function renderdepartments(){
-        let ctr = 0;
-        let row = `
-        <option value="">Select department</option>
-        `;
-        departments.forEach(element => {
-            ctr++;
-             row += `
-                <option value="${element.department_id}">
-        ${element.department_name}
-                </option>
-            `;
-
-        });
-            $("#department_name").html('');
-
-            $("#department_name").append(row);
-        
-    }
+    
+    
 
      async function get_audit_types(){
         try {
@@ -377,5 +354,21 @@ function submitAuditPlan() {
             $("#audit_type").append(row);
         
     }
+    
+$('#department_name').on('change', function() {
+    const department = $('#department_name').val();
+    const department_users = application_users.filter(au => au.department == department);
+    
+    let row = `<option value="">Select Department POC</option>`;
+    department_users.forEach(element => {
+        row += `
+            <option value="${element.user_id}">
+                ${element.name}
+            </option>
+        `;
+    });
+
+    $("#department_poc").html(row); // Replace content directly
+});
 
 </script>

@@ -151,6 +151,9 @@
                 Please fill out this form to document and manage a non-conformity.
             </p>
             <input class="field-type form-control"  type="file" id="fileInput">
+            <div id="nc_image_div">
+
+            </div>
             <textarea id="description" name="description" rows="4"
                 class="mt-1 block w-100 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 placeholder="Provide a detailed description of the non-conformity observed." required></textarea>
@@ -162,6 +165,8 @@
     </div>
 
         <script src="assets/js/common/file_upload.js"></script>   
+        <script src="assets/js/audit/audit.js"></script>   
+
 
 <script>
     let header_text = null;
@@ -253,12 +258,34 @@ async function get_answers(id){
         data.data.forEach(answer => {
             const question = template_questions.find(a => a.question_id === answer.question_id || a.question_id === answer.question_id);
             if(question){
+                
                 console.log(answer);
                 if (["text", "dropdown", "number"].includes(question.answer_type)) {
 
 
                     $("#response_"+answer.question_id).val(answer.answer);
 
+                }
+                else if(question.answer_type == "multi_select"){
+                        // Assuming answer.answer is a JSON string or comma-separated string
+            let selectedAnswers = [];
+            try {
+                // Parse if it's a JSON string (e.g., ["option1", "option2"])
+                selectedAnswers = JSON.parse(answer.answer);
+            } catch (e) {
+                // Fallback to comma-separated string (e.g., "option1,option2")
+                selectedAnswers = answer.answer.split(",").map(item => item.trim());
+            }
+                console.log(selectedAnswers);
+
+
+            // Check each checkbox that matches the selected answers
+            selectedAnswers.forEach(value => {
+                const decoded = new DOMParser().parseFromString(value, "text/html").body.textContent;
+                const cleaned = decoded.replace(/^\[|\]$/g, ''); // Removes [ at start and ] at end
+                const final = cleaned.replace(/^"|\"$/g, ''); // Removes " at start and end
+                $(`input[name="response_${answer.question_id}"][value="${final}"]`).prop("checked", true);
+            });
                 }else{
                     $(`input[name="response_${answer.question_id}"][value="${answer.answer}"]`).prop("checked", true);
 
@@ -360,9 +387,15 @@ function displayTemplate(template, questions, options) {
 
     questions.forEach(q => {
         let optionsHtml = "";
+        let nc_image_html = "";
         let showDefaultInputs = true;
         const savedAnswer = answers.find(a => a.question_id === q.id || a.question_id === q.question_id) || {};
         const non_confirmity = non_conformities.find(n => n.nc_question_id === q.question_id) || {};
+        if(non_confirmity){
+            if(non_confirmity.nc_image){
+                nc_image_html = `<img class="" width="200" src="ajax/${non_confirmity.nc_image}">`;
+            }
+        }
         const savedValue = savedAnswer.answer || '';
         const savedOptionId = savedAnswer.option_id || null;
 
@@ -390,14 +423,42 @@ function displayTemplate(template, questions, options) {
                 optionsHtml += `</select></div>`;
             }
         } else if (q.answer_type === "preconfigured") {
+            console.log("relatedOptions ", relatedOptions);
             optionsHtml = `
                 <div class="mt-3">
-                    <input type="radio" id="true_false_${q.question_id}" name="response_${q.question_id}" value="true_false" data-question-id="${q.question_id}" ${q.preconfigured_type === 'true_false' ? 'checked' : ''}>
-                    <label for="true_false_${q.question_id}">True/False</label><br>
-                    <input type="radio" id="pass_fail_${q.question_id}" name="response_${q.question_id}" value="pass_fail" data-question-id="${q.question_id}" ${q.preconfigured_type === 'pass_fail' ? 'checked' : ''}>
-                    <label for="pass_fail_${q.question_id}">Pass/Fail</label><br>
-                    <input type="radio" id="yes_no_${q.question_id}" name="response_${q.question_id}" value="yes_no" data-question-id="${q.question_id}" ${q.preconfigured_type === 'yes_no' ? 'checked' : ''}>
-                    <label for="yes_no_${q.question_id}">Yes/No</label>
+            `;
+
+            // Iterate over relatedOptions
+            relatedOptions.forEach((option, index) => {
+            console.log("relatedOptions ", option);
+
+            // Determine radio button labels based on option_value
+            let radioLabels = [];
+            if (option.option_value === true || option.option_value === "true") {
+                radioLabels = ["True", "False"];
+            } else if (option.option_value === "pass") {
+                radioLabels = ["Pass", "Fail"];
+            } else if (option.option_value === "yes") {
+                radioLabels = ["Yes", "No"];
+            } else {
+                // Skip or handle invalid option_value
+                return;
+            }
+
+            // Generate radio buttons for the current option
+            const radioName = `response_${q.question_id}`; // Unique name for each radio group
+            const radioHtml = `
+                <div>
+                <label><input type="radio" name="${radioName}" value="${radioLabels[0]}" onchange="handleRadioChange(event)"> ${radioLabels[0]}</label>
+                <label><input type="radio" name="${radioName}" value="${radioLabels[1]}" onchange="handleRadioChange(event)"> ${radioLabels[1]}</label>
+                </div>
+            `;
+
+            // Append to optionsHtml
+            optionsHtml += radioHtml;
+            });
+
+            optionsHtml += `
                 </div>
             `;
         }
@@ -407,7 +468,7 @@ function displayTemplate(template, questions, options) {
                 <hr>
                 <div class="row">
                     <div class="col-6">
-                    <input class="field-type" value="${q.answer_type}" type="hidden">
+                        <input class="field-type" value="${q.answer_type}" type="hidden">
                         <p class="" id="question-title-${q.question_id}">${q.question_title.trim()} </p>
                         <p class="" value="" id="question-description-${q.question_id}">${q.question_description.trim()} </p>
                         <div class="mt-3 ms-3 responseDiv">
@@ -420,29 +481,22 @@ function displayTemplate(template, questions, options) {
                         </div>
                     </div>
                     <div class="col-6">
-                        
-            <div>
-                <label for="severity" class="block text-sm font-medium text-gray-700 mb-1">Severity</label>
-                <br>
-                <select id="severity${q.question_id}" name="severity"
-                        class="mt-1 block w-100 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                        required>
-                    <option value="">Select Severity</option>
-                    <option value="Complied">Complied</option>
-                    <option value="OFI">OFI</option>
-                    <option value="Minor NC">Minor NC</option>
-                    <option value="Major NC">Major NC</option>
-
-                </select>
-                <img src="${non_confirmity.nc_image}">
-            </div>
-                        
-
+                        <div>
+                            <label for="severity" class="block text-sm font-medium text-gray-700 mb-1">Severity</label>
+                            <br>
+                            <select id="severity${q.question_id}" name="severity"
+                                    class="mt-1 block w-100 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                                    required>
+                                <option value="" ${non_confirmity.severity === '' ? 'selected' : ''}>Select Severity</option>
+                                <option value="Complied" ${non_confirmity.severity === 'Complied' ? 'selected' : ''}>Complied</option>
+                                <option value="OFI" ${non_confirmity.severity === 'OFI' ? 'selected' : ''}>OFI</option>
+                                <option value="Minor NC" ${non_confirmity.severity === 'Minor NC' ? 'selected' : ''}>Minor NC</option>
+                                <option value="Major NC" ${non_confirmity.severity === 'Major NC' ? 'selected' : ''}>Major NC</option>
+                            </select>
+                            ${nc_image_html}
+                        </div>
                     </div>
-                   
-                    
                 </div>
-               
             </div>
         `;
     });
@@ -461,7 +515,9 @@ function displayTemplate(template, questions, options) {
     // form.find('input, select, button').prop('disabled', true);
     // form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
 }
+function handleRadioChange(event){
 
+}
 function saveAnswers(templateId, questions) {
     const form = $(`#template-form-${templateId}`);
     const answers = {
@@ -477,7 +533,7 @@ function saveAnswers(templateId, questions) {
         const questionId = questionCard.data('question-id');
         const questionData = questions.find(q => q.question_id === questionId || q.question_id === questionId);
         let answerType = questionCard.find('.field-type').val() || (questionData && questionData.answer_type);
-
+console.log(answerType);
         if (!answerType) {
             console.warn(`Answer type undefined for question ${questionId}. Skipping.`);
             return true;
@@ -527,7 +583,6 @@ function saveAnswers(templateId, questions) {
     }
 
     console.log('Collected answers:', answers);
-
     $.ajax({
         url: 'ajax/save_answers.php',
         method: 'POST',
@@ -582,6 +637,15 @@ function handleSeverityChange(event) {
                     severityInput.value = selectedValue;
                     modalBackdrop.classList.add('show');
                     modal.classList.add('show');
+                    const non_confirmity = non_conformities.find(n => n.nc_question_id == questionId) || {};
+                    console.log(non_confirmity);
+                    if(non_confirmity){
+                        if(non_confirmity.nc_image){
+                            document.getElementById('nc_image_div').innerHTML = `<img class="w-100" src="ajax/${non_confirmity.nc_image}">`;
+                            document.getElementById('description').innerText = `${non_confirmity.description}`;
+
+                        }
+                    }
                 } else {
                     console.error('Modal elements not found');
                 }
@@ -681,32 +745,6 @@ async function saveNonConformity() {
             }
         }
 
-async function fetchNonConformities(scheduleId, templateId) {
-    try {
-        const payload = {};
-        if (scheduleId) payload.scheduleId = scheduleId;
-        if (templateId) payload.templateId = templateId;
 
-        const response = await fetch('ajax/get_non_conformities.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
-        console.log('Non-conformities response:', data);
-        non_conformities = data.data;
-
-        if (data.success) {
-            console.log('Non-conformities:', data.data);
-            // Render data in UI (e.g., table or list)
-        } else {
-            alert(data.message || 'Failed to retrieve non-conformities.');
-        }
-    } catch (error) {
-        console.error('Error fetching non-conformities:', error);
-        alert('Error: Failed to retrieve non-conformities.');
-    }
-}
 
 </script>

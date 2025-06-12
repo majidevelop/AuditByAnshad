@@ -11,20 +11,22 @@ include('../functionPDO.php');
 
 try {
       $input = json_decode(file_get_contents("php://input"), true);
-
+$where = "1";
     // Validate required fields
     if (!isset($input['scheduleId']) || !isset($input['templateId']) ) {
         $response = ['status' => 'error', 'message' => 'Missing required fields: scheduleId or templateId.'];
-        echo json_encode($response);
-        exit;
-    }
-    $schedule_id = $input['scheduleId'];
+        // echo json_encode($response);
+        // exit;
+    }else{
+        $schedule_id = $input['scheduleId'];
     $template_id = $input['templateId'];
 
 $where = array(
     array('scheduled_audit_id',$schedule_id,'INT'),
     array('template_id',$template_id,'INT')
 );
+    }
+    
     $templates  =   array();
     $templates  =   allrows('audit_non_confirmity_master',$where,'created_at DESC');
 

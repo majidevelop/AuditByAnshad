@@ -66,6 +66,7 @@
                                                         <input class="form-control mb-3" type="text" value="" placeholder="Question" id="example-text-input">
                                                         <input class="form-control" type="text" value="" placeholder="Description" id="example-text-input">
                                                         <div id="responseDiv" class="mt-3 responseDiv">
+                                                            <input type="hidden" value="1" class="question_number_val">
                                                             <!-- <input type="radio" id="html" name="fav_language" value="true">
                                                             <label for="html">True/False</label><br>
                                                             <input type="radio" id="css" name="fav_language" value="pass">
@@ -133,6 +134,7 @@
                          </div>
 <script>
     let templateId = null;
+    let question_number = 1;
     function load_func(){
         
         saveTemplate();
@@ -172,31 +174,36 @@ document.getElementById("questionsContainer").addEventListener("change", functio
     // let responseDiv = document.getElementById("responseDiv");
 
      // Find the closest question card
-     let questionCard = event.target.closest(".question-card");
-
+    let questionCard = event.target.closest(".question-card");
+let current_question_number = null;
     // Find the responseDiv inside this question card
     let responseDiv = questionCard.querySelector(".responseDiv");
-
+    let current_question_elem = responseDiv.querySelector(".question_number_val");
+    if(current_question_elem){
+        current_question_number = current_question_elem.value;
+    }
     let content = "";
     console.log(selectedValue);
     switch (selectedValue) {
         case "preconfigured":
-            content = `
-                <input type="radio" id="trueFalse" name="option" value="true">
-                <label for="trueFalse">True/False</label><br>
-                <input type="radio" id="passFail" name="option" value="pass">
-                <label for="passFail">Pass/Fail</label><br>
-                <input type="radio" id="yesNo" name="option" value="yes">
-                <label for="yesNo">Yes/No</label>`;
+            content = `<input type="hidden" value="${question_number}" class="question_number_val">
+                <input type="radio" id="trueFalse${current_question_number}" name="response${current_question_number}" value="true">
+                <label for="trueFalse${current_question_number}">True/False</label><br>
+                <input type="radio" id="passFail${current_question_number}" name="response${current_question_number}" value="pass">
+                <label for="passFail${current_question_number}">Pass/Fail</label><br>
+                <input type="radio" id="yesNo${current_question_number}" name="response${current_question_number}" value="yes">
+                <label for="yesNo${current_question_number}">Yes/No</label>`;
             break;
         case "text":
-            content = ``;
+            content = `<input type="hidden" value="${question_number}" class="question_number_val">`;
             break;
         case "number":
-            content = ``;
+            content = `<input type="hidden" value="${question_number}" class="question_number_val">`;
             break;
         case "single_select":
             content = `
+                            <input type="hidden" value="${question_number}" class="question_number_val">
+
                     <div id="singleSelectContainer">
                         <div id="singleSelectFields">
                             ${createRadioItem("Option 1")}
@@ -210,6 +217,8 @@ document.getElementById("questionsContainer").addEventListener("change", functio
             break;
         case "dropdown":
             content = `
+                            <input type="hidden" value="${question_number}" class="question_number_val">
+
                 <div id="dropdownContainer">
                     <div  id="dropdownSelect">
                         ${createDropdownItem("Option 1")}
@@ -223,6 +232,8 @@ document.getElementById("questionsContainer").addEventListener("change", functio
             break;
         case "multi_select":
             content = `
+                            <input type="hidden" value="${question_number}" class="question_number_val">
+
                      <div id="multiSelectContainer">
                         <div id="multiSelectFields">
                             ${createMultiSelectItem("Answer 1")}
@@ -249,11 +260,15 @@ document.getElementById("questionsContainer").addEventListener("change", functio
 }
 });
 
-    document.getElementById("saveTemplate").addEventListener("click", function () {
-        saveTemplate();
-    });
+document.getElementById("saveTemplate").addEventListener("click", function () {
+    saveTemplate();
+});
 
 function saveTemplate(){
+    if(templateId){
+        location.href= 'form_template_list_view_cards';
+        return;
+    }
     let templateData = {
         title: document.querySelector("#example-text-input").value,
         description: document.querySelector("#example-text-input").value,
@@ -271,6 +286,16 @@ function saveTemplate(){
                 options.push({ text: option.value, order: optIndex + 1 });
             });
         }
+        if(answerType === "preconfigured"){
+            let current_question_number = null;
+            // Find the responseDiv inside this question card
+            let responseDiv = card.querySelector(".responseDiv");
+            let current_question_elem = responseDiv.querySelector(".question_number_val");
+            let question_number = current_question_elem.value;
+            const selectedValue = $(`input[name="response_${question_number}"]:checked`).val();
+            options.push({ text: selectedValue, order: 1 });
+
+        }
 
         templateData.questions.push({
             text: questionText,
@@ -282,6 +307,7 @@ function saveTemplate(){
     });
 
 console.log(templateData);
+
     fetch("ajax/save_template.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -384,6 +410,16 @@ function collectTemplateData() {
                 options.push({ text: option.value, order: optIndex + 1 });
             });
         }
+        if(answerType === "preconfigured"){
+            let current_question_number = null;
+            // Find the responseDiv inside this question card
+            let responseDiv = card.querySelector(".responseDiv");
+            let current_question_elem = responseDiv.querySelector(".question_number_val");
+            let question_number = current_question_elem.value;
+            const selectedValue = $(`input[name="response_${question_number}"]:checked`).val();
+            options.push({ text: selectedValue, order: 1 });
+
+        }
 
         templateData.questions.push({
             text: questionText,
@@ -398,31 +434,16 @@ function collectTemplateData() {
 }
 
 </script>
-                         <script>
-// Function to add a new question
-// document.addEventListener("click", function(event) {
-//     if (event.target.classList.contains("add-question" ) ||
-//         event.target.classList.contains("dripicons-plus")) {
-//         let container = document.getElementById("questionsContainer");
-//         let questionCard = event.target.closest(".question-card"); 
 
-//         let newQuestion = questionCard.cloneNode(true);
+<script>
 
-//         // Reset input fields
-//         newQuestion.querySelectorAll("input[type='text']").forEach(input => input.value = "  Question");
-//         newQuestion.querySelectorAll("input[type='radio']").forEach(radio => radio.checked = false);
-
-//         container.appendChild(newQuestion);
-//         updateTemplate();
-
-//     }
-// });
 
 document.addEventListener("click", function(event) {
     if (
         event.target.classList.contains("add-question") ||
         event.target.classList.contains("dripicons-plus")
     ) {
+        question_number++;
         const container = document.getElementById("questionsContainer");
 
         if (!container) return;
@@ -437,6 +458,8 @@ document.addEventListener("click", function(event) {
                         <input class="form-control mb-3" type="text" value="" placeholder="Question" id="example-text-input">
                         <input class="form-control" type="text" value="" placeholder="Description" id="example-text-input">
                         <div id="responseDiv" class="mt-3 responseDiv">
+                            <input type="hidden" value="${question_number}" class="question_number_val">
+
                             <!-- Radio options can be dynamically added here -->
                         </div>
                     </div>
@@ -462,8 +485,6 @@ document.addEventListener("click", function(event) {
         `);
     }
 });
-
-
 
 // Function to move a question up
 document.addEventListener("click", function(event) {
@@ -536,6 +557,7 @@ document.addEventListener("click", function(event) {
         let questionCard = event.target.closest(".question-card");
         if (document.querySelectorAll(".question-card").length > 1) {
             questionCard.remove();
+            question_number--;
         } else {
             alert("At least one question must remain!");
         }
@@ -543,75 +565,6 @@ document.addEventListener("click", function(event) {
 
     }
 });
-</script>
-                         <script>
-                            /*
-document.getElementById("fieldType").addEventListener("change", function() {
-    let selectedValue = this.value;
-    let responseDiv = document.getElementById("responseDiv");
-
-    let content = "";
-    switch (selectedValue) {
-        case "preconfigured":
-            content = `
-                <input type="radio" id="trueFalse" name="option" value="true">
-                <label for="trueFalse">True/False</label><br>
-                <input type="radio" id="passFail" name="option" value="pass">
-                <label for="passFail">Pass/Fail</label><br>
-                <input type="radio" id="yesNo" name="option" value="yes">
-                <label for="yesNo">Yes/No</label>`;
-            break;
-        case "text":
-            content = ``;
-            break;
-        case "number":
-            content = ``;
-            break;
-        case "single_select":
-            content = `
-                    <div id="singleSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewRadio()">Option <i class="dripicons-plus"></i></button>
-                        <div id="singleSelectFields">
-                            ${createRadioItem("Option 1")}
-                            ${createRadioItem("Option 2")}
-                            ${createRadioItem("Option 3")}
-                        </div>
-                    </div>
-            `;
-            break;
-        case "dropdown":
-            content = `
-                <div id="dropdownContainer">
-                    <button class="btn btn-primary mb-2" onclick="addNewDropdownOption()">Option <i class="dripicons-plus"></i></button>
-                    <div  id="dropdownSelect">
-                        ${createDropdownItem("Option 1")}
-                        ${createDropdownItem("Option 2")}
-                        ${createDropdownItem("Option 3")}
-                    </div>
-                </div>
-            `;
-            break;
-        case "multi_select":
-            content = `
-                     <div id="multiSelectContainer">
-                        <button class="btn btn-primary mb-2" onclick="addNewField()">Option <i class="dripicons-plus"></i></button>
-                        <div id="multiSelectFields">
-                            ${createMultiSelectItem("Answer 1")}
-                            ${createMultiSelectItem("Answer 2")}
-                            ${createMultiSelectItem("Answer 3")}
-                        </div>
-                    </div>
-            `;
-            break;
-        case "date":
-            content = ``;
-            break;
-        default:
-            content = "";
-    }
-
-    responseDiv.innerHTML = content;
-}); */
 </script>
 <script>
    
