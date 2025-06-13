@@ -224,8 +224,8 @@ async function get_answers(id) {
 
         const data = await response.json();
         let ctr = 0;
-        console.log("Answers : ", data.data);
-        console.log("template_questions : ", template_questions);
+        // console.log("Answers : ", data.data);
+        // console.log("template_questions : ", template_questions);
 
         let html = `
             <center>
@@ -249,12 +249,18 @@ async function get_answers(id) {
                     if(non_confirmity.nc_image){
                         nc_image_html = `<p>${non_confirmity.severity}</p>
                         <img class="" width="200" src="ajax/${non_confirmity.nc_image}">
-                         <p>${non_confirmity.description}</p>`;
+                         <p class="mt-3">${non_confirmity.description}</p>`;
                     }
                 }
                 html += `
-                <div class="row border border-1">
+                <div class="card">
+                <div class="card-body">
+
+
+                <div class="row m-0">
                     <div class="col-sm-6">
+                    <i class="bx bx-purchase-tag-alt">
+                    </i>
                         <p>
                             ${ctr} - <b>${question.question_title}</b>
                         </p>
@@ -266,6 +272,9 @@ async function get_answers(id) {
                     </div>
                 
                 </div>
+                </div>
+                </div>
+
            
                 `;
 

@@ -97,15 +97,15 @@
                         <!-- start page title -->
                         <div class="row">
                             <div class="col-9">
-                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                                <!-- <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                                     <h4 class="mb-sm-0 font-size-18">Form Report Master Template</h4>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="col-3">
                                 <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Forms</a></li>
-                                            <li class="breadcrumb-item active">Master Template</li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Audit</a></li>
+                                            <li class="breadcrumb-item active">Start Audit</li>
                                         </ol>
                                         <div id="lastUpdated" class="m-0">
 
@@ -117,16 +117,17 @@
 
                         <div class="row">
                             <div class="col-12">
-                                <div class="card">
+                                <!-- <div class="card">
                                     <div class="card-body">
                                         <div class="row m-0">
-                                            <div id="questionsContainer" >
-
-                                            </div>
+                                            
 
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
+                                <div id="questionsContainer" >
+
+                                            </div>
                               
 
                             </div>
@@ -260,7 +261,7 @@ async function get_answers(id){
             if(question){
                 
                 console.log(answer);
-                if (["text", "dropdown", "number"].includes(question.answer_type)) {
+                if (["text", "dropdown", "number", "date"].includes(question.answer_type)) {
 
 
                     $("#response_"+answer.question_id).val(answer.answer);
@@ -268,24 +269,24 @@ async function get_answers(id){
                 }
                 else if(question.answer_type == "multi_select"){
                         // Assuming answer.answer is a JSON string or comma-separated string
-            let selectedAnswers = [];
-            try {
-                // Parse if it's a JSON string (e.g., ["option1", "option2"])
-                selectedAnswers = JSON.parse(answer.answer);
-            } catch (e) {
-                // Fallback to comma-separated string (e.g., "option1,option2")
-                selectedAnswers = answer.answer.split(",").map(item => item.trim());
-            }
-                console.log(selectedAnswers);
+                    let selectedAnswers = [];
+                    try {
+                        // Parse if it's a JSON string (e.g., ["option1", "option2"])
+                        selectedAnswers = JSON.parse(answer.answer);
+                    } catch (e) {
+                        // Fallback to comma-separated string (e.g., "option1,option2")
+                        selectedAnswers = answer.answer.split(",").map(item => item.trim());
+                    }
+                    console.log(selectedAnswers);
 
 
-            // Check each checkbox that matches the selected answers
-            selectedAnswers.forEach(value => {
-                const decoded = new DOMParser().parseFromString(value, "text/html").body.textContent;
-                const cleaned = decoded.replace(/^\[|\]$/g, ''); // Removes [ at start and ] at end
-                const final = cleaned.replace(/^"|\"$/g, ''); // Removes " at start and end
-                $(`input[name="response_${answer.question_id}"][value="${final}"]`).prop("checked", true);
-            });
+                    // Check each checkbox that matches the selected answers
+                    selectedAnswers.forEach(value => {
+                        const decoded = new DOMParser().parseFromString(value, "text/html").body.textContent;
+                        const cleaned = decoded.replace(/^\[|\]$/g, ''); // Removes [ at start and ] at end
+                        const final = cleaned.replace(/^"|\"$/g, ''); // Removes " at start and end
+                        $(`input[name="response_${answer.question_id}"][value="${final}"]`).prop("checked", true);
+                    });
                 }else{
                     $(`input[name="response_${answer.question_id}"][value="${answer.answer}"]`).prop("checked", true);
 
@@ -324,10 +325,12 @@ async function get_audit_plan_by_id(id) {
 
 
 function renderAuditPlan(audit_plan){
-    let html = `<h1> ${audit_plan.audit_title}</h1>
-        <p>Start Date : ${audit_plan.planned_start_date}</p>
-        <p>End Date : ${audit_plan.planned_end_date}</p>
-        
+    let html = `
+    
+    
+        <h1> ${audit_plan.audit_title}</h1>
+                <p>Start Date : ${audit_plan.planned_start_date}</p>
+                <p>End Date : ${audit_plan.planned_end_date}</p>
 
     `;
 
@@ -356,11 +359,12 @@ async function get_template_details_by_id(id){
 }
    
 function createRadioItem(value, questionId, answerId) {
-    return `<div><input type="radio" name="response_${questionId}" value="${value}" data-question-id="${questionId}" data-answer-id="${answerId}"> <label>${value}</label></div>`;
+    return `
+    <div class="col-sm-3"><input type="radio" name="response_${questionId}" value="${value}" data-question-id="${questionId}" data-answer-id="${answerId}"> <label>${value}</label></div>`;
 }
 
 function createMultiSelectItem(value, questionId, answerId) {
-    return `<div><input type="checkbox" name="response_${questionId}" value="${value}" data-question-id="${questionId}" data-answer-id="${answerId}"> <label>${value}</label></div>`;
+    return `<div class="col-sm-3"><input type="checkbox" name="response_${questionId}" value="${value}" data-question-id="${questionId}" data-answer-id="${answerId}"> <label>${value}</label></div>`;
 }
 
 function createDropdownItem(value, answerId) {
@@ -376,13 +380,25 @@ function displayTemplate(template, questions, options) {
         return;
     }
 
-    let html = `<h2>${audit_plan.audit_title}</h2>`;
+    let html = `
+    <div class="card">
+        <div class="card-body">
+            <div class="row m-0">
+                <h2>${audit_plan.audit_title}</h2>
+                <p><strong>Created At:</strong> ${template.created_at}</p>
+            </div>
+        </div>
+    </div>
+    
+    <form id="template-form-${template.id}" data-template-id="${template.id}">
+   
+    `;
     $("#example-text-input-desc").val(template.description);
     $("#example-text-input-title").val(template.title);
 
-    html += `<p><strong>Created At:</strong> ${template.created_at}</p>`;
-    html += `<form id="template-form-${template.id}" data-template-id="${template.id}">`; // Add form with template ID
-    html += `<h3>Questions:</h3><ul>`;
+    html += ``;
+    html += ``; // Add form with template ID
+    html += ``;
     let questionsHtml = ``;
 
     questions.forEach(q => {
@@ -393,7 +409,7 @@ function displayTemplate(template, questions, options) {
         const non_confirmity = non_conformities.find(n => n.nc_question_id === q.question_id) || {};
         if(non_confirmity){
             if(non_confirmity.nc_image){
-                nc_image_html = `<img class="" width="200" src="ajax/${non_confirmity.nc_image}">`;
+                nc_image_html = `<img class="mt-3" width="200" src="ajax/${non_confirmity.nc_image}">`;
             }
         }
         const savedValue = savedAnswer.answer || '';
@@ -403,7 +419,10 @@ function displayTemplate(template, questions, options) {
 
         if (["dropdown", "multi_select", "single_select"].includes(q.answer_type) && relatedOptions.length > 0) {
             showDefaultInputs = false;
-            optionsHtml = `<div class="mt-3"><label>Options:</label>`;
+            optionsHtml = `
+           
+                <div class="row mt-3">
+                `;
 
             if (q.answer_type === "multi_select") {
                 relatedOptions.forEach(option => {
@@ -416,21 +435,25 @@ function displayTemplate(template, questions, options) {
                 });
                 optionsHtml += `</div>`;
             } else if (q.answer_type === "dropdown") {
-                optionsHtml += `<select class="form-select" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}">`;
+                optionsHtml += `
+                <div class="row m-0">
+                <select class="form-select" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}">`;
                 relatedOptions.forEach(option => {
                     optionsHtml += createDropdownItem(option.option_value, option.option_id);
                 });
-                optionsHtml += `</select></div>`;
+                optionsHtml += `</select></div>
+                </div>`;
             }
         } else if (q.answer_type === "preconfigured") {
             console.log("relatedOptions ", relatedOptions);
             optionsHtml = `
+            
                 <div class="mt-3">
             `;
 
             // Iterate over relatedOptions
             relatedOptions.forEach((option, index) => {
-            console.log("relatedOptions ", option);
+            // console.log("relatedOptions ", option);
 
             // Determine radio button labels based on option_value
             let radioLabels = [];
@@ -448,9 +471,15 @@ function displayTemplate(template, questions, options) {
             // Generate radio buttons for the current option
             const radioName = `response_${q.question_id}`; // Unique name for each radio group
             const radioHtml = `
-                <div>
-                <label><input type="radio" name="${radioName}" value="${radioLabels[0]}" onchange="handleRadioChange(event)"> ${radioLabels[0]}</label>
-                <label><input type="radio" name="${radioName}" value="${radioLabels[1]}" onchange="handleRadioChange(event)"> ${radioLabels[1]}</label>
+                <div class="row m-0">
+                    <div class="col-sm-3">
+                        <label><input type="radio" name="${radioName}" value="${radioLabels[0]}" onchange="handleRadioChange(event)"> ${radioLabels[0]}</label>
+                    </div>
+                    <div class="col-sm-3">
+
+                        <label><input type="radio" name="${radioName}" value="${radioLabels[1]}" onchange="handleRadioChange(event)"> ${radioLabels[1]}</label>
+                    </div>
+
                 </div>
             `;
 
@@ -460,27 +489,43 @@ function displayTemplate(template, questions, options) {
 
             optionsHtml += `
                 </div>
+               
+
             `;
         }
 
         questionsHtml += `
+            <div class="card">
             <div class="card-body question-card" data-question-id="${q.question_id}">
-                <hr>
-                <div class="row">
-                    <div class="col-6">
-                        <input class="field-type" value="${q.answer_type}" type="hidden">
-                        <p class="" id="question-title-${q.question_id}">${q.question_title.trim()} </p>
-                        <p class="" value="" id="question-description-${q.question_id}">${q.question_description.trim()} </p>
-                        <div class="mt-3 ms-3 responseDiv">
-                            ${optionsHtml}
-                            ${showDefaultInputs ? `
-                                ${q.answer_type === 'text' ? `<input type="text" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter text">` : ''}
-                                ${q.answer_type === 'number' ? `<input type="number" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter number">` : ''}
-                                ${q.answer_type === 'date' ? `<input type="date" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}">` : ''}
-                            ` : ''}
+                <div class="row  m-0">
+                    
+                       
+                    <div class="col-5">
+                        <div class="row  m-0">
+                            <div class="col-1">
+                                <p>
+                                    <i class="bx bx-purchase-tag-alt"></i>
+                                </p>
+                            </div>
+                            <div class="col-10">
+                                <input class="field-type" value="${q.answer_type}" type="hidden">
+                                <p class="" id="question-title-${q.question_id}">
+                                
+                                <strong>${q.question_title.trim()} </strong></p>
+                                <p class="" value="" id="question-description-${q.question_id}">${q.question_description.trim()} </p>
+                                <div class="mt-3 responseDiv">
+                                    ${optionsHtml}
+                                    ${showDefaultInputs ? `
+                                        ${q.answer_type === 'text' ? `<input type="text" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter text">` : ''}
+                                        ${q.answer_type === 'number' ? `<input type="number" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}" placeholder="Enter number">` : ''}
+                                        ${q.answer_type === 'date' ? `<input type="date" class="form-control" name="response_${q.question_id}" id="response_${q.question_id}" data-question-id="${q.question_id}">` : ''}
+                                    ` : ''}
+                                </div>
+                            </div>
                         </div>
+                        
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <div>
                             <label for="severity" class="block text-sm font-medium text-gray-700 mb-1">Severity</label>
                             <br>
@@ -498,10 +543,12 @@ function displayTemplate(template, questions, options) {
                     </div>
                 </div>
             </div>
+            </div>
+
         `;
     });
 
-    html += questionsHtml + `</ul>`;
+    html += questionsHtml + ``;
     html += `<button type="button" class="btn btn-primary save-answers float-sm-end me-2" data-template-id="${template.id}">Submit Answers</button>`;
     html += `</form>`;
     // $("#template-container").html(html);
@@ -533,7 +580,7 @@ function saveAnswers(templateId, questions) {
         const questionId = questionCard.data('question-id');
         const questionData = questions.find(q => q.question_id === questionId || q.question_id === questionId);
         let answerType = questionCard.find('.field-type').val() || (questionData && questionData.answer_type);
-console.log(answerType);
+// console.log(answerType);
         if (!answerType) {
             console.warn(`Answer type undefined for question ${questionId}. Skipping.`);
             return true;
@@ -555,7 +602,7 @@ console.log(answerType);
                 // For preconfigured or single_select (radio buttons)
                 const checkedInput = questionCard.find(`input[name="response_${questionId}"]:checked`);
                 answer = checkedInput.val();
-                alert(answer);
+                // alert(answer);
                 answerIds.push(checkedInput.data('answer-id'));
             }
         } else if (answerType === 'multi_select') {
@@ -582,7 +629,7 @@ console.log(answerType);
         return;
     }
 
-    console.log('Collected answers:', answers);
+    // console.log('Collected answers:', answers);
     $.ajax({
         url: 'ajax/save_answers.php',
         method: 'POST',
