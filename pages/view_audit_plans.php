@@ -136,7 +136,7 @@
         
             const data = await response.json();
             audit_plans_list = data.data;
-            console.log("application_users:", application_users);
+            console.log("audit_plans_list:", audit_plans_list);
 
             console.log("Last Updated:", data);
             await renderAuditPlans();
