@@ -159,6 +159,14 @@
         <!-- Right bar overlay-->
         <div class="rightbar-overlay"></div>
 
+        <!-- Modal container -->
+        <div id="imageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
+        <img id="modalImage" style="max-width:90%; max-height:90%;" />
+        <span onclick="closeModal()" style=" font-size:30px; color:white; cursor:pointer;">&times;</span>
+
+        </div>
+
+
         <!-- JAVASCRIPT -->
         <script src="assets/libs/jquery/jquery.min.js"></script>
         <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>

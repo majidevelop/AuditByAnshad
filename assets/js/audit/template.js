@@ -13,3 +13,21 @@ function createEventListenerForRadio(IsRadioPresent, question_number){
                 });
     }
 }
+
+
+async function get_questions(id) {
+     try {
+        const response = await fetch(`ajax/get_questions_by_template_id.php?id=${id}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+
+        const data = await response.json();
+        console.log("Questions:", data.data);
+        template_questions = data.data;
+                    
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}

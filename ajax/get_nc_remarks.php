@@ -31,7 +31,7 @@ $where = array(
     }
     
     $templates  =   array();
-    $templates  =   allrows('audit_non_confirmity_master',$where,'created_at DESC');
+    $templates  =   allrows('audit_non_confirmity_remarks',$where,'created_at DESC');
 
 
     echo json_encode(["success" => true, "data" => $templates]);
