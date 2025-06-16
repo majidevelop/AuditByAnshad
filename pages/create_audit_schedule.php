@@ -142,25 +142,44 @@
                                                 </div> -->
                                                 <div class="col-6 p-3">
                                                     <label for="" class="">Planned Start Date</label>
-                                                    <input type="date" class="form-control" name="planned_start_date" id="planned_start_date">
+                                                    <input type="date" class="form-control" name="planned_start_date" id="planned_start_date" readonly>
                                                 </div>
 
                                                 <div class="col-6 p-3">
                                                     <label for="" class="">Planned End Date</label>
-                                                    <input type="date" class="form-control" name="planned_end_date" id="planned_end_date">
+                                                    <input type="date" class="form-control" name="planned_end_date" id="planned_end_date" readonly>
                                                 </div>
+                                                
+                                                <div class="col-6 p-3">
+                                                    <label for="" class="">Planned Duration</label>
+                                                    <input type="number" class="form-control" name="planned_duration" id="planned_duration" readonly>
+                                                </div>
+                                               <!-- Actual DateTime -->
+<div class="col-6 p-3">
+    <label>Actual Start Date & Time</label>
+    <input type="datetime-local" class="form-control" id="actual_start_date">
+</div>
+
+<div class="col-6 p-3">
+    <label>Actual End Date & Time</label>
+    <input type="datetime-local" class="form-control" id="actual_end_date">
+</div>
+
+<div class="col-6 p-3">
+    <label>Actual Duration (in hours)</label>
+    <input type="text" class="form-control" id="actual_duration" readonly>
+</div>
+
                                                 
                                                 <div class="col-6 p-3">
                                                         <label for="select_checklist">Select Checklist</label>
                                                         <select name="select_checklist" id="select_checklist"  class="form-control form-input">
-                                                            <option value="0"><p>dfdffddf <b>ewe</b></p></option>
                                                         </select>
                                                 </div>
 
                                                 <div class="col-6 p-3">
                                                         <label for="select_checklist">Select Process</label>
                                                         <select name="select_process" id="select_process"  class="form-control form-input">
-                                                            <option value="0"><p>Process <b>ewe</b></p></option>
                                                             <option value="1"><p>Process <b>1</b></p></option>
                                                             <option value="2"><p>Process <b>2</b></p></option>
                                                             <option value="3"><p>Process <b>3</b></p></option>
@@ -201,6 +220,43 @@
 <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
 <script>
+function calculateDateTimeDuration(startId, endId, durationId) {
+    const startInput = document.getElementById(startId);
+    const endInput = document.getElementById(endId);
+    const durationInput = document.getElementById(durationId);
+
+    function updateDuration() {
+        if (startInput.value && endInput.value) {
+            const start = new Date(startInput.value);
+            const end = new Date(endInput.value);
+
+            const diffMs = end - start;
+
+            if (diffMs >= 0) {
+                 const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+                const days = Math.floor(diffHours / 24);
+                const hours = diffHours % 24;
+
+                durationInput.value = `${days}d ${hours}h`;
+            } else {
+                durationInput.value = "Invalid";
+            }
+        } else {
+            durationInput.value = "";
+        }
+    }
+
+    startInput.addEventListener("change", updateDuration);
+    endInput.addEventListener("change", updateDuration);
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    calculateDateTimeDuration("planned_start_date", "planned_end_date", "duration");
+    calculateDateTimeDuration("actual_start_date", "actual_end_date", "actual_duration");
+});
+</script>
+
+<script>
 
 
     function get_template_details(templateId) {
@@ -229,7 +285,10 @@
         checklist_id: $("#select_checklist").val(),
         planned_start_date: $("#planned_start_date").val(),
         planned_end_date: $("#planned_end_date").val(),
-        // auto_calculated_duration: $("#auto_calculated_duration").val(),
+        
+        actual_start_date: $("#actual_start_date").val(),
+        actual_end_date: $("#actual_end_date").val(),
+        actual_duration: $("#actual_duration").val(),
         audit_process: $("#select_process").val()
     };
     console.log(payload);
@@ -354,6 +413,8 @@
 // choiceInstances['audit_lead'].setChoiceByValue(plan.lead_auditor);
         $("#planned_start_date").val(plan.planned_start_date);
         $("#planned_end_date").val(plan.planned_end_date);
+        $("#planned_duration").val(plan.auto_calculated_duration);
+
 
 
         $("#audit_team").val(plan.audit_team);

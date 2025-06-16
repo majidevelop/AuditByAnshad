@@ -43,6 +43,11 @@
                                                             <th data-priority="3">Assigned To</th>
                                                             <th data-priority="3">Auditee Department</th>
                                                             <th data-priority="3">Auditee</th>
+
+                                                            <th data-priority="3">Start Date</th>
+                                                            <th data-priority="3">End Date</th>
+                                                            <th data-priority="3">Duration</th>
+
                                                             <th data-priority="3">Status</th>
                                                             <th data-priority="3">CreatedAt</th>
                                                             <th>Action</th>
@@ -166,6 +171,12 @@ async function renderScheduledAudits(templates) {
             <td><a href="view_schedule?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${department_name ? department_name : 'undefined'}</a></td>
             <td><a href="view_schedule?id=${template.scheduled_id}">${department_poc_name ? department_poc_name : 'undefined'}</a></td>
+
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.actual_start_date ? template.actual_start_date : 'undefined'}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.actual_end_date ? template.actual_end_date : 'undefined'}</a></td>
+            <td><a href="view_schedule?id=${template.scheduled_id}">${template.actual_duration ? template.actual_duration : 'undefined'}</a></td>
+
+
             <td><a href="view_schedule?id=${template.scheduled_id}">${status ? status : 'draft'}</a></td>
 
 

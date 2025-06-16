@@ -64,7 +64,7 @@ header("Location: ".$loginpage);
 elseif($count!=1)
 {
 $tbl_name="admins";
-$where=array(array(username,$myusername,'STR'),array(password,$mypassword,'STR'));
+$where=array(array('username',$myusername,'STR'),array('password',$mypassword,'STR'));
 print_r($where);
 $countad= rownum($tbl_name,$where);
 

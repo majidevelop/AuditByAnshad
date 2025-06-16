@@ -71,6 +71,8 @@
                                                                 <th>Criteria</th>
                                                                 <th>Start Date</th>
                                                                 <th>End Date</th>
+                                                                <th>Duration</th>
+
                                                                 <th>Lead Auditor</th>
                                                                 <th>Audit Team</th>
                                                                 <th>Comments</th>
@@ -222,6 +224,8 @@ html += `
         <td>${plan.audit_criteria}</td>
         <td>${plan.planned_start_date}</td>
         <td>${plan.planned_end_date}</td>
+        <td>${plan.auto_calculated_duration}</td>
+
         <td>${lead_auditor_name}</td>
         <td>${audit_team_names}</td>
         <td>${plan.Comments}</td>

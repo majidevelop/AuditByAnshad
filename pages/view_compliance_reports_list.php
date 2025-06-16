@@ -55,13 +55,21 @@
                                             <table class="table">
                                                 <thead>
                                                     <tr>
+                                                        <th>#</th>
+                                                        <th>Audit Title</th>
+                                                        <th>Department</th>
+                                                        <th>Department POC</th>
+                                                        <th>Audit Lead</th>
+                                                        <th>#Display Number </th>
+                                                        <th>No. of Severities Reported</th>
+                                                        <th>
+                                                            Action
+                                                        </th>
 
                                                     </tr>
                                                 </thead>
-                                                <tbody>
-                                                    <tr>
-
-                                                    </tr>
+                                                <tbody class="" id="non_compliance_table">
+                                                   
                                                 </tbody>
                                             </table>
                                         </div>
@@ -74,6 +82,8 @@
 
                 <script src="assets/js/common/admin.js"></script>
                 <script src="assets/js/audit/audit.js"></script>
+                <script src="assets/js/audit/audit_compliance_reports.js"></script>
+
 <script>
     let non_conformities;
     let audit_plans;
@@ -88,5 +98,6 @@
         await get_audit_plans();
 
         await get_inspections();
+        await renderComplianceReports();
     }
 </script>

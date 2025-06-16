@@ -28,7 +28,10 @@ $values = array(
     array('planned_end_date', $input['planned_end_date'], 'STR'),
     array('auto_calculated_duration', $diff, 'INT'),
     array('audit_process', $input['audit_process'], 'STR'),
-    array('scheduled_audit_status' ,"SCHEDULED", 'STR')
+    array('scheduled_audit_status' ,"SCHEDULED", 'STR'),
+    array('actual_start_date', $input['actual_start_date'], 'STR'),
+    array('actual_end_date', $input['actual_end_date'], 'STR'),
+    array('actual_duration', $input['actual_duration'], 'STR')
 );
 
    

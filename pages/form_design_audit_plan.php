@@ -94,7 +94,12 @@
                                                 <label for="">Planned End Date</label>
                                                 <input type="date" class="form-control" name="planned_end_date" id="planned_end_date" >
 
-                                            </div><div class="col-6 p-3">
+                                            </div>
+                                            <div class="col-6 p-3">
+                                                <label for="">Duration (days)</label>
+                                                <input type="text" class="form-control" name="duration" id="duration" readonly>
+                                            </div>
+                                            <div class="col-6 p-3">
                                                 <label for="">Lead Auditor</label>
                                                 <select name="lead_auditor" id="lead_auditor" class="form-control">
                                                     
@@ -149,6 +154,27 @@
                 </div>
                 <!-- End Page-content -->
         <script src="assets/js/common/admin.js"></script>   
+<script>
+    const startInput = document.getElementById("planned_start_date");
+    const endInput = document.getElementById("planned_end_date");
+    const durationInput = document.getElementById("duration");
+
+    function calculateDuration() {
+        const startDate = new Date(startInput.value);
+        const endDate = new Date(endInput.value);
+
+        if (startInput.value && endInput.value) {
+            const timeDiff = endDate - startDate;
+            const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            durationInput.value = daysDiff >= 0 ? daysDiff : "Invalid date range";
+        } else {
+            durationInput.value = "";
+        }
+    }
+
+    startInput.addEventListener("change", calculateDuration);
+    endInput.addEventListener("change", calculateDuration);
+</script>
 
            <script>
             let departments;
@@ -297,7 +323,9 @@ function submitAuditPlan() {
         audit_team: $('#audit_team').val(),
         Comments: $('#Comments').val(),
         department_name : $('#department_name').val(),
-                department_poc : $('#department_poc').val()
+        department_poc : $('#department_poc').val(),
+        auto_calculated_duration : $('#duration').val()
+
     };
 
     $.ajax({
