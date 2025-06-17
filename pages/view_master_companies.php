@@ -47,7 +47,7 @@
                                 </div>
                                
                                 <div class="col-sm-4">
-                                     <button class="btn btn-submit" onclick="save_company()">Save</button>
+                                     <button class="btn btn-success" onclick="save_company()">Save</button>
                                 </div>
 
                             </div>

@@ -47,7 +47,7 @@
                                 </div>
                                
                                 <div class="col-sm-4">
-                                    <button class="btn btn-submit" onclick="save_role()">Save</button>
+                                    <button class="btn btn-success" onclick="save_role()">Save</button>
                                 </div>
 
                             </div>

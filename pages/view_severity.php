@@ -56,12 +56,12 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Audit Title</th>
-                                                        <th>Department</th>
-                                                        <th>Department POC</th>
-                                                        <th>Audit Lead</th>
-                                                        <th>#Display Number </th>
-                                                        <th>No. of Severities Reported</th>
+                                                        <th>Question</th>
+                                                        <th>Description</th>
+                                                        <th>Answer</th>
+                                                        <th>Severity</th>
+                                                        <th>Severity Notes </th>
+                                                        <th>Image</th>
                                                         <th>
                                                             Action
                                                         </th>

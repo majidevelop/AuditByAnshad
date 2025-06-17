@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="col-sm-12 mt-3">
                                     <center>
-                                        <button class="btn btn-submit" onclick="save_application_users()">Save</button>
+                                        <button class="btn btn-success" onclick="save_application_users()">Save</button>
                                     </center>
                                 </div>
                             </div>
