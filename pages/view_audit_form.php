@@ -125,7 +125,7 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div id="questionsContainer" >
+                                <div id="questionsContainer" class="mb-3 mt-3">
 
                                             </div>
                               
@@ -198,6 +198,7 @@
                 form = $("#questionsContainer"); // jQuery object
                 form.find('input, select, button').prop('disabled', true);
                 form.prepend('<p class="text-warning">This form has been submitted and is no longer editable.</p>');
+                form.append('<a class="btn btn-warning" href="list_audit_schedules">View scheduled audits</a>');
 
             }
             } else {
@@ -390,7 +391,7 @@ function displayTemplate(template, questions, options) {
         </div>
     </div>
     
-    <form id="template-form-${template.id}" data-template-id="${template.id}">
+    <form id="template-form-${template.id}" data-template-id="${template.id}" class=""mb-3 mt-3">
    
     `;
     $("#example-text-input-desc").val(template.description);

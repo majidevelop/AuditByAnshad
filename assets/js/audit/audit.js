@@ -56,6 +56,9 @@ async function getScheduledAuditStatus(scheduled_id) {
 
         if (data.success) {
             console.log('Non-conformities:', data.data);
+            if(non_conformities.length == 0 ){
+                return;
+            }
             for(let i=0;i<=non_conformities.length; i++){
                 template_id = non_conformities[0].template_id;
                 break;
@@ -134,7 +137,7 @@ async function get_inspections() {
         });
 
         const data = await response.json();
-        console.log("Form Templates:", data);
+        console.log("scheduled_audits :", data);
 
         if (data.success) {
             scheduled_audits = data.data;
@@ -166,5 +169,28 @@ async function get_answers(id) {
     }catch(error){
         console.error("Fetch Error:", error);
         alert("Failed to load Answers. Check console for details.");
+    }
+}
+
+async function submitStatusUpdate(id, status, created_by) {
+    try {
+        const response = await fetch('ajax/post_scheduled_audit_status.php', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+
+            },
+            body: JSON.stringify({
+                id: id,
+                status: status,
+                created_by: created_by
+            })
+        });
+
+        const result = await response.json(); // or response.json() if your PHP returns JSON
+        console.log("Server response:", result);
+        return result;
+    } catch (error) {
+        console.error("Error submitting status update:", error);
     }
 }

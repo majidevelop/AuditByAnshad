@@ -62,6 +62,7 @@
                                                         <th>Severity</th>
                                                         <th>Severity Notes </th>
                                                         <th>Image</th>
+
                                                         <th>
                                                             Action
                                                         </th>
@@ -133,13 +134,13 @@
 
     <!-- File Upload -->
     <label for="fileInput">Upload Image</label>
-    <input type="file" id="fileInput" accept="image/*" onchange="previewSeverityImage()" style="margin-bottom:10px;" />
+    <input type="file" id="fileInput" accept="image/*" onchange="previewSeverityImage()" style="margin-bottom:10px;" class="form-control" />
 
     <!-- Image Preview -->
     <img id="severityPreview" style="display:none; max-width:100%; margin-bottom:10px;" />
 
     <!-- Save Button -->
-    <button onclick="saveNonConformity()" style="padding:8px 16px;">Save</button>
+    <button onclick="saveNonConformity()" style="padding:8px 16px;" class="btn btn-primary">Save</button>
 
     <div id="remarksList">
 

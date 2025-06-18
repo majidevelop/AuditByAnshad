@@ -75,6 +75,10 @@
 
                                                                 <th>Lead Auditor</th>
                                                                 <th>Audit Team</th>
+                                                                <th>Created By</th>
+                                                                <th>Created At</th>
+
+
                                                                 <th>Comments</th>
                                                                 <th>Action</th>
 
@@ -147,21 +151,34 @@
 
 
 
-    async function renderAuditPlans() {
+async function renderAuditPlans() {
     // const container = document.getElementById('auditPlansContainer'); // Ensure this element exists
     // container.innerHTML = ''; // Clear any existing content
     let html =``;
     audit_plans_list.forEach(plan => {
+        const isLeadAuditor = plan.lead_auditor === current_user_id;
+        const isCreator = plan.created_by === current_user_id;
+
+        const auditTeamArray = typeof plan.audit_team === 'string'
+        ? plan.audit_team.split(',').map(id => id.trim())
+        : [];
+
+        const isInAuditTeam = auditTeamArray.includes(String(current_user_id));
+
+        if (!isLeadAuditor && !isInAuditTeam && !isCreator) {
+            console.log(false);
+            return; // Skip this iteration
+        }
+
         // const card = document.createElement('div');
         // card.className = 'card p-3 mb-3';
 
         const isApproved = plan.audit_plan_status === 'APPROVED' || plan.audit_plan_status === 'APPROVED->SCHEDULED';
         const isScheduled =  plan.audit_plan_status === 'APPROVED->SCHEDULED';
-        const isLeadAuditor = plan.lead_auditor === current_user_id;
     // Determine if the "Create Audit Schedule" link should be disabled
         // It's disabled if not lead auditor OR if the plan is already scheduled
         const disableCreateSchedule = !isLeadAuditor || isScheduled;
-         let createScheduleButtonHtml = '';
+        let createScheduleButtonHtml = '';
         if (isLeadAuditor) {
             createScheduleButtonHtml = `
                 <br><br>
@@ -200,6 +217,7 @@ audit_team_array.forEach( x=> {
 }
 const audit_type_name = findNameById(audit_types, "audit_type_id", plan.audit_type, "audit_type_name");
 const audit_department_name = findNameById(departments, "department_id", plan.department_name, "department_name");
+const created_by_name  = get_user_name(plan.created_by);
 
 
     /*    card.innerHTML = `
@@ -228,6 +246,9 @@ html += `
 
         <td>${lead_auditor_name}</td>
         <td>${audit_team_names}</td>
+        <td>${created_by_name}</td>
+        <td>${plan.row_created_at}</td>
+
         <td>${plan.Comments}</td>
         <td>${approveButton}</td>
     </tr>

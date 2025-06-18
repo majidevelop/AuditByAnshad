@@ -101,28 +101,40 @@
 
 
 
-async function renderScheduledAudits(templates) {
+async function renderScheduledAudits(audits) {
     
     let table = "";
     let ctr =0 ;
 
-    for (const template of templates) {
+    for (const template of audits) {
         try{
 
             const status = await getScheduledAuditStatus(template.scheduled_id);
-            console.log("status " + status);
+            console.log("status " + status + " - " + template.scheduled_id);
             let audit_plan = audit_plans.find(auditplan => template.audit_id === auditplan.audit_id);
            /* console.log(audit_plan);
             console.log(audit_plan.lead_auditor);
             console.log(audit_plan.audit_plan_status);
             console.log("template.created_by : "+audit_plan.created_by);*/
+            const isLeadAuditor = audit_plan.lead_auditor === current_user_id;
+            const isCreator = audit_plan.created_by === current_user_id;
+
+            const auditTeamArray = typeof audit_plan.audit_team === 'string'
+            ? audit_plan.audit_team.split(',').map(id => id.trim())
+            : [];
+
+            const isInAuditTeam = auditTeamArray.includes(String(current_user_id));
+
+            if (!isLeadAuditor && !isInAuditTeam && !isCreator) {
+                console.log(false);
+                continue; // Skip this iteration
+            }
 
         ctr++;
         const created_by_name = application_users.find(user => user.user_id === audit_plan.created_by).name;
         // console.log("created_by" + created_by_name);
         const lead_auditor_name = application_users.find(user => user.user_id === audit_plan.lead_auditor).name;
 
-        const isLeadAuditor = audit_plan.lead_auditor === current_user_id;
         const isApproved = status === 'SUBMITTED' || status === 'APPROVED';
         let approveButton;
 
@@ -133,7 +145,7 @@ async function renderScheduledAudits(templates) {
             const linkText = isApproved ? 'View Answers' : 'View Schedule';
             approveButton = `
                 <td>
-                    <a href="${url}">${linkText}</a>
+                    <a class="btn btn-primary" href="${url}">${linkText}</a>
                 </td>
             `;
         } else {
@@ -143,7 +155,7 @@ async function renderScheduledAudits(templates) {
             const linkText = isApproved ? 'View Answers' : 'View Schedule';
             approveButton = `
                 <td>
-                    <a href="${url}">${linkText}</a>
+                    <a class="btn btn-secondary" href="${url}">${linkText}</a>
                 </td>
             `;
         }
@@ -163,25 +175,25 @@ async function renderScheduledAudits(templates) {
 
         
         <tr>
-            <td> <a href="view_schedule?id=${template.scheduled_id}">${ctr} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${audit_plan.audit_title} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${created_by_name} </a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${department_name ? department_name : 'undefined'}</a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${department_poc_name ? department_poc_name : 'undefined'}</a></td>
+            <td> <a class="btn" href="view_schedule?id=${template.scheduled_id}">${ctr} </a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${audit_plan.audit_title} </a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
+            <td><a  class="btn" href="view_schedule?id=${template.scheduled_id}">${created_by_name} </a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${department_name ? department_name : 'undefined'}</a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${department_poc_name ? department_poc_name : 'undefined'}</a></td>
 
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.actual_start_date ? template.actual_start_date : 'undefined'}</a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.actual_end_date ? template.actual_end_date : 'undefined'}</a></td>
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.actual_duration ? template.actual_duration : 'undefined'}</a></td>
-
-
-            <td><a href="view_schedule?id=${template.scheduled_id}">${status ? status : 'draft'}</a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.actual_start_date ? template.actual_start_date : 'undefined'}</a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.actual_end_date ? template.actual_end_date : 'undefined'}</a></td>
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.actual_duration ? template.actual_duration : 'undefined'}</a></td>
 
 
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${status ? status : 'draft'}</a></td>
 
-            <td><a href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} 
+
+
+            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} 
             
             </a></td>
     ${approveButton}

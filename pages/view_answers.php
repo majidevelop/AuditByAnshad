@@ -253,27 +253,36 @@ async function get_answers(id) {
                     }
                 }
                 html += `
-                <div class="card">
-                <div class="card-body">
+                    <div class="card">
+                    <div class="card-body">
 
 
-                <div class="row m-0">
-                    <div class="col-sm-6">
-                    <i class="bx bx-purchase-tag-alt">
-                    </i>
-                        <p>
-                            ${ctr} - <b>${question.question_title}</b>
-                        </p>
-                        <p>${question.question_description}</p>
-                        <p><strong>Answer</strong><br>${answer.answer}</p>
+                    <div class="row m-0">
+                        <div class="col-6">
+                            <div class="row m-0">
+                                <div class="col-1">
+                                    <p>
+                                        <i class="bx bx-purchase-tag-alt"></i>
+                                    </p>
+                                </div>
+                                <div class="col-10">
+                                    <p>
+                                        ${ctr} - <b>${question.question_title}</b>
+                                    </p>
+                                    <p>${question.question_description}</p>
+                                    <p><strong>Answer</strong><br>${answer.answer}</p>
+                                </div>
+                            </div>
+                        
+                            
+                        </div>
+                        <div class="col-6">
+                            ${nc_image_html}
+                        </div>
+                    
                     </div>
-                    <div class="col-sm-6">
-                        ${nc_image_html}
                     </div>
-                
-                </div>
-                </div>
-                </div>
+                    </div>
 
            
                 `;

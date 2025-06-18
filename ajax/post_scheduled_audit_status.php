@@ -29,7 +29,7 @@ if (isset($scheduled_audit_id) && isset($status)) {
 
     
     
-   echo json_encode(['schedule_audit_status_log' => 'success']);
+   echo json_encode(['message' => 'success']);
     
     
 } else {

@@ -1,16 +1,21 @@
 async function renderComplianceReports() {
     if (scheduled_audits.length > 0) {
         let html = ``;
-        scheduled_audits.forEach((element, index) => {
-             try{
-                console.log(index);
-            ncs = non_conformities.filter( nc => nc.scheduled_audit_id === element.scheduled_id);
-            if(ncs.length > 0){
+        // scheduled_audits.forEach((element, index) => {
+    for (let index = 0; index < scheduled_audits.length; index++) {
 
-                audit_plan = audit_plans.find(a=> a.audit_id === element.audit_id);
-                if(audit_plan){
+            try{
+        const element = scheduled_audits[index];
+
+                console.log(element);
+                ncs = non_conformities.filter( nc => nc.scheduled_audit_id === element.scheduled_id);
+                if(ncs.length > 0){
+
+                    audit_plan = audit_plans.find(a=> a.audit_id === element.audit_id && a.department_poc == current_user_id);
+                    if(audit_plan){
                    
-                        console.log(audit_plan);
+                        const status = await getScheduledAuditStatus(element.scheduled_id);
+
                         department_name =   departments.find(d => audit_plan.department_name == d.department_id).department_name;
                         department_poc = application_users.find(a => a.user_id == audit_plan.department_poc).name;
                         audit_lead_name = application_users.find(a => a.user_id == audit_plan.lead_auditor).name;
@@ -23,18 +28,23 @@ async function renderComplianceReports() {
                             <td>${audit_lead_name}</td>
                             <td>${element.scheduled_id}</td>
                             <td>${ncs.length}</td>
+                    <td>                    ${status}                    </td>
+
                             <td>
                             <button type="button" class="btn btn-primary waves-effect waves-light" onClick=view_severity(${element.scheduled_id})>View</button>
                             </td>
                         </tr>`;
                     
-                }
+                    }
                
-            }
+                }
             }catch(err){
                 console.error(`Error processing scheduled_audit at index ${index}:`, err.message);
             }
-        });
+        }
+        if(html==``){
+            html = `<tr><td colspan="8" class="text-center text-danger"><p>This user is not assigned as dpartment POC</p></td></tr>`;
+        }
         $("#non_compliance_table").html(html);
     }
 }
@@ -47,42 +57,47 @@ function view_severity(id){
 
 
 async function renderComplianceReportsByID(params) {
-        let html = ``;
+    let html = ``;
+    let scheduled_audit_id;
 
-        non_conformities.forEach((element, index) => {
-            console.log(element);
-            const question = template_questions.find(a=> a.question_id === element.nc_question_id);
-            const answer = answers.find(a=> a.question_id === element.nc_question_id);
+    for (let index = 0; index < non_conformities.length; index++) {
+        const element = non_conformities[index];
+        // console.log(element);
 
-            if(question){
-                html += `<tr>
-                    <td>${index + 1}</td>
+        const question = template_questions.find(a => a.question_id === element.nc_question_id);
+        const answer = answers.find(a => a.question_id === element.nc_question_id);
+
+        if (question) {
+            const status = await getScheduledAuditStatus(element.scheduled_audit_id);
+            scheduled_audit_id = element.scheduled_audit_id;
+
+            html += `<tr>
+                <td>${index + 1}</td>
                     <td>${question.question_title}</td>
                     <td>${question.question_description}</td>
                     <td>${answer.answer}</td>
-
                     <td>${element.severity}</td>
                     <td>${element.description}</td>
                     <td><img src="ajax/${element.nc_image}" width="50" onclick="openModalImage('${element.nc_image}')"></td>
-                    
                     <td>
                         <button type="button" class="btn btn-primary waves-effect waves-light" onClick="open_severity_comment_modal(${element.scheduled_audit_id},${element.nc_question_id},'${element.severity}',${element.template_id},${element.nc_id})">Comment</button>
                     </td>
+
                 </tr>`;
             }
 
                         
-        });
+        }
         $("#severity_table").html(html);
         let buttons =`
         <div class ="col-sm-3"></div>
                 <div class ="col-sm-3">
 
-        <button class="btn btn-success m-0"> Accept
+        <button class="btn btn-success m-0" onclick="acceptSeverity(${scheduled_audit_id})"> Accept
 </button></div>
         <div class ="col-sm-3">
         
-<button  class="btn btn-danger m-0"> Reject
+<button  class="btn btn-danger m-0"  onclick="rejectSeverity(${scheduled_audit_id})"> Reject
 </button>
         </div>
 
@@ -93,6 +108,24 @@ async function renderComplianceReportsByID(params) {
 
 }
 
+async function acceptSeverity(scheduled_audit_id){
+    const status = "POC APPROVED";
+    let res = await submitStatusUpdate(scheduled_audit_id, status, current_user_id);
+    if(res.message == "success"){
+            location.href = 'view_compliance_reports_list';
+    }
+
+}
+
+async function rejectSeverity(scheduled_audit_id){
+    const status = "POC REJECTED";
+
+    let res = await submitStatusUpdate(scheduled_audit_id, status, current_user_id);
+
+    if(res.message == "success"){
+            location.href = 'view_compliance_reports_list';
+    }
+}
 
 function open_severity_comment_modal(scheduled_audit_id,nc_question_id,severity,templateId,nc) {
     document.getElementById('modalBackdrop').style.display = 'block';
@@ -151,7 +184,7 @@ function previewSeverityImage() {
     }
 }
 
-function saveSeverityComment() {
+async function saveSeverityComment() {
     const image = document.getElementById('severityFileInput').files[0];
     const comment = document.getElementById('severityCommentText').value;
 
@@ -160,7 +193,8 @@ function saveSeverityComment() {
     console.log("Image File:", image);
 
     alert('Comment saved!');
-    close_severity_comment_modal();
+    await close_severity_comment_modal();
+    location.reload;
 }
 
 
