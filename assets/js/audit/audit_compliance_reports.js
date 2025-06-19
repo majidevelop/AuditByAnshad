@@ -59,7 +59,6 @@ function view_severity(id){
 async function renderComplianceReportsByID(params) {
     let html = ``;
     let scheduled_audit_id;
-
     for (let index = 0; index < non_conformities.length; index++) {
         const element = non_conformities[index];
         // console.log(element);
@@ -68,8 +67,8 @@ async function renderComplianceReportsByID(params) {
         const answer = answers.find(a => a.question_id === element.nc_question_id);
 
         if (question) {
-            const status = await getScheduledAuditStatus(element.scheduled_audit_id);
             scheduled_audit_id = element.scheduled_audit_id;
+            
 
             html += `<tr>
                 <td>${index + 1}</td>
@@ -89,21 +88,30 @@ async function renderComplianceReportsByID(params) {
                         
         }
         $("#severity_table").html(html);
+        const status = await getScheduledAuditStatus(scheduled_audit_id);
+        let button_status = "";
+        if(status === "POC APPROVED"){
+            button_status = "disabled";
+        }
+
         let buttons =`
-        <div class ="col-sm-3"></div>
-                <div class ="col-sm-3">
+            <div class ="col-sm-3"></div>
+            <div class ="col-sm-3">
+                <center>
+                    <button class="btn btn-success m-0" onclick="acceptSeverity(${scheduled_audit_id})" ${button_status}> Accept
+                    </button>
+                </center>
 
-        <button class="btn btn-success m-0" onclick="acceptSeverity(${scheduled_audit_id})"> Accept
-</button></div>
-        <div class ="col-sm-3">
-        
-<button  class="btn btn-danger m-0"  onclick="rejectSeverity(${scheduled_audit_id})"> Reject
-</button>
-        </div>
+            </div>
+            <div class ="col-sm-3">
+                <center>
 
+                    <button  class="btn btn-danger m-0"  onclick="rejectSeverity(${scheduled_audit_id})" ${button_status}> Reject
+                    </button>
+                </center>
 
-
-`;
+            </div>
+        `;
         $("#severity_window").append(buttons);
 
 }
@@ -135,30 +143,34 @@ function open_severity_comment_modal(scheduled_audit_id,nc_question_id,severity,
     document.getElementById('questionIdInput').value = nc_question_id;
     document.getElementById('templateId').value = templateId;
     document.getElementById('nc').value = nc;
-let html =``;
+    non_conformities_remarks("remarksList");
 
-non_conformities_remarks.forEach((element, index) => {
-            console.log(element);
-            const question = template_questions.find(a=> a.question_id === element.nc_question_id);
-            const answer = answers.find(a=> a.question_id === element.nc_question_id);
 
-            if(question){
-                html += `<div class="mt-3">
-                    <p>${index + 1}</p>
-                    
-                    <p>${element.severity}</p>
-                    <p>${element.description}</p>
-                    <img src="ajax/${element.nc_image}" width="100" onclick="openModalImage('${element.nc_image}')">
-                    <hr>
-                  
-                <div>`;
-            }
+}
 
+function render_non_conformities_remarks(id){
+    let html =``;
+
+    non_conformities_remarks.forEach((element, index) => {
+                console.log(element);
+                const question = template_questions.find(a=> a.question_id === element.nc_question_id);
+                const answer = answers.find(a=> a.question_id === element.nc_question_id);
+
+                if(question){
+                    html += `<div class="mt-3">
+                        <p>${index + 1}</p>
                         
-        });
-$("#remarksList").html(html);
+                        <p>${element.severity}</p>
+                        <p>${element.description}</p>
+                        <img src="ajax/${element.nc_image}" width="100" onclick="openModalImage('${element.nc_image}')">
+                        <hr>
+                    
+                    <div>`;
+                }
 
-
+                            
+            });
+    $(`#${id}`).html(html);
 }
 
 function close_severity_comment_modal() {

@@ -116,7 +116,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-12 p-3">
                                 <!-- <div class="card">
                                     <div class="card-body">
                                         <div class="row m-0">
@@ -125,9 +125,9 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div id="questionsContainer" class="mb-3 mt-3">
+                                <div id="questionsContainer">
 
-                                            </div>
+                                </div>
                               
 
                             </div>
@@ -391,7 +391,7 @@ function displayTemplate(template, questions, options) {
         </div>
     </div>
     
-    <form id="template-form-${template.id}" data-template-id="${template.id}" class=""mb-3 mt-3">
+    <form id="template-form-${template.id}" data-template-id="${template.id}" class="mb-3 mt-3">
    
     `;
     $("#example-text-input-desc").val(template.description);

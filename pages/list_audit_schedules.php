@@ -135,17 +135,19 @@ async function renderScheduledAudits(audits) {
         // console.log("created_by" + created_by_name);
         const lead_auditor_name = application_users.find(user => user.user_id === audit_plan.lead_auditor).name;
 
-        const isApproved = status === 'SUBMITTED' || status === 'APPROVED';
+        const isApproved = status === 'SUBMITTED' || status === 'APPROVED' || status === 'POC APPROVED' ;
         let approveButton;
+        const linkClass = isApproved ? 'btn btn-primary' : 'btn btn-secondary';
 
         if (isLeadAuditor) {
             const url = isApproved 
                 ? `view_answers?id=${template.scheduled_id}&audit_lead=true` 
                 : `view_schedule?id=${template.scheduled_id}`;
             const linkText = isApproved ? 'View Answers' : 'View Schedule';
+
             approveButton = `
                 <td>
-                    <a class="btn btn-primary" href="${url}">${linkText}</a>
+                    <a class="${linkClass}" href="${url}">${linkText}</a>
                 </td>
             `;
         } else {
@@ -155,7 +157,7 @@ async function renderScheduledAudits(audits) {
             const linkText = isApproved ? 'View Answers' : 'View Schedule';
             approveButton = `
                 <td>
-                    <a class="btn btn-secondary" href="${url}">${linkText}</a>
+                    <a class="${linkClass}" href="${url}">${linkText}</a>
                 </td>
             `;
         }

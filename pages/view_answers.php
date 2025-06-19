@@ -72,36 +72,44 @@
                                         </div>
                                     </div>
                                 </div>
-                              
-
                             </div>
-
-                            
-
-                            
-                            
                     </div>
-                    
 
+
+                    <!-- <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#myModal">Standard modal</button> -->
+
+                    <!-- sample modal content -->
+                    <div id="myModal" class="modal fade" tabindex="-1" aria-labelledby="myModalLabel" aria-hidden="true" data-bs-scroll="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="myModalLabel">Severity Comments</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="severityModalBody">
+                                    
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary waves-effect waves-light">Save changes</button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
 
                     <script>
                         let header_text = null;
                         let footer_text = null;
-
-
                     </script>
-                     
-
      <!-- /Right-bar -->
 
         <!-- Right bar overlay-->
 
-       
-
         <script src="assets/js/app.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
         <script src="assets/js/audit/audit.js"></script>   
-
+        <script src="assets/js/common/common.js"></script>   
+        <script src="assets/js/audit/audit_compliance_reports.js"></script>
 
 </html>
 
@@ -114,7 +122,9 @@
     let answers;
     let audit_plan;
     let scheduled_audit;
-    async function load_func(){
+    let severityActivity = "severityActivity";
+
+async function load_func(){
         scheduleId = new URLSearchParams(window.location.search).get("id");
         if (scheduleId) {
             await get_schedule_by_id(scheduleId);
@@ -123,6 +133,7 @@
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
             await get_answers(scheduleId);
+            await fetchNonConformitiesRemarks(scheduleId, null);
 
             if( scheduled_audit.scheduled_audit_status == "submitted"){
 
@@ -157,7 +168,6 @@
 
 }
 
-
 async function get_audit_plan_by_id(id) {
     try {
         const response = await fetch(`ajax/get_audit_plan_by_id.php?id=${id}`);
@@ -175,7 +185,6 @@ async function get_audit_plan_by_id(id) {
         alert("Failed to load audit plan. Check console for details.");
     }
 }
-
 
 async function get_template_details_by_id(id){
 
@@ -255,15 +264,13 @@ async function get_answers(id) {
                 html += `
                     <div class="card">
                     <div class="card-body">
-
-
                     <div class="row m-0">
                         <div class="col-6">
-                            <div class="row m-0">
-                                <div class="col-1">
-                                    <p>
-                                        <i class="bx bx-purchase-tag-alt"></i>
-                                    </p>
+                            <div class="row m-0 ">
+                                <div class="col-1 icon-demo-content">
+                                    <button type="button" class="btn p-0"  data-bs-toggle="modal" data-bs-target="#myModal" onclick="openModalById('severityModalBody')">
+                                    <i class="bx bx-purchase-tag-alt"></i>
+                                    </button>
                                 </div>
                                 <div class="col-10">
                                     <p>
@@ -295,7 +302,7 @@ async function get_answers(id) {
             }
         });
         const status = await getScheduledAuditStatus(scheduleId);
-        const isApproved = status === "APPROVED";
+        const isApproved = status === "APPROVED" || status === "POC APPROVED";
 
         html += `
             </div>
@@ -391,6 +398,8 @@ function printToPdf() {
 
     // Hide the print button
     if (printButton) printButton.style.display = "none";
+    document.querySelectorAll('i').forEach(el => el.style.display = 'none');
+
 
     const opt = {
         margin:       0.5,

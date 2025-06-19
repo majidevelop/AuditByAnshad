@@ -19,6 +19,10 @@
   transform: scale(1.02);
   cursor: pointer;
 }
+tr td, th{
+    text-align : center;
+    align-items : center;
+}
 </style>
 
 <div class="page-content">

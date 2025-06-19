@@ -8,3 +8,9 @@ function openModalImage(imgSrc) {
 function closeModal() {
     document.getElementById('imageModal').style.display = 'none';
 }
+
+
+function openModalById(modalId){
+   render_non_conformities_remarks(modalId);
+
+}

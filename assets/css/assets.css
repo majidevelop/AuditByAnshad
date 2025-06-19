@@ -1,0 +1,5 @@
+.icon-demo-content p i:hover
+ {
+    background-color: rgba(81, 86, 190, .2);
+    color: #5156be;
+}

@@ -67,6 +67,8 @@
                                                                 <th>Title</th>
                                                                 <th>Type</th>
                                                                 <th>Department</th>
+                                                                <th>Department POC</th>
+
                                                                 <th>Scope</th>
                                                                 <th>Criteria</th>
                                                                 <th>Start Date</th>
@@ -218,6 +220,8 @@ audit_team_array.forEach( x=> {
 const audit_type_name = findNameById(audit_types, "audit_type_id", plan.audit_type, "audit_type_name");
 const audit_department_name = findNameById(departments, "department_id", plan.department_name, "department_name");
 const created_by_name  = get_user_name(plan.created_by);
+const audit_department_poc  = get_user_name(plan.department_poc);
+
 
 
     /*    card.innerHTML = `
@@ -237,6 +241,8 @@ html += `
         <td>${plan.audit_title}</td>
         <td>${audit_type_name}</td>
         <td>${audit_department_name}</td>
+        <td>${audit_department_poc}</td>
+
 
         <td>${plan.audit_scope}</td>
         <td>${plan.audit_criteria}</td>
