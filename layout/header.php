@@ -501,6 +501,8 @@
                                     <li><a href="view_master_roles" data-key="t-form-elements">Roles</a></li>
                                     <li><a href="view_master_companies" data-key="t-form-elements">Companies</a></li>
                                     <li><a href="view_master_departments" data-key="t-form-elements">Departments</a></li>
+                                    <li><a href="view_master_process" data-key="t-form-elements">Process</a></li>
+
                                     <li><a href="view_master_audit_types" data-key="t-form-elements">Audit Types</a></li>
 
 

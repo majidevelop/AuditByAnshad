@@ -9,14 +9,22 @@ include('../functionPDO.php');
 
 try {
 
+    session_start();
     
+    $company_id = $_SESSION['company_id'];
+    $user_id = $_SESSION['application_user_id'];
 // Read raw POST input
 $input = json_decode(file_get_contents("php://input"), true);
-$where = array(
-    array('status', 1 , 'INT')
+$where=array(
+    array('company_id',$company_id,'INT'),
+    array('status',1,'INT')
+
+
 );
+
+
     $templates = array();
-    $templates=allrows('departments',$where,'department_name ASC');
+    $templates=allrows('process_master',$where,'process_name ASC');
 
 
     echo json_encode(["success" => true, "data" => $templates]);

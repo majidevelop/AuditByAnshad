@@ -20,7 +20,7 @@
                         <div class="row">
                             <div class="col-9">
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0 font-size-18">departments</h4>
+                                    <h4 class="mb-sm-0 font-size-18">Departments</h4>
 
                                  
 
@@ -30,7 +30,7 @@
                                 <div class="page-title-right">
                                         <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Account Master</a></li>
-                                            <li class="breadcrumb-item active">departments</li>
+                                            <li class="breadcrumb-item active">Departments</li>
                                         </ol>
                                         <div id="lastUpdated" class="m-0">
 
@@ -46,7 +46,7 @@
                                     <input type="text" name="department_name" id="department_name" placeholder="Department Name" class="form-control">
                                 </div>
                                
-                                <div class="col-sm-4">
+                                <div class="col-sm-4 pt-4" id="department_action_button_div">
                                     <button class="btn btn-success" onclick="save_department()">Save</button>
                                 </div>
 
@@ -58,6 +58,8 @@
                                         <tr>
                                             <th>SI No.</th>
                                             <th>Department Name</th>
+                                            <th>Action</th>
+
 
                                         </tr>
 
@@ -80,6 +82,8 @@
                     </div> <!-- container-fluid -->
                 </div>
                 <!-- End Page-content -->
+                   <script src="assets/js/common/admin.js"></script>
+                 <script src="assets/js/common/common.js"></script>
 <script>
    
 
@@ -118,6 +122,11 @@ let departments;
                 <tr>
                     <td>${ctr}</td>
                     <td>${element.department_name}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="edit_department(${element.department_id})">Edit</button>
+                        <button class="btn btn-danger" onclick="open_delete_modal(${element.department_id}, 'Department')"  data-bs-toggle="modal" data-bs-target=".bs-example-modal-sm">Delete</button>
+                    </td>
+
                 </tr>
             `;
 
@@ -128,10 +137,14 @@ let departments;
         
     }
 
-async function save_department() {
+async function save_department(id) {
+    let url = `ajax/post_departments.php`;
+    if(id){
+        url = `ajax/update_departments.php?id=${id}`;
+    }
     const department_name = $("#department_name").val(); // Correctly calling the .val() function
 
-    const response = await fetch("ajax/post_departments.php", {
+    const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -152,13 +165,45 @@ async function save_department() {
 
     }
 }
-function clearfields() {
-    // Clear text inputs, textareas, and selects
-    $("input:not([type=radio]):not([type=checkbox]), textarea, select").val("");
 
-    // Uncheck all radio buttons and checkboxes
-    $("input[type=radio], input[type=checkbox]").prop("checked", false);
+async function delete_Department (id){
+    let url = `ajax/post_departments.php`;
+    if(id){
+        url = `ajax/delete_department.php?id=${id}`;
+    }
+    const department_name = $("#department_name").val(); // Correctly calling the .val() function
+
+    const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            department_name: department_name
+        })
+    });
+
+    if (response.ok) {
+        const result = await response.json();
+        console.log("Department saved:", result);
+        clearfields();
+        get_departments();
+    } else {
+        console.error("Failed to save Department:", response.statusText);
+        clearfields();
+        get_departments();
+
+
+    }
 }
 
+
+async function edit_department(id){
+        const pro = departments.find(p => p.department_id === id);
+        if(pro){
+            $("#department_name").val(pro.department_name);
+            $("#department_action_button_div").html(`<button class="btn btn-success" onclick="save_department(${id})">Update</button>`);
+
+        }
+
+    }
 
 </script>
