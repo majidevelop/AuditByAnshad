@@ -56,7 +56,7 @@ $startDay = date('w', strtotime("$year-$month-01"));
 <a href="?page=list_schedule_inspection_calendar&month=<?= ($month == 1 ? 12 : $month - 1) ?>&year=<?= ($month == 1 ? $year - 1 : $year) ?>">← Prev</a> |
 <a href="?page=list_schedule_inspection_calendar&month=<?= ($month == 12 ? 1 : $month + 1) ?>&year=<?= ($month == 12 ? $year + 1 : $year) ?>">Next →</a>
 
-<div class="calendar" id="calendar">
+<div  id="calendar"  class="fc fc-media-screen fc-direction-ltr fc-theme-standard calendar ">
     <?php foreach (['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] as $d): ?>
         <div class="header"><?= $d ?></div>
     <?php endforeach; ?>

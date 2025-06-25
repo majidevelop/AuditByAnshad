@@ -24,6 +24,7 @@ try {
     $productid = insertrow('departments', $values);
 
     echo json_encode(['pid' => $productid, 'message' => "Success"]);
+$_SESSION['success_message'] = "Department created successfully!";
 
     exit;
 } catch (Exception $e) {

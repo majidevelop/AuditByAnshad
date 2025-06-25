@@ -28,9 +28,6 @@ include('../functionPDO.php') ;
         array('updated_by', $user_id, 'INT'),
         array('status', $status, 'INT')
 
-
-        // array('updated_by', $input['updated_by'], 'INT')
-        // created_at and updated_at will be automatically handled by DB
     );
 
     $id = $_GET['id'];

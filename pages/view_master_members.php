@@ -79,7 +79,7 @@
                                     <select name="company" id="company" class="form-control">
                                     </select>
                                 </div>
-                                <div class="col-sm-12 mt-3">
+                                <div class="col-sm-12 mt-3" id="user_action_button_div">
                                     <center>
                                         <button class="btn btn-success" onclick="save_application_users()">Save</button>
                                     </center>
@@ -97,6 +97,7 @@
                                             <th>Department</th>
                                             <th>Company</th>
                                             <th>Roles</th>
+                                            <th>Action</th>
 
 
                                         </tr>
@@ -113,84 +114,123 @@
                 </div>
                 <!-- End Page-content -->
         <script src="assets/js/common/admin.js"></script>   
-                 
+        <script src="assets/js/common/common.js"></script>
 <script>
-   
-
-    
 let application_users;
 let roles;
 let companies;
 let choicesInstance;
 let departments;
+// Instance registry
+const choicesInstances = new Map();
 
-    async function load_func(){
-        await get_departments();
+async function load_func(){
+    await get_departments();
+    await get_application_users();
+    await get_roles();
+    await get_companies();
+    await renderdepartments(); // ✅ now correctly awaited
+    await renderapplication_users(); // ✅ now correctly awaited
 
-        await get_application_users();
-        
-        await get_roles();
-        await get_companies();
-        await renderdepartments(); // ✅ now correctly awaited
+}
+async function delete_User(id) {
+    try {
+            let url = 'ajax/post_user.php';
+            if(id){
+                url = `ajax/delete_user.php?id=${id}`;
 
-        await renderapplication_users(); // ✅ now correctly awaited
+            }
+            const data = {
+                    status: 0
+                    
+                };
+            const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+            });
 
-       
-    }
+            const result = await response.json();
 
-    async function renderapplication_users(){
+            if (response.ok) {
+                console.log('User deleted:', result);
+                // clearfields();
+                await get_application_users();
+                await renderapplication_users();
+                // $("#process_action_button_div").html(`<button class="btn btn-success" onclick="createProcessMaster()">Save</button>`);
+// document.querySelector('.modal.bs-example-modal-sm').setAttribute('aria-hidden', 'true');
+
+            } else {
+                console.error('Server returned an error:', result);
+            }
+
+            return result;
+
+        } catch (error) {
+            console.error('Request failed:', error);
+            return { error: true, message: error.message };
+        }
+}
+async function renderapplication_users(){
         let ctr = 0;
         let row;
         application_users.forEach(element => {
-            company_name= "undefined";
-            department_name = "undefined";
+        company_name= "undefined";
+        department_name = "undefined";
 
-            company = companies.find( c => c.company_id == element.company_id);
-            if(company){
-                company_name = company.company_name;
+        company = companies.find( c => c.company_id == element.company_id);
+        if(company){
+            company_name = company.company_name;
+        }
+            department = departments.find( c => c.department_id == element.department);
+        if(department){
+            department_name = department.department_name;
+        }
+
+        let roles_string = element.roles;
+        roles_array = roles_string.split(",");
+        let role_names = [];
+        roles_array.forEach( r => {
+            role = roles.find( a=> a.role_id == r);
+            if(role){
+            role_names.push(role.role_name);
+
             }
-             department = departments.find( c => c.department_id == element.department);
-            if(department){
-                department_name = department.department_name;
-            }
+        });
 
-            let roles_string = element.roles;
-            roles_array = roles_string.split(",");
-            let role_names = [];
-            roles_array.forEach( r => {
-                role = roles.find( a=> a.role_id == r);
-                if(role){
-                role_names.push(role.role_name);
-
-                }
-            });
-            role_names_string = role_names.toString(); 
-            ctr++;
-             row += `
-                <tr>
-                    <td>${ctr}</td>
-                    <td>${element.name}</td>
-                    <td>${element.email}</td>
-                    <td>${element.phone}</td>
-                    <td>${department_name}</td>
-
-
-
-                    <td>${company_name}</td>
-                    <td>${role_names_string}</td>
-
-                    
-                </tr>
-            `;
+        role_names_string = role_names.toString(); 
+        ctr++;
+        row += `
+            <tr>
+                <td>${ctr}</td>
+                <td>${element.name}</td>
+                <td>${element.email}</td>
+                <td>${element.phone}</td>
+                <td>${department_name}</td>
+                <td>${company_name}</td>
+                <td>${role_names_string}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="edit_user(${element.user_id})">Edit</button>
+                    <button class="btn btn-danger" onclick="open_delete_modal(${element.user_id}, 'User')"  data-bs-toggle="modal" data-bs-target=".bs-example-modal-sm">Delete</button>
+                
+                </td>
+                
+            </tr>
+        `;
 
         });
-            $("#rendertable").html('');
+        $("#rendertable").html('');
 
-            $("#rendertable").append(row);
+        $("#rendertable").append(row);
         
     }
-
-async function save_application_users() {
+async function save_application_users(id) {
+    let url = "ajax/post_application_users.php";
+    if(id){
+        url = "ajax/update_application_users.php?id="+id
+    }
  // Trim input values
     const name = $("#name").val().trim();
     const email = $("#email").val().trim();
@@ -233,7 +273,7 @@ async function save_application_users() {
     }
 
     // Submit form
-    const response = await fetch("ajax/post_application_users.php", {
+    const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -273,8 +313,6 @@ function clearfields() {
     $("input[type=radio], input[type=checkbox]").prop("checked", false);
     choicesInstance.removeActiveItems();
 }
-
-
 async function get_roles(){
         try {
             const response = await fetch("ajax/get_roles.php", {
@@ -291,28 +329,43 @@ async function get_roles(){
             console.error("Error:", error);
         }
     }
-
-async function renderroles() {
+async function renderroles(roles_string) {
     let row = '';
+    let roles_array = [];
+
+    if (roles_string) {
+        roles_array = roles_string.split(",").map(s => s.trim()); // trim in case of spaces
+    }
+
+    // Check if 'roles' is defined and is an array
+    if (!Array.isArray(roles)) {
+        console.error("The 'roles' variable is not defined or not an array.");
+        return;
+    }
 
     roles.forEach(element => {
-        row += `<option value="${element.role_id}">${element.role_name}</option>`;
+        const isSelected = roles_array.includes(String(element.role_id));
+
+        row += `<option value="${element.role_id}" ${isSelected ? 'selected' : ''}>${element.role_name}</option>`;
     });
 
-    $("#roles").html(row);
+    const $roles = $("#roles");
+    $roles.html(row);
 
-    // Destroy existing Choices instance if re-initializing
-    if (choicesInstance) {
+    // Destroy existing Choices instance safely
+    if (typeof choicesInstance !== 'undefined' && choicesInstance) {
         choicesInstance.destroy();
     }
 
-    // Initialize Choices
+    // Initialize Choices.js
     choicesInstance = new Choices('#roles', {
         removeItemButton: true,
         searchEnabled: true,
-        placeholderValue: 'Select roles'
+        placeholderValue: 'Select roles',
+        shouldSort: false
     });
 }
+
 async function get_companies(){
         try {
             const response = await fetch("ajax/get_companies.php", {
@@ -329,7 +382,7 @@ async function get_companies(){
             console.error("Error:", error);
         }
     }
-    async function renderCompanies(){
+async function renderCompanies(){
         let ctr = 0;
         let row =`
                                         <option value="" >Select Company</option>
@@ -347,5 +400,21 @@ async function get_companies(){
             $("#company").append(row);
         
     }
+async function edit_user(id){
+    const user = application_users.find(p => p.user_id === id);
+    if(user){
+
+        renderroles(user.roles);
+        $("#name").val(user.name);
+        $("#email").val(user.email);
+        $("#phone").val(user.phone);
+        $("#department_name").val(user.department);
+        $("#company").val(user.company_id);
+        $("#user_action_button_div").html(`<center><button class="btn btn-success" onclick="save_application_users(${id})">Update</button></center>`);
+
+    }
+
+}
+
 
 </script>

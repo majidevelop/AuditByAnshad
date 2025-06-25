@@ -28,6 +28,7 @@ try {
     );
 
     $processId = insertrow('process_master', $values);
+$_SESSION['success_message'] = "Process created successfully!";
 
     echo json_encode(['process_id' => $processId, 'message' => "Success"]);
     exit;

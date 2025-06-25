@@ -29,8 +29,6 @@ $values = array(
     array('audit_type', $input['audit_type'], 'INT'),
     array('department_name', $input['department_name'], 'STR'),
     array('department_poc', $input['department_poc'], 'INT'),
-
-
     array('audit_scope', $input['audit_scope'], 'STR'),
     array('audit_criteria', $input['audit_criteria'], 'STR'),
     array('planned_start_date', $input['planned_start_date'], 'STR'),
@@ -50,7 +48,7 @@ $values = array(
 //} else {
 //    echo json_encode(['error' => 'Update failed']);
 //}
-
+$_SESSION['success_message'] = "Audit plan created successfully!";
 echo json_encode(['pid' => $productid, 'message' => "Success"]);
 
 exit;

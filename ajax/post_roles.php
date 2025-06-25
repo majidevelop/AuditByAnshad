@@ -17,6 +17,8 @@ try {
 
     $productid = insertrow('roles', $values);
 
+$_SESSION['success_message'] = "Role created successfully!";
+
     echo json_encode(['pid' => $productid, 'message' => "Success"]);
 
     exit;

@@ -99,6 +99,7 @@ try {
         }
 
     
+$_SESSION['success_message'] = "Non-Conformity created!";
 
      echo json_encode($response);
                 exit;

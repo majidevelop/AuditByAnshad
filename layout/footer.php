@@ -177,10 +177,71 @@
 
         <!-- Modal container -->
         <div id="imageModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center;">
-        <img id="modalImage" style="max-width:90%; max-height:90%;" />
-        <span onclick="closeModal()" style=" font-size:30px; color:white; cursor:pointer;">&times;</span>
+            <img id="modalImage" style="max-width:90%; max-height:90%;" />
+            <span onclick="closeModal()" style=" font-size:30px; color:white; cursor:pointer;">&times;</span>
 
         </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 9999;">
+            <div style="background: white; padding: 20px 30px; border-radius: 8px; min-width: 300px; text-align: center; box-shadow: 0 0 10px #333;">
+                <h3 style="margin-bottom: 10px;">Success</h3>
+                <p id="successMessage">Your action was successful!</p>
+                <button onclick="closeSuccessModal()" style="margin-top: 15px; padding: 5px 15px;" class="btn btn-close">Close</button>
+            </div>
+        </div>
+        <script>
+            function showSuccessModal(message = 'Action completed successfully!') {
+                document.getElementById('successMessage').innerText = message;
+                document.getElementById('successModal').style.display = 'flex';
+                setTimeout(() => closeSuccessModal(), 3000);
+            }
+
+
+            function closeSuccessModal() {
+                document.getElementById('successModal').style.display = 'none';
+            }
+        </script>
+        <?php
+        session_start();
+        
+        if (!empty($_SESSION['success_message'])): ?>
+        <script>
+            showSuccessModal("<?= addslashes($_SESSION['success_message']) ?>");
+        </script>
+        <?php unset($_SESSION['success_message']); ?>
+        <?php endif; ?>
+
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toISOString().split('T')[0];
+
+            document.querySelectorAll('input[type="date"]').forEach(function (input) {
+                input.setAttribute('min', today);
+            });
+        });
+        </script>
+
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const now = new Date();
+            // Format to "YYYY-MM-DDTHH:MM" (what datetime-local expects)
+            const pad = (n) => n.toString().padStart(2, '0');
+            const formattedNow = now.getFullYear() + '-' +
+                pad(now.getMonth() + 1) + '-' +
+                pad(now.getDate()) + 'T' +
+                pad(now.getHours()) + ':' +
+                pad(now.getMinutes());
+
+            document.querySelectorAll('input[type="datetime-local"]').forEach(function (input) {
+                input.setAttribute('min', formattedNow);
+            });
+        });
+        </script>
+
+
 
 
         <!-- JAVASCRIPT -->

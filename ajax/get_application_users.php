@@ -19,7 +19,9 @@ try {
 
     $company_id = $_SESSION['company_id'];
     $where = array(
-            array('company_id', $company_id, 'INT')
+            array('company_id', $company_id, 'INT'),
+            array('status', 1, 'INT')
+
         );
         
     if(!$company_id){

@@ -42,6 +42,7 @@ $values = array(
 //} else {
 //    echo json_encode(['error' => 'Update failed']);
 //}
+$_SESSION['success_message'] = "Audit schedule created successfully!";
 
 echo json_encode(['pid' => $productid, 'message' => "Success"]);
 

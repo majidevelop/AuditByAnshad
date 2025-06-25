@@ -333,7 +333,6 @@ function submitAuditPlan() {
         type: 'POST',
         data: JSON.stringify(data),
         success: function(response) {
-            alert('Audit plan submitted successfully!');
             console.log(response);
             location.href = 'view_audit_plans';
         },
