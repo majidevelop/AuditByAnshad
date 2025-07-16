@@ -142,8 +142,8 @@ async function renderScheduledAudits(audits) {
         if (isLeadAuditor) {
             const url = isApproved 
                 ? `view_answers?id=${template.scheduled_id}&audit_lead=true` 
-                : `view_schedule?id=${template.scheduled_id}`;
-            const linkText = isApproved ? 'View Answers' : 'View Schedule';
+                : `view_audit_form?id=${template.scheduled_id}`;
+            const linkText = isApproved ? 'View Observations' : 'Start Audit';
 
             approveButton = `
                 <td>
@@ -153,8 +153,8 @@ async function renderScheduledAudits(audits) {
         } else {
             const url = isApproved 
                 ? `view_answers?id=${template.scheduled_id}` 
-                : `view_schedule?id=${template.scheduled_id}`;
-            const linkText = isApproved ? 'View Answers' : 'View Schedule';
+                : `view_audit_form?id=${template.scheduled_id}`;
+            const linkText = isApproved ? 'View Observations' : 'Start Audit';
             approveButton = `
                 <td>
                     <a class="${linkClass}" href="${url}">${linkText}</a>
@@ -177,25 +177,25 @@ async function renderScheduledAudits(audits) {
 
         
         <tr>
-            <td> <a class="btn" href="view_schedule?id=${template.scheduled_id}">${ctr} </a></td>
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${audit_plan.audit_title} </a></td>
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
-            <td><a  class="btn" href="view_schedule?id=${template.scheduled_id}">${created_by_name} </a></td>
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${department_name ? department_name : 'undefined'}</a></td>
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${department_poc_name ? department_poc_name : 'undefined'}</a></td>
+            <td> <a class="btn" href="view_audit_form?id=${template.scheduled_id}">${ctr} </a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}"> ${template.scheduled_id} </a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${audit_plan.audit_title} </a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${template.description ? '' : 'Default Value'} </a></td>
+            <td><a  class="btn" href="view_audit_form?id=${template.scheduled_id}">${created_by_name} </a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${lead_auditor_name}</a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${department_name ? department_name : 'undefined'}</a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${department_poc_name ? department_poc_name : 'undefined'}</a></td>
 
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.actual_start_date ? template.actual_start_date : 'undefined'}</a></td>
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.actual_end_date ? template.actual_end_date : 'undefined'}</a></td>
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.actual_duration ? template.actual_duration : 'undefined'}</a></td>
-
-
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${status ? status : 'draft'}</a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${template.actual_start_date ? template.actual_start_date : 'undefined'}</a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${template.actual_end_date ? template.actual_end_date : 'undefined'}</a></td>
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${template.actual_duration ? template.actual_duration : 'undefined'}</a></td>
 
 
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${status ? status : 'draft'}</a></td>
 
-            <td><a class="btn" href="view_schedule?id=${template.scheduled_id}">${template.row_created_at} 
+
+
+            <td><a class="btn" href="view_audit_form?id=${template.scheduled_id}">${template.row_created_at} 
             
             </a></td>
     ${approveButton}

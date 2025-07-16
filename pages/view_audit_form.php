@@ -528,12 +528,12 @@ function displayTemplate(template, questions, options) {
                     </div>
                     <div class="col-4">
                         <div>
-                            <label for="severity" class="block text-sm font-medium text-gray-700 mb-1">Severity</label>
+                            <label for="severity" class="block text-sm font-medium text-gray-700 mb-1">Level of compliance</label>
                             <br>
                             <select id="severity${q.question_id}" name="severity"
                                     class="mt-1 block w-100 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                                     required>
-                                <option value="" ${non_confirmity.severity === '' ? 'selected' : ''}>Select Severity</option>
+                                <option value="" ${non_confirmity.severity === '' ? 'selected' : ''}>Select level of compliance</option>
                                 <option value="Complied" ${non_confirmity.severity === 'Complied' ? 'selected' : ''}>Complied</option>
                                 <option value="OFI" ${non_confirmity.severity === 'OFI' ? 'selected' : ''}>OFI</option>
                                 <option value="Minor NC" ${non_confirmity.severity === 'Minor NC' ? 'selected' : ''}>Minor NC</option>

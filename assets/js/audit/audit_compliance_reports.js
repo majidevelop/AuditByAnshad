@@ -126,7 +126,7 @@ async function acceptSeverity(scheduled_audit_id){
 }
 
 async function rejectSeverity(scheduled_audit_id){
-    const status = "POC REJECTED";
+    const status = "AUDITEE REJECTED";
 
     let res = await submitStatusUpdate(scheduled_audit_id, status, current_user_id);
 

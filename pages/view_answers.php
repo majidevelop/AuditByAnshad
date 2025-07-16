@@ -257,15 +257,15 @@ async function get_answers(id) {
                 if(non_confirmity){
                     if(non_confirmity.nc_image){
                         nc_image_html = `<p>${non_confirmity.severity}</p>
-                        <img class="" width="200" src="ajax/${non_confirmity.nc_image}">
+                        <img class="w-100"  src="ajax/${non_confirmity.nc_image}">
                          <p class="mt-3">${non_confirmity.description}</p>`;
                     }
                 }
                 html += `
                     <div class="card">
-                    <div class="card-body">
-                    <div class="row m-0">
-                        <div class="col-6">
+                        <div class="card-body">
+                            <div class="row m-0">
+                                <div class="col-4">
                             <div class="row m-0 ">
                                 <div class="col-1 icon-demo-content">
                                     <button type="button" class="btn p-0"  data-bs-toggle="modal" data-bs-target="#myModal" onclick="openModalById('severityModalBody')">
@@ -283,8 +283,24 @@ async function get_answers(id) {
                         
                             
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             ${nc_image_html}
+                        </div>
+                        <div class="col-2">
+                            <textarea class="form-control" id="remark_${question.question_id}">
+                            </textarea>
+
+                        </div>
+                        
+
+                        <div class="col-2">
+                            <button class="btn btn-success" onclick="submitLogEntry('ACCEPT', ${question.question_id})">Approve</button>
+                            <br>
+                            <br>
+
+                            <button class="btn btn-danger" onclick="submitLogEntry('REJECT', ${question.question_id})">Reject</button>
+
+
                         </div>
                     
                     </div>
@@ -412,6 +428,31 @@ function printToPdf() {
     // Convert and save PDF
     html2pdf().set(opt).from(element).save();
 }
+
+async function submitLogEntry(status, question_id) {
+    // Example usage:
+submitLogEntry({
+    scheduled_audit_id: id,
+    status: status,
+    remark: $("remark_"+question_id).val(),
+    question_id: question_id
+});
+    try {
+        const response = await fetch('post_question_wise_status_log.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(logData)
+        });
+
+        const result = await response.json();
+        console.log('Server response:', result);
+    } catch (error) {
+        console.error('Error submitting log:', error);
+    }
+}
+
 
 
 </script>

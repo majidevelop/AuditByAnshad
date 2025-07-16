@@ -61,7 +61,7 @@
                                                         <th>Department POC</th>
                                                         <th>Audit Lead</th>
                                                         <th>#Display Number </th>
-                                                        <th>No. of Severities Reported</th>
+                                                        <th>No. of observations</th>
                                                         <th>Status</th>
 
                                                         <th>

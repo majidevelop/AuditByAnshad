@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 23, 2025 at 02:53 PM
+-- Generation Time: Jul 16, 2025 at 02:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -36,32 +36,35 @@ CREATE TABLE `application_users` (
   `email` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `application_users`
 --
 
-INSERT INTO `application_users` (`user_id`, `name`, `department`, `roles`, `company_id`, `email`, `phone`, `created_at`, `updated_at`) VALUES
-(1, 'test user 1', 1, '[\"1\",\"2\"]', 0, 'user@acs.com', '3456', '2025-04-12 06:43:34', '2025-04-12 06:43:34'),
-(2, 'test manager 1', 1, '[\"1\",\"3\"]', 0, '0', '0', '2025-04-12 06:43:34', '2025-04-12 06:43:34'),
-(5, 'hfdh', 1, '1', 2, 'ghjg@gj.com', '8484884', '2025-05-19 05:07:19', '2025-05-19 05:07:19'),
-(6, 'hfdh', 1, '4', 1, 'gsdfhjg@gj.com', '435435', '2025-05-19 05:07:38', '2025-05-19 05:07:38'),
-(7, 'hfdh', 1, '1,2', 1, 'ghjg@gj.com', '3423423', '2025-05-19 05:09:19', '2025-05-19 05:09:19'),
-(8, 'yutu', 1, '1,4', 3, 'ghjytutyug@gj.com', '657567567', '2025-05-19 05:13:27', '2025-05-19 05:13:27'),
-(9, 'ghjghj', 1, '1', 3, 'gghjghjhjg@gj.com', '66546546', '2025-05-19 05:15:38', '2025-05-19 05:15:38'),
-(10, 'hfdhsdfsf', 1, '2,3', 3, 'ghcvcvjg@gj.com', '45435435435', '2025-05-19 05:16:55', '2025-05-19 05:16:55'),
-(11, 'fdgdfsgdfg', 1, '2,4', 5, 'gherewrjg@gj.com', '34234234234', '2025-05-19 05:27:51', '2025-05-19 05:27:51'),
-(12, 'sdfsfsdf', 1, '2', 1, 'ghjg@gj.in', '2020202020', '2025-05-19 05:32:22', '2025-05-19 05:32:22'),
-(13, 'hfdhsdfs', 1, '2', 1, 'ghjg@gj.com', '2020202054rr', '2025-05-19 05:32:46', '2025-05-19 05:32:46'),
-(14, 'asdfg', 1, '2', 2, 'asdfg@as.in', '454354354345', '2025-05-19 08:30:57', '2025-05-19 08:30:57'),
-(15, 'asdasd', 1, '2,4,3', 2, 'asdasd@df.in', '45435435444', '2025-05-19 08:32:08', '2025-05-19 08:32:08'),
-(16, 'Basic User', 1, '3', 7, 'basicuser@inventruck.in', '9878987898', '2025-05-19 08:36:47', '2025-05-19 08:36:47'),
-(17, 'Basic User 2', 1, '4,3', 7, 'basicuser2@inventruck.in', '9878987899', '2025-05-19 09:28:27', '2025-05-19 09:28:27'),
-(18, 'Audit lead', 1, '2', 7, 'audit_lead@inventruck.in', '9878987897', '2025-05-19 09:28:57', '2025-05-19 09:28:57'),
-(19, 'Auditor 1', 3, '3', 7, 'auditor1@inventruck.in', '45435435436', '2025-06-11 09:55:21', '2025-06-11 09:55:21'),
-(20, 'Auditor 2', 3, '2,4,3', 7, 'auditor2@inventruck.in', '45435435422', '2025-06-11 10:01:08', '2025-06-11 10:01:08');
+INSERT INTO `application_users` (`user_id`, `name`, `department`, `roles`, `company_id`, `email`, `phone`, `created_at`, `updated_at`, `created_by`, `updated_by`, `status`) VALUES
+(1, 'test user 1', 1, '[\"1\",\"2\"]', 0, 'user@acs.com', '3456', '2025-04-12 06:43:34', '2025-04-12 06:43:34', 0, 0, 1),
+(2, 'test manager 1', 1, '[\"1\",\"3\"]', 0, '0', '0', '2025-04-12 06:43:34', '2025-04-12 06:43:34', 0, 0, 1),
+(5, 'hfdh', 1, '1', 2, 'ghjg@gj.com', '8484884', '2025-05-19 05:07:19', '2025-05-19 05:07:19', 0, 0, 1),
+(6, 'hfdh', 1, '4', 1, 'gsdfhjg@gj.com', '435435', '2025-05-19 05:07:38', '2025-05-19 05:07:38', 0, 0, 1),
+(7, 'hfdh', 1, '1,2', 1, 'ghjg@gj.com', '3423423', '2025-05-19 05:09:19', '2025-05-19 05:09:19', 0, 0, 1),
+(8, 'yutu', 1, '1,4', 3, 'ghjytutyug@gj.com', '657567567', '2025-05-19 05:13:27', '2025-05-19 05:13:27', 0, 0, 1),
+(9, 'ghjghj', 1, '1', 3, 'gghjghjhjg@gj.com', '66546546', '2025-05-19 05:15:38', '2025-05-19 05:15:38', 0, 0, 1),
+(10, 'hfdhsdfsf', 1, '2,3', 3, 'ghcvcvjg@gj.com', '45435435435', '2025-05-19 05:16:55', '2025-05-19 05:16:55', 0, 0, 1),
+(11, 'fdgdfsgdfg', 1, '2,4', 5, 'gherewrjg@gj.com', '34234234234', '2025-05-19 05:27:51', '2025-05-19 05:27:51', 0, 0, 1),
+(12, 'sdfsfsdf', 1, '2', 1, 'ghjg@gj.in', '2020202020', '2025-05-19 05:32:22', '2025-05-19 05:32:22', 0, 0, 1),
+(13, 'hfdhsdfs', 1, '2', 1, 'ghjg@gj.com', '2020202054rr', '2025-05-19 05:32:46', '2025-05-19 05:32:46', 0, 0, 1),
+(14, 'asdfg', 1, '2', 2, 'asdfg@as.in', '454354354345', '2025-05-19 08:30:57', '2025-05-19 08:30:57', 0, 0, 1),
+(15, 'asdasd', 1, '2,4,3', 2, 'asdasd@df.in', '45435435444', '2025-05-19 08:32:08', '2025-05-19 08:32:08', 0, 0, 1),
+(16, 'Basic User', 1, '3', 7, 'basicuser@inventruck.in', '9878987898', '2025-05-19 08:36:47', '2025-05-19 08:36:47', 0, 0, 1),
+(17, 'Basic User 2', 1, '4,3', 7, 'basicuser2@inventruck.in', '9878987899', '2025-05-19 09:28:27', '2025-05-19 09:28:27', 0, 0, 0),
+(18, 'Audit lead', 1, '1,2', 7, 'audit_lead@inventruck.in', '9878987897', '2025-05-19 09:28:57', '2025-05-19 09:28:57', 0, 0, 1),
+(19, 'Auditor 1', 3, '3', 7, 'auditor1@inventruck.in', '45435435436', '2025-06-11 09:55:21', '2025-06-11 09:55:21', 0, 0, 1),
+(20, 'Auditor 2', 3, '2,4,3', 7, 'auditor2@inventruck.in', '45435435422', '2025-06-11 10:01:08', '2025-06-11 10:01:08', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -200,7 +203,11 @@ INSERT INTO `audit_plans` (`audit_id`, `audit_title`, `audit_type`, `audit_scope
 (9, 'Audit Plan 100dfg dg dfg dfg', 2, 'Basics fdg ', 'df gdf ', '1', 17, '2025-06-14', '2025-07-12', 7, 20, '19', '', '', 20, 7, '2025-06-12 10:06:07', '2025-06-12 10:06:07', NULL, NULL, 0),
 (10, 'Audit Plan 100 sdf sdf sdg dgdf', 2, 'Basics dfg df', ' dgd fgd fg', '1', 17, '2025-06-20', '2025-07-05', 7, 20, '18', '', '', 20, 7, '2025-06-12 10:08:13', '2025-06-12 10:08:13', NULL, NULL, 0),
 (11, 'MEP Audit Q2- JUNE 2025', 3, 'Basics', 'Basics', '1', 16, '2025-06-20', '2025-07-12', 22, 18, '19,20', '', 'APPROVED->SCHEDULED', 16, 7, '2025-06-18 09:13:56', '2025-06-18 09:13:56', NULL, NULL, 0),
-(12, 'MEP Audit Q2- JUNE 2025 123', 2, 'fghdfgh', 'sf s', '1', 18, '2025-06-28', '2025-07-12', 14, 18, '19,20', '', 'APPROVED->SCHEDULED', 16, 7, '2025-06-18 09:46:08', '2025-06-18 09:46:08', NULL, NULL, 0);
+(12, 'MEP Audit Q2- JUNE 2025 123', 2, 'fghdfgh', 'sf s', '1', 18, '2025-06-28', '2025-07-12', 14, 18, '19,20', '', 'APPROVED->SCHEDULED', 16, 7, '2025-06-18 09:46:08', '2025-06-18 09:46:08', NULL, NULL, 0),
+(13, 'Audit Plan 100', 2, 'Basics fdg ', 'sf s', '1', 18, '2025-06-25', '2025-07-05', 10, 16, '19', '', '', 16, 7, '2025-06-25 09:41:52', '2025-06-25 09:41:52', NULL, NULL, 0),
+(14, 'dsdf', 2, 'Basics', 'Basics', '1', 18, '2025-06-25', '2025-07-05', 10, 16, '18', '', '', 16, 7, '2025-06-25 09:43:21', '2025-06-25 09:43:21', NULL, NULL, 0),
+(15, 'dsfsdf', 2, 'Basics dfg df', ' dgd fgd fg', '1', 16, '2025-06-25', '2025-06-30', 5, 16, '16', '', 'APPROVED', 16, 7, '2025-06-25 09:46:03', '2025-06-25 09:46:03', NULL, NULL, 0),
+(16, '', 0, '', '', '', 0, '0000-00-00', '0000-00-00', 0, 0, '', '', '', 16, 7, '2025-06-25 09:47:06', '2025-06-25 09:47:06', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -400,6 +407,22 @@ INSERT INTO `form_answers` (`answer_id`, `schedule_id`, `template_id`, `question
 (40, 13, 25, 884, 'No', '', '2025-06-18 11:08:22'),
 (41, 3, 18, 25, 'Option 1', '16', '2025-06-19 10:37:03'),
 (42, 3, 18, 26, '[&#34;Answer 1&#34;]', '19', '2025-06-19 10:37:03');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `form_question_wise_status_log`
+--
+
+CREATE TABLE `form_question_wise_status_log` (
+  `id` int(11) NOT NULL,
+  `scheduled_audit_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `created_by` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `remark` text NOT NULL,
+  `question_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -839,6 +862,7 @@ CREATE TABLE `schedule_audit_status_log` (
   `status_id` int(11) NOT NULL,
   `scheduled_audit_id` int(11) NOT NULL,
   `status` varchar(20) NOT NULL,
+  `remarks` text DEFAULT NULL,
   `created_by` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -848,31 +872,31 @@ CREATE TABLE `schedule_audit_status_log` (
 -- Dumping data for table `schedule_audit_status_log`
 --
 
-INSERT INTO `schedule_audit_status_log` (`status_id`, `scheduled_audit_id`, `status`, `created_by`, `created_at`, `updated_at`) VALUES
-(1, 0, '', 0, '2025-05-27 12:04:36', '2025-05-27 12:04:36'),
-(2, 2, 'IN REVIEW', 18, '2025-05-27 12:26:38', '2025-05-27 12:26:38'),
-(3, 2, 'IN REVIEW', 18, '2025-05-27 12:30:08', '2025-05-27 12:30:08'),
-(4, 2, 'SUBMITTED', 16, '2025-05-29 11:30:34', '2025-05-29 11:30:34'),
-(5, 2, 'APPROVED', 18, '2025-05-29 11:57:44', '2025-05-29 11:57:44'),
-(6, 8, 'SUBMITTED', 16, '2025-06-11 05:04:44', '2025-06-11 05:04:44'),
-(7, 8, 'IN REVIEW', 16, '2025-06-11 05:20:15', '2025-06-11 05:20:15'),
-(8, 8, 'SUBMITTED', 16, '2025-06-11 06:26:22', '2025-06-11 06:26:22'),
-(9, 10, 'SUBMITTED', 20, '2025-06-12 05:20:46', '2025-06-12 05:20:46'),
-(10, 12, 'SUBMITTED', 20, '2025-06-13 08:47:13', '2025-06-13 08:47:13'),
-(11, 12, 'IN REVIEW', 20, '2025-06-13 08:52:49', '2025-06-13 08:52:49'),
-(12, 12, 'SUBMITTED', 20, '2025-06-13 08:53:16', '2025-06-13 08:53:16'),
-(13, 11, 'SUBMITTED', 16, '2025-06-18 08:30:36', '2025-06-18 08:30:36'),
-(14, 1, 'SUBMITTED', 16, '2025-06-18 08:34:16', '2025-06-18 08:34:16'),
-(15, 11, 'APPROVED', 16, '2025-06-18 08:45:23', '2025-06-18 08:45:23'),
-(16, 13, 'SUBMITTED', 18, '2025-06-18 11:08:22', '2025-06-18 11:08:22'),
-(17, 13, 'POC REJECTED', 18, '2025-06-18 12:12:01', '2025-06-18 12:12:01'),
-(18, 13, 'POC REJECTED', 18, '2025-06-18 12:12:22', '2025-06-18 12:12:22'),
-(19, 13, 'POC REJECTED', 18, '2025-06-18 12:13:18', '2025-06-18 12:13:18'),
-(20, 13, 'POC REJECTED', 18, '2025-06-18 12:13:36', '2025-06-18 12:13:36'),
-(21, 13, 'SUBMITTED', 16, '2025-06-19 04:41:50', '2025-06-19 04:41:50'),
-(22, 13, 'APPROVED', 16, '2025-06-19 04:49:54', '2025-06-19 04:49:54'),
-(23, 13, 'POC APPROVED', 18, '2025-06-19 04:57:15', '2025-06-19 04:57:15'),
-(24, 3, 'SUBMITTED', 16, '2025-06-19 10:37:03', '2025-06-19 10:37:03');
+INSERT INTO `schedule_audit_status_log` (`status_id`, `scheduled_audit_id`, `status`, `remarks`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 0, '', NULL, 0, '2025-05-27 12:04:36', '2025-05-27 12:04:36'),
+(2, 2, 'IN REVIEW', NULL, 18, '2025-05-27 12:26:38', '2025-05-27 12:26:38'),
+(3, 2, 'IN REVIEW', NULL, 18, '2025-05-27 12:30:08', '2025-05-27 12:30:08'),
+(4, 2, 'SUBMITTED', NULL, 16, '2025-05-29 11:30:34', '2025-05-29 11:30:34'),
+(5, 2, 'APPROVED', NULL, 18, '2025-05-29 11:57:44', '2025-05-29 11:57:44'),
+(6, 8, 'SUBMITTED', NULL, 16, '2025-06-11 05:04:44', '2025-06-11 05:04:44'),
+(7, 8, 'IN REVIEW', NULL, 16, '2025-06-11 05:20:15', '2025-06-11 05:20:15'),
+(8, 8, 'SUBMITTED', NULL, 16, '2025-06-11 06:26:22', '2025-06-11 06:26:22'),
+(9, 10, 'SUBMITTED', NULL, 20, '2025-06-12 05:20:46', '2025-06-12 05:20:46'),
+(10, 12, 'SUBMITTED', NULL, 20, '2025-06-13 08:47:13', '2025-06-13 08:47:13'),
+(11, 12, 'IN REVIEW', NULL, 20, '2025-06-13 08:52:49', '2025-06-13 08:52:49'),
+(12, 12, 'SUBMITTED', NULL, 20, '2025-06-13 08:53:16', '2025-06-13 08:53:16'),
+(13, 11, 'SUBMITTED', NULL, 16, '2025-06-18 08:30:36', '2025-06-18 08:30:36'),
+(14, 1, 'SUBMITTED', NULL, 16, '2025-06-18 08:34:16', '2025-06-18 08:34:16'),
+(15, 11, 'APPROVED', NULL, 16, '2025-06-18 08:45:23', '2025-06-18 08:45:23'),
+(16, 13, 'SUBMITTED', NULL, 18, '2025-06-18 11:08:22', '2025-06-18 11:08:22'),
+(17, 13, 'POC REJECTED', NULL, 18, '2025-06-18 12:12:01', '2025-06-18 12:12:01'),
+(18, 13, 'POC REJECTED', NULL, 18, '2025-06-18 12:12:22', '2025-06-18 12:12:22'),
+(19, 13, 'POC REJECTED', NULL, 18, '2025-06-18 12:13:18', '2025-06-18 12:13:18'),
+(20, 13, 'POC REJECTED', NULL, 18, '2025-06-18 12:13:36', '2025-06-18 12:13:36'),
+(21, 13, 'SUBMITTED', NULL, 16, '2025-06-19 04:41:50', '2025-06-19 04:41:50'),
+(22, 13, 'APPROVED', NULL, 16, '2025-06-19 04:49:54', '2025-06-19 04:49:54'),
+(23, 13, 'POC APPROVED', NULL, 18, '2025-06-19 04:57:15', '2025-06-19 04:57:15'),
+(24, 3, 'SUBMITTED', NULL, 16, '2025-06-19 10:37:03', '2025-06-19 10:37:03');
 
 -- --------------------------------------------------------
 
@@ -939,21 +963,22 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `lastlog` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `lastlog` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `status` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `application_user_id`, `eid`, `password`, `name`, `email`, `lastlog`) VALUES
-(1, 0, 'user', 'pass', 'User', 'user@gmail.com', '2025-05-21 06:17:08'),
-(2, 15, 'asdasd', '45435435444', 'asdasd', 'asdasd@df.in', '2025-05-19 08:32:08'),
-(3, 16, 'basicuser', '9878987898', 'Basic User', 'basicuser@inventruck.in', '2025-06-23 04:43:35'),
-(4, 17, 'basicuser2', '9878987899', 'Basic User 2', 'basicuser2@inventruck.in', '2025-06-12 11:29:39'),
-(5, 18, 'audit_lead', '9878987897', 'Audit lead', 'audit_lead@inventruck.in', '2025-06-19 04:51:09'),
-(6, 19, 'auditor1', '45435435436', 'Auditor 1', 'auditor1@inventruck.in', '2025-06-11 09:55:21'),
-(7, 20, 'auditor2', '45435435422', 'Auditor 2', 'auditor2@inventruck.in', '2025-06-16 05:09:37');
+INSERT INTO `users` (`id`, `application_user_id`, `eid`, `password`, `name`, `email`, `lastlog`, `status`) VALUES
+(1, 0, 'user', 'pass', 'User', 'user@gmail.com', '2025-05-21 06:17:08', 1),
+(2, 15, 'asdasd', '45435435444', 'asdasd', 'asdasd@df.in', '2025-05-19 08:32:08', 1),
+(3, 16, 'basicuser', '9878987898', 'Basic User', 'basicuser@inventruck.in', '2025-07-16 11:01:58', 1),
+(4, 17, 'basicuser2', '9878987899', 'Basic User 2', 'basicuser2@inventruck.in', '2025-06-25 06:29:58', 0),
+(5, 18, 'audit_lead', '9878987897', 'Audit lead', 'audit_lead@inventruck.in', '2025-07-16 11:17:29', 1),
+(6, 19, 'auditor1', '45435435436', 'Auditor 1', 'auditor1@inventruck.in', '2025-06-11 09:55:21', 1),
+(7, 20, 'auditor2', '45435435422', 'Auditor 2', 'auditor2@inventruck.in', '2025-06-16 05:09:37', 1);
 
 --
 -- Indexes for dumped tables
@@ -1026,6 +1051,12 @@ ALTER TABLE `forms_answer_versions`
 --
 ALTER TABLE `form_answers`
   ADD PRIMARY KEY (`answer_id`);
+
+--
+-- Indexes for table `form_question_wise_status_log`
+--
+ALTER TABLE `form_question_wise_status_log`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `form_templates`
@@ -1113,7 +1144,7 @@ ALTER TABLE `audit_non_confirmity_remarks`
 -- AUTO_INCREMENT for table `audit_plans`
 --
 ALTER TABLE `audit_plans`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `audit_report_layouts`
@@ -1156,6 +1187,12 @@ ALTER TABLE `forms_answer_versions`
 --
 ALTER TABLE `form_answers`
   MODIFY `answer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT for table `form_question_wise_status_log`
+--
+ALTER TABLE `form_question_wise_status_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `form_templates`
