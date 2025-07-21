@@ -123,18 +123,20 @@
     let audit_plan;
     let scheduled_audit;
     let severityActivity = "severityActivity";
+    let questionWiseAnswerlog;
 
 async function load_func(){
         scheduleId = new URLSearchParams(window.location.search).get("id");
         if (scheduleId) {
             await get_schedule_by_id(scheduleId);
+            questionWiseAnswerlog = await getQuestionWiseStatusLog(scheduleId);
+            console.log(questionWiseAnswerlog);
             // setLastUpdated();
             await fetchNonConformities(scheduleId, templateId)
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
             await get_answers(scheduleId);
             await fetchNonConformitiesRemarks(scheduleId, null);
-
             if( scheduled_audit.scheduled_audit_status == "submitted"){
 
             }
@@ -261,6 +263,28 @@ async function get_answers(id) {
                          <p class="mt-3">${non_confirmity.description}</p>`;
                     }
                 }
+                const latestStatus = findLatestQuestionStatus(question.question_id);
+                let statusDivHtml =``;
+                if (latestStatus) {
+                    console.log("Latest status:", latestStatus.status);
+                    console.log("Remark:", latestStatus.remark);
+                    console.log("Created At:", latestStatus.created_at);
+                    statusDivHtml = `<button class="btn btn-warning">${latestStatus.status}ED<button>`;
+                } else {
+                    console.log("No logs found for question_id 876");
+                     statusDivHtml= `
+                        <div class="col-2" id="questionStatusDiv_${question.question_id}">
+                            <button class="btn btn-success" onclick="submitLogEntry('ACCEPT', ${question.question_id})">Approve</button>
+                            <br>
+                            <br>
+
+                            <button class="btn btn-danger" onclick="submitLogEntry('REJECT', ${question.question_id})">Reject</button>
+
+
+                        </div>
+                    `;
+                }
+
                 html += `
                     <div class="card">
                         <div class="card-body">
@@ -292,16 +316,8 @@ async function get_answers(id) {
 
                         </div>
                         
-
-                        <div class="col-2">
-                            <button class="btn btn-success" onclick="submitLogEntry('ACCEPT', ${question.question_id})">Approve</button>
-                            <br>
-                            <br>
-
-                            <button class="btn btn-danger" onclick="submitLogEntry('REJECT', ${question.question_id})">Reject</button>
-
-
-                        </div>
+            ${statusDivHtml}
+                        
                     
                     </div>
                     </div>
@@ -431,28 +447,76 @@ function printToPdf() {
 
 async function submitLogEntry(status, question_id) {
     // Example usage:
-submitLogEntry({
-    scheduled_audit_id: id,
-    status: status,
-    remark: $("remark_"+question_id).val(),
-    question_id: question_id
-});
+ // Prepare the data to submit
+    const submitLog = {
+        scheduled_audit_id: scheduleId,  // Assuming scheduleId is already defined elsewhere
+        status: status,
+        remark: document.getElementById("remark_" + question_id).value.trim(),  // Use getElementById for selecting element
+        question_id: question_id
+    };
     try {
-        const response = await fetch('post_question_wise_status_log.php', {
+        const response = await fetch('ajax/post_question_wise_status_log.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(logData)
+            body: JSON.stringify(submitLog)
         });
 
         const result = await response.json();
         console.log('Server response:', result);
+        changeQuestionStatusButton(status,question_id);
     } catch (error) {
         console.error('Error submitting log:', error);
     }
 }
 
+
+function changeQuestionStatusButton(status, question_id) {
+    // Properly disable the textarea
+    const remarkTextarea = document.getElementById("remark_" + question_id);
+    if (remarkTextarea) {
+        remarkTextarea.disabled = true;
+    }
+
+    // Update the status button area
+    const statusDiv = document.getElementById("questionStatusDiv_" + question_id);
+    if (statusDiv) {
+        statusDiv.innerHTML = `<button class="btn btn-warning">${status}ED</button>`;
+    }
+}
+
+
+async function getQuestionWiseStatusLog(id) {
+    try {
+        const response = await fetch(`ajax/get_question_wise_status_log.php?id=${encodeURIComponent(id)}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Status log received:", data);
+        return data;
+    } catch (error) {
+        console.error("Error fetching status log:", error);
+        return null;
+    }
+}
+
+function findLatestQuestionStatus(question_id) {
+  /*  const filteredLogs = questionWiseAnswerLog
+        .filter(log => log.question_id === question_id)
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Descending order
+
+    return filteredLogs[0] || null; // Return latest or null if not found */
+    return null;
+}
 
 
 </script>
