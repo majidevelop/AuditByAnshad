@@ -308,7 +308,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Await the async approve_audit_plan function
         await approve_audit_plan(payload.audit_id);
         
-        alert(data.message);
+        // alert(data.message);
         location.href = 'list_audit_schedules';
     } catch (error) {
         console.error("Error:", error);
@@ -608,14 +608,14 @@ async function get_application_users() {
     }
 
 
-async function approve_audit_plan(plan_id) {
-    let status = "APPROVED->SCHEDULED";
-    try {
-        const response = await fetch("ajax/update_audit_plan_approval_status.php?id=" + plan_id, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+    async function approve_audit_plan(plan_id) {
+        let status = "APPROVED->SCHEDULED";
+        try {
+            const response = await fetch("ajax/update_audit_plan_approval_status.php?id=" + plan_id, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
             body: JSON.stringify({
                 status: status
             })

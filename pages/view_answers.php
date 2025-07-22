@@ -124,12 +124,12 @@
     let scheduled_audit;
     let severityActivity = "severityActivity";
     let questionWiseAnswerlog;
-
+    let isAllAnswersApproved = true;
 async function load_func(){
         scheduleId = new URLSearchParams(window.location.search).get("id");
         if (scheduleId) {
             await get_schedule_by_id(scheduleId);
-            questionWiseAnswerlog = await getQuestionWiseStatusLog(scheduleId);
+            await getQuestionWiseStatusLog(scheduleId);
             console.log(questionWiseAnswerlog);
             // setLastUpdated();
             await fetchNonConformities(scheduleId, templateId)
@@ -237,6 +237,7 @@ async function get_answers(id) {
         let ctr = 0;
         // console.log("Answers : ", data.data);
         // console.log("template_questions : ", template_questions);
+        $("#questionsContainer").html('');
 
         let html = `
             <center>
@@ -264,12 +265,23 @@ async function get_answers(id) {
                     }
                 }
                 const latestStatus = findLatestQuestionStatus(question.question_id);
+                let remark ='';
                 let statusDivHtml =``;
                 if (latestStatus) {
                     console.log("Latest status:", latestStatus.status);
                     console.log("Remark:", latestStatus.remark);
                     console.log("Created At:", latestStatus.created_at);
-                    statusDivHtml = `<button class="btn btn-warning">${latestStatus.status}ED<button>`;
+                    remark = latestStatus.remark;
+                    statusDivHtml = `
+                        <div class="col-2" id="questionStatusDiv_${question.question_id}">
+                    
+                    <button class="btn btn-warning">${latestStatus.status}ED</button>
+                        </div>
+                    
+                    `;
+                    if(latestStatus.status == "REJECT"){
+                        isAllAnswersApproved = false;
+                    }
                 } else {
                     console.log("No logs found for question_id 876");
                      statusDivHtml= `
@@ -311,12 +323,11 @@ async function get_answers(id) {
                             ${nc_image_html}
                         </div>
                         <div class="col-2">
-                            <textarea class="form-control" id="remark_${question.question_id}">
-                            </textarea>
+                            <textarea class="form-control" id="remark_${question.question_id}" ${remark ? 'disabled' : ''}>${remark}</textarea>
 
                         </div>
                         
-            ${statusDivHtml}
+                            ${statusDivHtml}
                         
                     
                     </div>
@@ -343,18 +354,14 @@ async function get_answers(id) {
         `;
 
         // Conditionally render buttons
-        if (!isApproved) {
+        if (isAllAnswersApproved) {
             html += `
                     <div class="col-sm-4">
                         <center>
-                            <button class="btn btn-success" onclick="approveAnswers(${scheduleId})">Approve Answers</button>
+                            <button class="btn btn-success" onclick="approveAnswers(${scheduleId})">Send to auditee</button>
                         </center>
                     </div>
-                    <div class="col-sm-4">
-                        <center>
-                            <button class="btn btn-danger" onclick="rejectAnswers(${scheduleId})">Reject Answers</button>
-                        </center>
-                    </div>
+                   
                     <div class="col-sm-4">
                         <center>
                             <button class="btn btn-primary" onclick="printToPdf()">Print</button>
@@ -364,7 +371,12 @@ async function get_answers(id) {
         } else {
             // Center the Print button if only it is shown
             html += `
-                    <div class="col-sm-12">
+             <div class="col-sm-4">
+                         <center>
+                            <button class="btn btn-danger" onclick="rejectAnswers(${scheduleId})">Send back to auditors</button>
+                        </center> 
+                    </div>
+                    <div class="col-sm-8">
                         <center>
                             <button class="btn btn-primary" onclick="printToPdf()">Print</button>
                         </center>
@@ -421,29 +433,49 @@ async function submitStatusUpdate(id, status, created_by) {
 
 function printToPdf() {
     const element = document.getElementById("questionsContainer");
-    const printButton = element.querySelector("button");
 
     if (!element) {
         alert("No content to print.");
         return;
     }
 
-    // Hide the print button
-    if (printButton) printButton.style.display = "none";
-    document.querySelectorAll('i').forEach(el => el.style.display = 'none');
+    // Select elements to hide
+    const buttons = document.querySelectorAll('button');
+    const icons = document.querySelectorAll('i');
 
+    // Store original display styles
+    const originalButtonDisplays = Array.from(buttons).map(el => el.style.display);
+    const originalIconDisplays = Array.from(icons).map(el => el.style.display);
+
+    // Hide buttons and icons
+    buttons.forEach(el => el.style.display = 'none');
+    icons.forEach(el => el.style.display = 'none');
 
     const opt = {
-        margin:       0.5,
-        filename:     'audit_report.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        margin: 0.5,
+        filename: 'audit_report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+            scale: 2,
+            scrollY: 0,           // Ensures full vertical capture
+            useCORS: true         // If images or fonts are external
+        },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
     };
 
     // Convert and save PDF
-    html2pdf().set(opt).from(element).save();
+    html2pdf().set(opt).from(element).save().then(() => {
+        // Restore original styles after saving
+        buttons.forEach((el, i) => el.style.display = originalButtonDisplays[i]);
+        icons.forEach((el, i) => el.style.display = originalIconDisplays[i]);
+    }).catch(err => {
+        console.error("PDF generation failed:", err);
+        // Ensure UI is restored even if something goes wrong
+        buttons.forEach((el, i) => el.style.display = originalButtonDisplays[i]);
+        icons.forEach((el, i) => el.style.display = originalIconDisplays[i]);
+    });
 }
+
 
 async function submitLogEntry(status, question_id) {
     // Example usage:
@@ -466,11 +498,19 @@ async function submitLogEntry(status, question_id) {
         const result = await response.json();
         console.log('Server response:', result);
         changeQuestionStatusButton(status,question_id);
+        // checkAllQuestionStatus();
+            await getQuestionWiseStatusLog(scheduleId);
+
+            await get_answers(scheduleId);
+
     } catch (error) {
         console.error('Error submitting log:', error);
     }
 }
 
+// function checkAllQuestionStatus(){
+
+// }
 
 function changeQuestionStatusButton(status, question_id) {
     // Properly disable the textarea
@@ -487,36 +527,7 @@ function changeQuestionStatusButton(status, question_id) {
 }
 
 
-async function getQuestionWiseStatusLog(id) {
-    try {
-        const response = await fetch(`ajax/get_question_wise_status_log.php?id=${encodeURIComponent(id)}`, {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("Status log received:", data);
-        return data;
-    } catch (error) {
-        console.error("Error fetching status log:", error);
-        return null;
-    }
-}
-
-function findLatestQuestionStatus(question_id) {
-  /*  const filteredLogs = questionWiseAnswerLog
-        .filter(log => log.question_id === question_id)
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Descending order
-
-    return filteredLogs[0] || null; // Return latest or null if not found */
-    return null;
-}
 
 
 </script>

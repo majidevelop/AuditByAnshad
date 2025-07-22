@@ -180,12 +180,15 @@
     let answers;
     let audit_plan;
     let scheduled_audit;
+    let questionWiseAnswerlog;
+    let isAllAnswersApproved = true;
     async function load_func(){
         scheduleId = new URLSearchParams(window.location.search).get("id");
         if (scheduleId) {
             await get_schedule_by_id(scheduleId);
             // setLastUpdated();
             await fetchNonConformities(scheduleId, templateId)
+            await getQuestionWiseStatusLog(scheduleId);
 
             await get_template_details_by_id(templateId);
             await get_template_questions(templateId);
@@ -418,6 +421,37 @@ function displayTemplate(template, questions, options) {
 
         let relatedOptions = options.filter(o => o.question_id === q.question_id);
 
+        const latestStatus = findLatestQuestionStatus(q.question_id);
+                let remark ='';
+                let statusDivHtml =``;
+                if (latestStatus) {
+                    console.log("Latest status:", latestStatus.status);
+                    console.log("Remark:", latestStatus.remark);
+                    console.log("Created At:", latestStatus.created_at);
+                    remark = latestStatus.remark;
+                    statusDivHtml = `
+                        <div class="col-2" id="questionStatusDiv_${q.question_id}">
+                    
+                            <p> ${latestStatus.remark} <br> <small>${latestStatus.created_at}</small></p>
+                        </div>
+                    
+                    `;
+                    if(latestStatus.status == "REJECT"){
+                        isAllAnswersApproved = false;
+                    }
+                } else {
+                    console.log("No logs found for question_id 876");
+                     statusDivHtml= `
+                        <div class="col-2" id="questionStatusDiv_${q.question_id}">
+                            
+
+
+                        </div>
+                    `;
+                }
+
+                // -----------------------------------------------------------------
+
         if (["dropdown", "multi_select", "single_select"].includes(q.answer_type) && relatedOptions.length > 0) {
             showDefaultInputs = false;
             optionsHtml = `
@@ -526,7 +560,7 @@ function displayTemplate(template, questions, options) {
                         </div>
                         
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <div>
                             <label for="severity" class="block text-sm font-medium text-gray-700 mb-1">Level of compliance</label>
                             <br>
@@ -542,6 +576,7 @@ function displayTemplate(template, questions, options) {
                             ${nc_image_html}
                         </div>
                     </div>
+    ${statusDivHtml}
                 </div>
             </div>
             </div>

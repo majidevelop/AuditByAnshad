@@ -143,7 +143,7 @@ async function renderScheduledAudits(audits) {
             const url = isApproved 
                 ? `view_answers?id=${template.scheduled_id}&audit_lead=true` 
                 : `view_audit_form?id=${template.scheduled_id}`;
-            const linkText = isApproved ? 'View Observations' : 'Start Audit';
+            const linkText = isApproved ? '<i class="mdi mdi-eye"></i>' : '<i class="mdi mdi-file-edit"></i>';
 
             approveButton = `
                 <td>
@@ -154,7 +154,7 @@ async function renderScheduledAudits(audits) {
             const url = isApproved 
                 ? `view_answers?id=${template.scheduled_id}` 
                 : `view_audit_form?id=${template.scheduled_id}`;
-            const linkText = isApproved ? 'View Observations' : 'Start Audit';
+            const linkText = isApproved ? '<i class="mdi mdi-eye"></i>' : '<i class="mdi mdi-file-edit"></i>';
             approveButton = `
                 <td>
                     <a class="${linkClass}" href="${url}">${linkText}</a>

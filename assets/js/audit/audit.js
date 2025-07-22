@@ -194,3 +194,37 @@ async function submitStatusUpdate(id, status, created_by) {
         console.error("Error submitting status update:", error);
     }
 }
+
+
+
+async function getQuestionWiseStatusLog(id) {
+    try {
+        const response = await fetch(`ajax/get_question_wise_status_log.php?id=${encodeURIComponent(id)}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Status log received:", data.data);
+        questionWiseAnswerlog =  data.data;
+    } catch (error) {
+        console.error("Error fetching status log:", error);
+        return null;
+    }
+}
+
+
+function findLatestQuestionStatus(question_id) {
+    const filteredLogs = questionWiseAnswerlog
+        .filter(log => log.question_id === question_id)
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Descending order
+
+    return filteredLogs[0] || null; // Return latest or null if not found 
+    return null;
+}
