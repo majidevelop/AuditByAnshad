@@ -226,5 +226,34 @@ function findLatestQuestionStatus(question_id) {
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Descending order
 
     return filteredLogs[0] || null; // Return latest or null if not found 
-    return null;
+}
+function getAllRemarksOfQuestion(question_id) {
+    const filteredLogs = questionWiseAnswerlog.filter(log => log.question_id === question_id);
+    return filteredLogs.length > 0 ? filteredLogs : null;
+}
+
+
+function viewCommentsByQuestionId(question_id) {
+    console.log("viewCommentsByQuestionId: " + question_id);
+    const filteredLogs = getAllRemarksOfQuestion(question_id);
+
+    $("#comments_section").html(''); // Clear previous comments
+
+    if (!filteredLogs) return; // Handle case where null is returned
+
+    // Sort oldest to newest (optional if already sorted)
+    const sortedLogs = filteredLogs.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    let html = ``;
+    sortedLogs.forEach(element => {
+        html += `
+            <div class="comment">
+                <p><i class="mdi mdi-account me-3"></i> ${element.remark} <br>
+                <small>${element.created_at}</small></p>
+            </div>
+        `;
+    });
+
+    // Append all at once in correct order
+    $("#comments_section").html(html);
 }

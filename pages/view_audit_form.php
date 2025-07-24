@@ -89,6 +89,15 @@
     --tw-bg-opacity: 1;
     background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
 }
+#comments_section {
+    display: fixed;
+    flex-direction: column;
+    justify-content: flex-end; /* Push all content to the bottom */
+    height: 77vh;            /*  or whatever height you want */
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
 
 </style>
 <div class="page-content">
@@ -116,7 +125,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-12 p-3">
+                            <div class="col-9 p-3">
                                 <!-- <div class="card">
                                     <div class="card-body">
                                         <div class="row m-0">
@@ -131,6 +140,19 @@
                               
 
                             </div>
+                              <!-- Fixed Comments Section -->
+<div class="col-3 p-3">
+    <div id="comments_section_wrapper"
+        style="position: sticky; top: 80px; background: #fff; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+        <strong>Comments</strong>
+        <div id="comments_section" style="display: flex; flex-direction: column; justify-content: flex-end; gap: 8px;">
+            <!-- Comments will appear here -->
+        </div>
+    </div>
+</div>
+
+                            
+
 
                             
 
@@ -432,7 +454,7 @@ function displayTemplate(template, questions, options) {
                     statusDivHtml = `
                         <div class="col-2" id="questionStatusDiv_${q.question_id}">
                     
-                            <p> ${latestStatus.remark} <br> <small>${latestStatus.created_at}</small></p>
+                            <p><i class="mdi mdi-account me-3"></i> ${latestStatus.remark} <br> <small>${latestStatus.created_at}</small></p>
                         </div>
                     
                     `;
@@ -535,12 +557,12 @@ function displayTemplate(template, questions, options) {
                 <div class="row  m-0">
                     
                        
-                    <div class="col-5">
+                    <div class="col-4">
                         <div class="row  m-0">
                             <div class="col-1">
-                                <p>
+                                <button class="btn" onclick="viewCommentsByQuestionId(${q.question_id})">
                                     <i class="bx bx-purchase-tag-alt"></i>
-                                </p>
+                                </button>
                             </div>
                             <div class="col-10">
                                 <input class="field-type" value="${q.answer_type}" type="hidden">

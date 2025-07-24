@@ -275,7 +275,7 @@ async function get_answers(id) {
                     statusDivHtml = `
                         <div class="col-2" id="questionStatusDiv_${question.question_id}">
                     
-                    <button class="btn btn-warning">${latestStatus.status}ED</button>
+                            <button class="btn btn-warning">${latestStatus.status}ED</button>
                         </div>
                     
                     `;
