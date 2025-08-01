@@ -1,4 +1,32 @@
 <?php
+        session_start();
+
+
+
+function hasRole($role)
+{
+    // Check if the session variable is set and is an array
+    if (!isset($_SESSION['roles_array']) || !is_array($_SESSION['roles_array'])) {
+        return false;
+    }
+
+    // Check if the given role exists in the user's roles array
+    return in_array($role, $_SESSION['roles_array']);
+}
+
+function hasAnyRole(array $roles)
+{
+    // Check if the session variable is set and is an array
+    if (!isset($_SESSION['roles_array']) || !is_array($_SESSION['roles_array'])) {
+        return false;
+    }
+
+    // Check for any overlap between the user's roles and the specified roles
+    $commonRoles = array_intersect($_SESSION['roles_array'], $roles);
+
+    // If the resulting array is not empty, it means there's at least one match
+    return !empty($commonRoles);
+}
 
 
 
@@ -109,7 +137,6 @@ function Hex2String($hex){
 
     return $string;
 };
-
 
 
 
