@@ -85,9 +85,12 @@
                                     </center>
                                 </div>
                             </div>
-                            
+                           
                             <div class="row mt-3">
-                                <table class="table">
+                                  <div class="table-responsive">
+
+                                            <table class="table align-middle datatable dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+
                                     <thead>
                                         <tr>
                                             <th>SI No.</th>
@@ -108,6 +111,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            </div>
                          </div>
 
                     </div> <!-- container-fluid -->
@@ -115,6 +119,7 @@
                 <!-- End Page-content -->
         <script src="assets/js/common/admin.js"></script>   
         <script src="assets/js/common/common.js"></script>
+        <script src="assets/libs/flatpickr/flatpickr.min.js"></script>
 <script>
 let application_users;
 let roles;
@@ -211,10 +216,25 @@ async function renderapplication_users(){
                 <td>${department_name}</td>
                 <td>${company_name}</td>
                 <td>${role_names_string}</td>
+               
                 <td>
-                    <button class="btn btn-primary" onclick="edit_user(${element.user_id})">Edit</button>
-                    <button class="btn btn-danger" onclick="open_delete_modal(${element.user_id}, 'User')"  data-bs-toggle="modal" data-bs-target=".bs-example-modal-sm">Delete</button>
-                
+                <div class="dropdown">
+                                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle show" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+                                                                    <i class="bx bx-dots-horizontal-rounded"></i>
+                                                                </button>
+                                                                <ul class="dropdown-menu dropdown-menu-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(-67px, 28px);" data-popper-placement="bottom-end">
+                                                                    <li><a class="dropdown-item" href="#">Edit</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Print</a></li>
+                                                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                                                    <li>
+                                                                        <button class="btn btn-primary" onclick="edit_user(${element.user_id})">Edit</button>
+                                                                    </li>
+                                                                    <li>
+                                                                        <button class="btn btn-danger" onclick="open_delete_modal(${element.user_id}, 'User')"  data-bs-toggle="modal" data-bs-target=".bs-example-modal-sm">Delete</button>
+                                                                    </li>
+
+                                                                </ul>
+                                                            </div>
                 </td>
                 
             </tr>

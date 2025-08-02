@@ -203,15 +203,16 @@
                 document.getElementById('successModal').style.display = 'none';
             }
         </script>
-        <?php
-        session_start();
-        
-        if (!empty($_SESSION['success_message'])): ?>
-        <script>
-            showSuccessModal("<?= addslashes($_SESSION['success_message']) ?>");
-        </script>
-        <?php unset($_SESSION['success_message']); ?>
-        <?php endif; ?>
+      <?php
+session_start();
+
+if (!empty($_SESSION['success_message'])): ?>
+    <script>
+        showSuccessModal("<?= addslashes($_SESSION['success_message']) ?>");
+    </script>
+<?php 
+    unset($_SESSION['success_message']);
+endif; ?>
 
 
         <script>
