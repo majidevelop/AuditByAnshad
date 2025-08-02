@@ -211,7 +211,7 @@ async function getQuestionWiseStatusLog(id) {
         }
 
         const data = await response.json();
-        console.log("Status log received:", data.data);
+        console.log("Status log received:", data);
         questionWiseAnswerlog =  data.data;
     } catch (error) {
         console.error("Error fetching status log:", error);
@@ -221,6 +221,7 @@ async function getQuestionWiseStatusLog(id) {
 
 
 function findLatestQuestionStatus(question_id) {
+
     const filteredLogs = questionWiseAnswerlog
         .filter(log => log.question_id === question_id)
         .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Descending order

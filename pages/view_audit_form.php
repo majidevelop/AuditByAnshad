@@ -714,7 +714,7 @@ function saveAnswers(templateId, questions) {
             console.log('Found severity selects:', selects.length);
             if (selects.length === 0) {
                 console.warn('No select elements found with ID starting with "severity". Retrying in 1s...');
-                setTimeout(setupSeverityListeners, 1000); // Retry if elements not found
+                // setTimeout(setupSeverityListeners, 1000); // Retry if elements not found
                 return;
             }
             selects.forEach(select => {

@@ -120,38 +120,38 @@
                             </div>
                         </div>
 
-                        <div class="dropdown d-none d-sm-inline-block">
+                        <!-- <div class="dropdown d-none d-sm-inline-block">
                             <button type="button" class="btn header-item"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img id="header-lang-img" src="assets/images/flags/us.jpg" alt="Header Language" height="16">
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
 
-                                <!-- item-->
+                                item
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="en">
                                     <img src="assets/images/flags/us.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
                                 </a>
-                                <!-- item-->
+                                item
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
                                     <img src="assets/images/flags/spain.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
                                 </a>
 
-                                <!-- item-->
+                                item
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
                                     <img src="assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
                                 </a>
 
-                                <!-- item-->
+                                item
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
                                     <img src="assets/images/flags/italy.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
                                 </a>
 
-                                <!-- item-->
+                                item
                                 <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
                                     <img src="assets/images/flags/russia.jpg" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
                                 </a>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="dropdown d-none d-sm-inline-block">
                             <button type="button" class="btn header-item" id="mode-setting-btn">
@@ -160,7 +160,7 @@
                             </button>
                         </div>
 
-                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                       <!--  <div class="dropdown d-none d-lg-inline-block ms-1">
                             <button type="button" class="btn header-item"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i data-feather="grid" class="icon-lg"></i>
@@ -210,9 +210,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="dropdown d-inline-block">
+                        <!-- <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item noti-icon position-relative" id="page-header-notifications-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i data-feather="bell" class="icon-lg"></i>
@@ -299,13 +299,13 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
-
+                        </div> -->
+<!-- 
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item right-bar-toggle me-2">
                                 <i data-feather="settings" class="icon-lg"></i>
                             </button>
-                        </div>
+                        </div> -->
 
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item bg-light-subtle border-start border-end" id="page-header-user-dropdown"
@@ -318,7 +318,7 @@
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
 
-                                <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a>
+                                <!-- <a class="dropdown-item" href="apps-contacts-profile.html"><i class="mdi mdi mdi-face-man font-size-16 align-middle me-1"></i> Profile</a> -->
                                  <!--<a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock font-size-16 align-middle me-1"></i> Lock Screen</a> -->
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="logout"><i class="mdi mdi-logout font-size-16 align-middle me-1"></i> Logout</a>
@@ -338,7 +338,7 @@
                     <div id="sidebar-menu">
                         <!-- Left Menu Start -->
                         <ul class="metismenu list-unstyled" id="side-menu">
-                            <li class="menu-title" data-key="t-menu">Menu</li>
+                           <!-- <li class="menu-title" data-key="t-menu">Menu</li>
 
                             <li>
                                 <a href="index.html">
@@ -490,7 +490,7 @@
                                     <li><a href="extended-rating.html" data-key="t-rating">Rating</a></li>
                                     <li><a href="extended-notifications.html" data-key="t-notifications">Notifications</a></li>
                                 </ul>
-                            </li>
+                            </li> -->
                             <li>
                                 <a href="javascript: void(0);">
                                     <i data-feather="box"></i>
@@ -553,7 +553,7 @@
                                 </ul>
                             </li>
 
-                            <li>
+                           <!-- <li>
                                 <a href="javascript: void(0);" class="has-arrow">
                                     <i data-feather="sliders"></i>
                                     <span data-key="t-tables">Tables</span>
@@ -620,11 +620,11 @@
                                         </ul>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> -->
 
                         </ul>
 
-                        <div class="card sidebar-alert border-0 text-center mx-4 mb-0 mt-5">
+                        <!-- <div class="card sidebar-alert border-0 text-center mx-4 mb-0 mt-5"> 
                             <div class="card-body">
                                 <img src="assets/images/giftbox.png" alt="">
                                 <div class="mt-4">
@@ -633,7 +633,7 @@
                                     <a href="#!" class="btn btn-primary mt-2">Upgrade Now</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- Sidebar -->
                 </div>
