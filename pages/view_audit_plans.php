@@ -27,14 +27,18 @@
                         <!-- start page title -->
                         <div class="row">
                             <div class="col-12">
+                              
                                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0 font-size-18">Create Audit Plan</h4>
+                                            <h4 class="mb-sm-0 font-size-18">Audit Plans</h4>
+
 
                                     <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
+                                        <!-- <ol class="breadcrumb m-0">
                                             <li class="breadcrumb-item"><a href="javascript: void(0);">Audit</a></li>
                                             <li class="breadcrumb-item active">Audit plan</li>
-                                        </ol>
+                                        </ol> -->
+                                            <a href="form_design_audit_plan" class="btn btn-primary">Create Audit Plan</a>
+
                                     </div>
 
                                 </div>
@@ -45,13 +49,39 @@
                         <div class="row">
                             <div class="col-12">
                                
+                                <!-- end card -->
+
+
+                        <div class="row">
+                            <div class="col-xl-12">
                                 <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Create Audit Plan</h4>
-                                        <!-- <p class="card-title-desc">This is an experimental awesome solution for responsive tables with complex data.</p> -->
-                                    </div>
+                                    <div class="card-header align-items-center d-flex">
+                                        <h4 class="card-title mb-0 flex-grow-1"></h4>
+                                        <div class="flex-shrink-0">
+                                            <ul class="nav justify-content-end nav-tabs-custom rounded card-header-tabs" role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active" data-bs-toggle="tab" href="#home2" role="tab">
+                                                        <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+                                                        <span class="d-none d-sm-block">Audit Plans</span> 
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link" data-bs-toggle="tab" href="#profile2" role="tab">
+                                                        <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+                                                        <span class="d-none d-sm-block"></span> 
+                                                    </a>
+                                                </li>
+                                           
+                                            </ul>
+                                        </div>
+                                    </div><!-- end card header -->
+                                    
                                     <div class="card-body">
-                                        <div class="row" id="">
+                                       
+                                        <!-- Tab panes -->
+                                        <div class="tab-content text-muted">
+                                            <div class="tab-pane active" id="home2" role="tabpanel">
+                                                <div class="row" id="">
 
                                         </div>
                                         <div class="table-rep-plugin">
@@ -98,9 +128,22 @@
         
                                         </div>
         
-                                    </div>
-                                </div>
-                                <!-- end card -->
+                                            </div>
+                                            <div class="tab-pane" id="profile2" role="tabpanel">
+                                               
+                                            </div>
+                                            <div class="tab-pane" id="messages2" role="tabpanel">
+                                               
+                                            </div>
+                                        </div>
+                                    </div><!-- end card-body -->
+                                </div><!-- end card -->
+                            </div><!-- end col -->
+
+                        </div><!-- end row -->
+
+
+
                             </div> <!-- end col -->
                         </div> <!-- end row -->
                         

@@ -38,41 +38,59 @@
                                     </div>
                                 
                             </div>
-                            <div class="col-10"></div>
-                            <div class="col-2">
-                                <a href="add_users" class="btn btn-primary">Add users</a>
+                            <div class="col-9"></div>
+                            <div class="col-3">
+                                <!-- <a href="add_users" class="btn btn-primary">Add users</a> -->
                             </div>
 
                         </div>
                             <!-- end page title -->
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" id="name" placeholder="User name" class="form-control">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="email">Email</label>
+                                    <input type="email" name="email" id="email" placeholder="username@companyname.com" class="form-control">
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="phone">Phone</label>
+                                    <input type="text" name="phone" id="phone" placeholder="+971XXXXXXX000" class="form-control">
+                                </div>
+                                
 
-                           
+
+                            </div>
                             <div class="row mt-3">
-                                  <div class="table-responsive">
+                                <div class="col-4">
+                                                <label for="">Department Name</label>
+                                                <select class="form-control" name="department_name" id="department_name" >
+                                                    <option value="">Select department</option>
+                                                </select>
+                                                
 
-                                            <table class="table align-middle datatable dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+                                            </div>
 
-                                    <thead>
-                                        <tr>
-                                            <th>SI No.</th>
-                                            <th>User Name</th>
-                                            <th>Email</th>
-                                            <th>Phone</th>
-                                            <th>Department</th>
-                                            <th>Company</th>
-                                            <th>Roles</th>
-                                            <th>Action</th>
+                                <div class="col-sm-4">
+                                    <label for="roles">
+                                        Select Roles
+                                    </label>
+                                        <select name="roles" id="roles" multiple class="form-control"></select>
 
-
-                                        </tr>
-
-                                    </thead>
-                                    <tbody id="rendertable">
-
-                                    </tbody>
-                                </table>
+                                </div>
+                                <div class="col-sm-4">
+                                    <label for="company">Select Company</label>
+                                    <select name="company" id="company" class="form-control">
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 mt-3" id="user_action_button_div">
+                                    <center>
+                                        <button class="btn btn-success" onclick="save_application_users()">Save</button>
+                                    </center>
+                                </div>
                             </div>
-                            </div>
+                           
                          </div>
 
                     </div> <!-- container-fluid -->

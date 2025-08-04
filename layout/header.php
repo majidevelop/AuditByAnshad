@@ -66,7 +66,7 @@
                     <div class="d-flex">
                         <!-- LOGO -->
                         <div class="navbar-brand-box">
-                            <a href="index.html" class="logo logo-dark">
+                            <a href="#" class="logo logo-dark">
                                 <span class="logo-sm">
                                     <img src="assets/images/logo-sm.svg" alt="" height="24">
                                 </span>
@@ -90,12 +90,12 @@
                         </button>
 
                         <!-- App Search-->
-                        <form class="app-search d-none d-lg-block">
+                        <!-- <form class="app-search d-none d-lg-block">
                             <div class="position-relative">
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <button class="btn btn-primary" type="button"><i class="bx bx-search-alt align-middle"></i></button>
                             </div>
-                        </form>
+                        </form> -->
                     </div>
 
                     <div class="d-flex">
@@ -495,10 +495,10 @@
                                 <a href="javascript: void(0);">
                                     <i data-feather="box"></i>
                                     <span class="badge rounded-pill badge-soft-danger  text-danger float-end">7</span>
-                                    <span data-key="t-members">Members</span>
+                                    <span data-key="t-members">User Management</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="view_master_members" data-key="t-form-elements">Members</a></li>
+                                    <li><a href="view_master_members" data-key="t-form-elements">Users</a></li>
                                     <li><a href="view_master_roles" data-key="t-form-elements">Roles</a></li>
                                     <li><a href="view_master_companies" data-key="t-form-elements">Companies</a></li>
                                     <li><a href="view_master_departments" data-key="t-form-elements">Departments</a></li>
@@ -513,11 +513,11 @@
                                 <a href="javascript: void(0);">
                                     <i data-feather="box"></i>
                                     <span class="badge rounded-pill badge-soft-danger  text-danger float-end">7</span>
-                                    <span data-key="t-forms">Forms</span>
+                                    <span data-key="t-forms">Audit Management</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
-                                    <li><a href="forms_master_layout" data-key="t-form-elements">Master</a></li>
-                                    <li><a href="list_master_layouts" data-key="t-form-elements">Master Layouts</a></li>
+                                    <!-- <li><a href="forms_master_layout" data-key="t-form-elements">Master</a></li>
+                                    <li><a href="list_master_layouts" data-key="t-form-elements">Master Layouts</a></li> -->
 
                                     
                                     <!-- <li><a href="view_create_master_header" data-key="t-form-elements">Master - Header</a></li> -->
@@ -525,31 +525,31 @@
                                     <!-- <li><a href="view_create_master_footer" data-key="t-form-elements">Master - Footer</a></li> -->
 
 
-                                    <li><a href="form_design_audit_plan" data-key="t-form-elements">Create Audit Plan</a></li>
-                                    <li><a href="view_audit_plans" data-key="t-form-elements">View Audit Plans</a></li>
+                                    <!-- <li><a href="form_design_audit_plan" data-key="t-form-elements">Create Audit Plan</a></li> -->
+                                    <li><a href="view_audit_plans" data-key="t-form-elements">Audit Plans</a></li>
 
 
 
-                                    <li><a href="list_audit_schedules" data-key="t-form-elements">View Scheduled Audits</a></li>
-                                    <li><a href="list_schedule_inspection_calendar" data-key="t-form-elements">View Scheduled Inspection Calendar</a></li>
-                                    <li><a href="view_compliance_reports_list" data-key="t-form-elements">View Compliance Reports</a></li>
+                                    <li><a href="list_audit_schedules" data-key="t-form-elements">Schedules</a></li>
+                                    <!-- <li><a href="list_schedule_inspection_calendar" data-key="t-form-elements">View Scheduled Inspection Calendar</a></li> -->
+                                    <!-- <li><a href="view_compliance_reports_list" data-key="t-form-elements">View Compliance Reports</a></li> -->
 
 
                                     <!-- <li><a href="list_schedule_inspection" data-key="t-form-elements">Inspections</a></li> -->
 
-                                    <li><a href="form_template_list" data-key="t-form-elements">Form Templates</a></li>
-                                    <li><a href="form_template_list_view_cards" data-key="t-form-elements">View Templates</a></li>
+                                    <li><a href="form_template_list" data-key="t-form-elements">Checlists</a></li>
+                                    <!-- <li><a href="form_template_list_view_cards" data-key="t-form-elements">Checlists</a></li> -->
 
 
-                                    <li><a href="forms_home" data-key="t-form-elements">Create Form Templates</a></li>
+                                    <!-- <li><a href="forms_home" data-key="t-form-elements">Create Form Templates</a></li> -->
                                     <!-- <li><a href="view_lead_auditor_approval_page" data-key="t-form-elements">Lead Auditor Approval Page</a></li> -->
 
-                                    <li><a href="form-validation.html" data-key="t-form-validation">Validation</a></li>
+                                    <!-- <li><a href="form-validation.html" data-key="t-form-validation">Validation</a></li>
                                     <li><a href="form-advanced.html" data-key="t-form-advanced">Advanced Plugins</a></li>
                                     <li><a href="form-editors.html" data-key="t-form-editors">Editors</a></li>
                                     <li><a href="form-uploads.html" data-key="t-form-upload">File Upload</a></li>
                                     <li><a href="form-wizard.html" data-key="t-form-wizard">Wizard</a></li>
-                                    <li><a href="form-mask.html" data-key="t-form-mask">Mask</a></li>
+                                    <li><a href="form-mask.html" data-key="t-form-mask">Mask</a></li> -->
                                 </ul>
                             </li>
 
