@@ -40,7 +40,7 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     $data = array(
         array('application_user_id', $id, 'STR'),
         array('eid', $username, 'STR'),
-        array('password', $input['phone'], 'STR'),
+        array('password', $input['password'], 'STR'),
         array('name', $input['name'], 'STR'),
         array('email', $input['email'], 'STR')
 

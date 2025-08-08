@@ -15,7 +15,8 @@ try {
         array('company_id', $input['company_id'], 'INT'),
         array('email', $input['email'], 'STR'),
         array('phone', $input['phone'], 'STR'),
-        array('department', $input['department'], 'STR')
+        array('department', $input['department'], 'STR'),
+        
 
 
 
@@ -29,9 +30,11 @@ try {
     $data = array(
         array('application_user_id', $productid, 'STR'),
         array('eid', $username, 'STR'),
-        array('password', $input['phone'], 'STR'),
+        // array('password', $input['phone'], 'STR'),
         array('name', $input['name'], 'STR'),
-        array('email', $input['email'], 'STR')
+        array('email', $input['email'], 'STR'),
+        array('password', $input['password'], 'STR')
+
 
     );
     $user_id = insertrow('users', $data);

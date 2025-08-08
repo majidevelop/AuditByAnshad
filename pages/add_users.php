@@ -84,7 +84,11 @@
                                     <select name="company" id="company" class="form-control">
                                     </select>
                                 </div>
-                                <div class="col-sm-12 mt-3" id="user_action_button_div">
+                                <div class="col-sm-6">
+                                    <label for="phone">Password</label>
+                                    <input type="password" name="password" id="password" placeholder="*********" class="form-control">
+                                </div>
+                                <div class="col-sm-6 pt-3" id="user_action_button_div">
                                     <center>
                                         <button class="btn btn-success" onclick="save_application_users()">Save</button>
                                     </center>
@@ -235,6 +239,8 @@ async function save_application_users(id) {
     const email = $("#email").val().trim();
     const phone = $("#phone").val().trim();
     const company_id = $("#company").val();
+    const password = $("#password").val();
+
     const roles = $("#roles").val(); // array
     const roles_string = roles ? roles.toString() : '';
     const department = $('#department_name').val();
@@ -243,6 +249,8 @@ async function save_application_users(id) {
 
     // Validate Name
     if (!name) errors.push("Name is required.");
+    if (!password) errors.push("Password is required.");
+
 
     // Validate Email
     if (!email) {
@@ -281,7 +289,8 @@ async function save_application_users(id) {
             phone,
             company_id,
             department,
-            roles: roles_string
+            roles: roles_string,
+            password
         })
     });
 
