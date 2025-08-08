@@ -494,7 +494,7 @@
                             <li>
                                 <a href="javascript: void(0);">
                                     <i data-feather="box"></i>
-                                    <span class="badge rounded-pill badge-soft-danger  text-danger float-end">7</span>
+                                    <!-- <span class="badge rounded-pill badge-soft-danger  text-danger float-end">7</span> -->
                                     <span data-key="t-members">User Management</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
@@ -512,7 +512,7 @@
                             <li>
                                 <a href="javascript: void(0);">
                                     <i data-feather="box"></i>
-                                    <span class="badge rounded-pill badge-soft-danger  text-danger float-end">7</span>
+                                    <!-- <span class="badge rounded-pill badge-soft-danger  text-danger float-end">7</span> -->
                                     <span data-key="t-forms">Audit Management</span>
                                 </a>
                                 <ul class="sub-menu" aria-expanded="false">
