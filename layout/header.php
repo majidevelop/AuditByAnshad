@@ -491,6 +491,8 @@
                                     <li><a href="extended-notifications.html" data-key="t-notifications">Notifications</a></li>
                                 </ul>
                             </li> -->
+                                 <?php if (hasRole('1')): ?>
+
                             <li>
                                 <a href="javascript: void(0);">
                                     <i data-feather="box"></i>
@@ -509,6 +511,7 @@
 
                                 </ul>
                             </li>
+                            <?php  endif ?>
                             <li>
                                 <a href="javascript: void(0);">
                                     <i data-feather="box"></i>

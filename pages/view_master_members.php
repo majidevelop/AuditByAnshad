@@ -184,15 +184,18 @@ async function renderapplication_users(){
                                                                     <i class="bx bx-dots-horizontal-rounded"></i>
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(-67px, 28px);" data-popper-placement="bottom-end">
-                                                                    <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Print</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Delete</a></li>
+                                                                    <li><a class="dropdown-item" href="edit_user?id=${element.user_id}">Edit</a></li>
                                                                     <li>
+                                                                        <button class="dropdown-item" onclick="open_delete_modal(${element.user_id}, 'User')"  data-bs-toggle="modal" data-bs-target=".bs-example-modal-sm">Delete</button>
+
+                                                                   <!-- <a class="dropdown-item" href="#">Delete</a> -->
+                                                                    </li>
+                                                        <!--      <li>
                                                                         <button class="btn btn-primary" onclick="edit_user(${element.user_id})">Edit</button>
                                                                     </li>
                                                                     <li>
                                                                         <button class="btn btn-danger" onclick="open_delete_modal(${element.user_id}, 'User')"  data-bs-toggle="modal" data-bs-target=".bs-example-modal-sm">Delete</button>
-                                                                    </li>
+                                                                    </li> -->
 
                                                                 </ul>
                                                             </div>

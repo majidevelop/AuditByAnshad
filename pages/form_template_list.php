@@ -25,10 +25,13 @@
                             <div class="col-12">
                                
                                 <div class="card">
+                                 <?php if (hasRole('1')): ?>
+
                                     <div class="card-header">
                                         <h4 class="card-title">Checklists</h4>
                                         <p class="card-title-desc">Create your template from one of the options below.</p>
                                     </div>
+
                                     <div class="row">
                                         <div class="col-sm-4"></div>
 
@@ -50,6 +53,7 @@
 
 
                                     </div>
+                                    <?php endif ?>
                                     <div class="card-body">
                                         <div class="table-rep-plugin">
                                             <div class="table-responsive mb-0" data-pattern="priority-columns">
@@ -59,7 +63,6 @@
                                                             <th>SI No</th>
                                                             <th data-priority="1">Display ID</th>
                                                             <th data-priority="3">Title</th>
-                                                            <th data-priority="1">Description</th>
                                                             <th data-priority="3">Created By</th>
                                                             <th data-priority="3">CreatedAt</th>
                                                             <th>Action</th>
@@ -129,10 +132,11 @@ function displayTemplates(templates) {
         <tr>
             <td> <a class="btn" href="view_template?id=${template.id}">${ctr} </a></td>
             <td><a  class="btn" href="view_template?id=${template.id}"> ${template.id} </a></td>
-            <td><a  class="btn" href="view_template?id=${template.id}">${template.title ? template.title : 'Untitled checklist'} </a></td>
-            <td><a  class="btn" href="view_template?id=${template.id}">${template.description ? '' : 'Default Value'} </a></td>
+            <td><a  class="btn" href="view_template?id=${template.id}">${template.title ? template.title : 'Untitled checklist'} <br> ${template.description ? '' : 'Default Value'} </a></td>
             <td><a  class="btn" href="view_template?id=${template.id}">${template.created_by ? '' : 'Default Value'} </a></td>
             <td><a  class="btn" href="view_template?id=${template.id}">${template.created_at} </a></td>
+                                 <?php if (hasRole('1')): ?>
+
             <td>
                 
                 <div class="dropdown">
@@ -140,7 +144,8 @@ function displayTemplates(templates) {
                         <i class="bx bx-dots-horizontal-rounded"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate(-67px, 28px);" data-popper-placement="bottom-end">
-                        <li>
+                        
+                    <li>
                         
                         <a href="view_template?id=${template.id}" class="dropdown-item">Edit</a>
                         </li>
@@ -151,6 +156,8 @@ function displayTemplates(templates) {
                     </ul>
                 </div>
             </td>
+                                 <?php endif ?>
+
         </tr> 
                   `;
     });
